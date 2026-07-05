@@ -55,3 +55,9 @@
 - 全站累计：29 实体 + 20 概念 + 9 主题 + 4 综述 = 63 页面
 - 更新 index.md
 - 更新 index.md
+
+## [2026-07-05] ingest | LLM 模型融合深度报告（综述）
+- 来源：arXiv 论文 (TIES/DARE/InfiFusion/FuseChat) + HuggingFace 博客 + NVIDIA 技术文章
+- 创建综述页「LLM 模型融合深度报告」：原理、参数合并 vs 知识蒸馏两条技术路线、实现方式、评测对比、选型指南
+- 全站累计：29 实体 + 20 概念 + 9 主题 + 5 综述 = 64 页面
+- 更新 index.md

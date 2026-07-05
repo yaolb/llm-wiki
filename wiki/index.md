@@ -82,7 +82,8 @@
 - [2026上半年万象项目复盘](wiki/synthesis/2026-h1-wanxiang-review.md) — 万象 AI Agent 能力建设、智能圈人、ChatBI、标签治理四大方向复盘 `#复盘 #万象 #2026`
 - [BMAD vs OpenSpec：航母与特种兵](wiki/synthesis/bmad-vs-openspec.md) — AI 驱动开发两大赛道的多维度对比与选型建议 `#SDD #对比分析 #BMAD #OpenSpec`
 - [AI增强开发三件套](wiki/synthesis/ai-dev-trifecta.md) — OpenSpec + Superpowers + gstack 把 Vibe Coding 拉回工程交付 `#AI编程 #工程交付 #三件套`
+- [LLM 模型融合深度报告](wiki/synthesis/model-fusion-deep-report.md) — 从原理、技术路线、实现方式、评测四维度系统性梳理模型融合全貌 `#模型融合 #综述 #评测`
 
 ---
 
-_最后更新于 2026-07-05_ | 全站 63 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
+_最后更新于 2026-07-05_ | 全站 64 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
