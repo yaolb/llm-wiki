@@ -62,6 +62,7 @@
 ## 主题
 <!-- 技术领域、研究方向、行业动态 -->
 
+- [LLM Wiki 方法论](wiki/topics/llm-wiki-methodology.md) — Karpathy 提出用 LLM 增量构建持久化交叉引用知识库的模式，替代传统 RAG 的"查一次拼一次" `#知识管理 #方法论 #Karpathy`
 - [Unsloth — 消费级 GPU 高效微调大模型](wiki/topics/unsloth-efficient-llm-finetuning.md) — 开源框架让普通显卡也能微调 7B 级大模型，2026 年推出无代码 Web UI `#模型训练 #微调 #开源`
 - [Firecrawl — AI 原生的网页数据采集引擎](wiki/topics/firecrawl-web-scraping.md) — 将任意网站转为 LLM 可消费的结构化数据，配套 MCP Server 接入 Agent 生态 `#网页爬虫 #MCP #AI`
 - [Snail AI — Java 生态的企业级 AI Agent 平台](wiki/topics/snail-ai-agent-platform.md) — 让 Java 开发者不需 Python 就能构建多模型管理、RAG、长时记忆的 Agent 应用 `#AI项目 #Java #Agent`
@@ -82,4 +83,4 @@
 ---
 
 _创建于 2026-07-04_
-_最后更新于 2026-07-04_ | 全站 59 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD 等核心领域
+_最后更新于 2026-07-05_ | 全站 60 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论等核心领域

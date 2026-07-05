@@ -35,9 +35,16 @@
 - 全站总计：28 实体 + 19 概念 + 8 主题 + 4 综述 = 59 页面
 - 更新 index.md
 
-
 ## [2026-07-05] setup | OpenClaw 集成 — 自动化同步技能就绪
 - 克隆仓库到 OpenClaw 工作区
 - 创建 llm-wiki skill（skills/llm-wiki/SKILL.md）
 - 设定规则：更新 Notion 时同步更新 llm-wiki 并提交 GitHub
 - 工作流：按 CLAUDE.md 规范执行 Ingest → 更新页面 → commit & push
+
+## [2026-07-05] ingest | Karpathy LLM Wiki 方法论 Gist
+- 来源：https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+- 保存原始素材到 raw/karpathy-llm-wiki-methodology.md
+- 创建主题页：LLM Wiki 方法论（三层架构、三大工作流、RAG vs Wiki 对比）
+- 更新 Karpathy AI编码方法论页：添加相关主题链接
+- 全站总计：28 实体 + 19 概念 + 9 主题 + 4 综述 = 60 页面
+- 更新 index.md
