@@ -47,4 +47,11 @@
 - 创建主题页：LLM Wiki 方法论（三层架构、三大工作流、RAG vs Wiki 对比）
 - 更新 Karpathy AI编码方法论页：添加相关主题链接
 - 全站总计：28 实体 + 19 概念 + 9 主题 + 4 综述 = 60 页面
+
+## [2026-07-05] ingest | HuggingFace 模型融合技术生态
+- 来源：HuggingFace 官网 & arXiv 论文
+- 创建概念页「模型融合」涵盖参数合并（SLERP/TIES/DARE/SCE）和知识蒸馏（InfiFusion/FuseLLM/FuseChat/FuseO1）两条技术路线
+- 创建 3 个实体页：FuseAI、InfiFusion、mergekit
+- 全站累计：29 实体 + 20 概念 + 9 主题 + 4 综述 = 63 页面
+- 更新 index.md
 - 更新 index.md

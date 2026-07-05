@@ -35,10 +35,14 @@
 - [Huashu Design](wiki/entities/huashu-design.md) — 花叔开源 Claude Code 设计 Skill，19k Star `#工具 #设计 #UI`
 - [khazix-skills](wiki/entities/khazix-skills.md) — 数字生命卡兹克开源 AI Skills 合集 `#工具 #AI编程 #Skills`
 - [Understand Anything](wiki/entities/understand-anything.md) — 代码库 → 交互式知识图谱转换工具 `#工具 #代码分析 #知识图谱`
+- [FuseAI](wiki/entities/fuseai.md) — 中山大学/腾讯发起的开源 LLM 知识融合研究社区 `#模型融合 #开源 #研究`
+- [InfiFusion](wiki/entities/infifusion.md) — Reallm-Labs 的统一 LLM 融合框架，首个融合 4 个 14B+ 异构模型 `#模型融合 #知识蒸馏 #LLM融合`
+- [mergekit](wiki/entities/mergekit.md) — HuggingFace 流行的模型合并工具，SLERP/TIES/DARE 无需 GPU 即可合并 `#模型融合 #工具 #模型合并`
 
 ## 概念
 <!-- 技术概念、方法论、理论 -->
 
+- [模型融合](wiki/concepts/model-fusion.md) — 将多个 LLM 通过参数合并或知识蒸馏统一为一个模型，无需从零训练 `#模型融合 #LLM #融合方法`
 - [模型微调](wiki/concepts/model-finetuning.md) — 在预训练大模型上继续训练使之适配下游任务，含 Full Fine-tuning / PEFT / LoRA / QLoRA 等变体 `#训练方法 #LLM`
 - [MCP 模型上下文协议](wiki/concepts/mcp-model-context-protocol.md) — Anthropic 提出的开放协议，标准化 AI 模型与外部工具之间的通信接口 `#协议 #Agent #标准化`
 - [AI Agent](wiki/concepts/ai-agent.md) — 具备自主感知-规划-行动能力的 AI 系统，支持工具使用、记忆管理和多步推理 `#Agent #自动化`
@@ -62,7 +66,6 @@
 ## 主题
 <!-- 技术领域、研究方向、行业动态 -->
 
-- [LLM Wiki 方法论](wiki/topics/llm-wiki-methodology.md) — Karpathy 提出用 LLM 增量构建持久化交叉引用知识库的模式，替代传统 RAG 的"查一次拼一次" `#知识管理 #方法论 #Karpathy`
 - [Unsloth — 消费级 GPU 高效微调大模型](wiki/topics/unsloth-efficient-llm-finetuning.md) — 开源框架让普通显卡也能微调 7B 级大模型，2026 年推出无代码 Web UI `#模型训练 #微调 #开源`
 - [Firecrawl — AI 原生的网页数据采集引擎](wiki/topics/firecrawl-web-scraping.md) — 将任意网站转为 LLM 可消费的结构化数据，配套 MCP Server 接入 Agent 生态 `#网页爬虫 #MCP #AI`
 - [Snail AI — Java 生态的企业级 AI Agent 平台](wiki/topics/snail-ai-agent-platform.md) — 让 Java 开发者不需 Python 就能构建多模型管理、RAG、长时记忆的 Agent 应用 `#AI项目 #Java #Agent`
@@ -82,5 +85,4 @@
 
 ---
 
-_创建于 2026-07-04_
-_最后更新于 2026-07-05_ | 全站 60 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论等核心领域
+_最后更新于 2026-07-05_ | 全站 63 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
