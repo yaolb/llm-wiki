@@ -61,3 +61,11 @@
 - 创建综述页「LLM 模型融合深度报告」：原理、参数合并 vs 知识蒸馏两条技术路线、实现方式、评测对比、选型指南
 - 全站累计：29 实体 + 20 概念 + 9 主题 + 5 综述 = 64 页面
 - 更新 index.md
+
+## [2026-07-05] ingest | Agentic RAG — RAG 从独立系统到 Agent 组件
+- 来源：微信公众号"算法狗"《RAG没死，它藏在了Agent架构底下》
+- 保存原始素材到 raw/rag-as-agent-component.md
+- 创建主题页「Agentic RAG」：RAG 从独立系统降级为 Agent 组件，Agentic RAG 架构、对比传统 RAG
+- 更新 RAG 概念页：新增 Agentic RAG 章节
+- 全站累计：29 实体 + 20 概念 + 10 主题 + 5 综述 = 65 页面
+- 更新 index.md

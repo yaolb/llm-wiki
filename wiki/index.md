@@ -46,7 +46,7 @@
 - [模型微调](wiki/concepts/model-finetuning.md) — 在预训练大模型上继续训练使之适配下游任务，含 Full Fine-tuning / PEFT / LoRA / QLoRA 等变体 `#训练方法 #LLM`
 - [MCP 模型上下文协议](wiki/concepts/mcp-model-context-protocol.md) — Anthropic 提出的开放协议，标准化 AI 模型与外部工具之间的通信接口 `#协议 #Agent #标准化`
 - [AI Agent](wiki/concepts/ai-agent.md) — 具备自主感知-规划-行动能力的 AI 系统，支持工具使用、记忆管理和多步推理 `#Agent #自动化`
-- [RAG 检索增强生成](wiki/concepts/rag-retrieval-augmented-generation.md) — 检索 + 生成的混合架构，先从知识库检索相关文档再注入 LLM，减少幻觉 `#检索 #知识库 #LLM`
+- [RAG 检索增强生成](wiki/concepts/rag-retrieval-augmented-generation.md) — 检索 + 生成的混合架构，已从独立系统演进为 Agent 组件 `#检索 #知识库 #LLM #Agentic`
 - [红绿回归测试](wiki/concepts/red-green-regression-testing.md) — AI 自动执行红-绿-回归三道测试关卡，通过后才交付代码的验证管道 `#测试 #AI编程 #自动化`
 - [AI 编程](wiki/concepts/ai-programming.md) — LLM 辅助/自动完成代码生成、测试、审查、修复，从补全→自主生成→自验证三个发展阶段 `#AI编程 #开发工具`
 - [混合专家模型 MoE](wiki/concepts/moe-mixture-of-experts.md) — 稀疏激活的神经网络架构，每次推理只激活少数专家，同计算量下大幅扩大模型容量 `#模型架构 #稀疏计算`
@@ -74,6 +74,7 @@
 - [AI Agent 技术全景报告 2026](wiki/topics/ai-agent-landscape-2026.md) — 六大趋势 × 架构范式 × 框架对比，基于 50+ 篇技术资料的系统梳理 `#AI-Agent #技术全景 #2026`
 - [Karpathy AI编码方法论](wiki/topics/karpathy-ai-coding-methodology.md) — 65行 CLAUDE.md 定义的四条铁律：先想再写、简洁第一、手术式修改、目标驱动 `#AI编程 #方法论 #Karpathy`
 - [AI Native 研发体系](wiki/topics/ai-native-dev-system.md) — 以 AI 为核心重新设计软件开发全流程，从辅助工具到 Agent 自主执行 `#AI-Native #研发体系 #软件2.0`
+- [Agentic RAG](wiki/topics/agentic-rag.md) — RAG 从独立系统降级为 Agent 工具箱中的组件，由 Agent 自主决定检索策略 `#RAG #Agent #Agentic-RAG`
 
 ## 综述
 <!-- 多源对比、综合分析、阶段性总结 -->
@@ -86,4 +87,4 @@
 
 ---
 
-_最后更新于 2026-07-05_ | 全站 64 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
+_最后更新于 2026-07-05_ | 全站 65 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
