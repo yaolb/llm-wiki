@@ -35,3 +35,9 @@
 - 全站总计：28 实体 + 19 概念 + 8 主题 + 4 综述 = 59 页面
 - 更新 index.md
 
+
+## [2026-07-05] setup | OpenClaw 集成 — 自动化同步技能就绪
+- 克隆仓库到 OpenClaw 工作区
+- 创建 llm-wiki skill（skills/llm-wiki/SKILL.md）
+- 设定规则：更新 Notion 时同步更新 llm-wiki 并提交 GitHub
+- 工作流：按 CLAUDE.md 规范执行 Ingest → 更新页面 → commit & push
