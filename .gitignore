@@ -1,0 +1,30 @@
+# Notion API secrets
+.mcp.json
+
+# Notion API response dumps
+notion_*.json
+
+# Temp sync scripts
+create_dashboard.js
+create_missing.js
+rebuild_dashboard.js
+sync_*.js
+sync_report.json
+unmatched.json
+dashboard_append.json
+
+# Claude internal
+.claude/
+
+# Obsidian
+.obsidian/
+
+# Dependencies
+wiki-viewer/node_modules/
+
+# Stray files
+RAG 检索增强生成.md
+
+# OS
+.DS_Store
+Thumbs.db
