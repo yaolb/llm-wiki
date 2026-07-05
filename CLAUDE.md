@@ -4,6 +4,26 @@
 
 ---
 
+## Git 自动同步
+
+**每次文件变更后必须自动同步到 GitHub**，无需用户提示：
+
+1. **检测变更**：每次写入/编辑 `wiki/` 下的文件后，自动执行 git 同步
+2. **提交规范**：
+   - 查看 `git status` 确认变更范围
+   - 使用 `git add` 暂存所有变更文件（排除 `.gitignore` 中的文件）
+   - 生成语义化 commit message，格式：`<type>: <简述>`（type = ingest / update / fix / refactor）
+   - 不跳过 hooks，不 force push
+3. **推送**：`git push origin master`
+4. **冲突处理**：如 push 被拒绝，先 `git pull --rebase` 再 push
+
+示例 commit message：
+- `ingest: 摄入 PageAgent 实体页 + 更新 index.md`
+- `update: 补充 AI Agent 概念页的 ReAct 架构章节`
+- `fix: 修复 wikilink 跳转路径错误`
+
+---
+
 ## 三层架构
 
 ### 第一层：索引层
