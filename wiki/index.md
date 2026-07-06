@@ -46,7 +46,7 @@
 
 - [模型融合](wiki/concepts/model-fusion.md) — 将多个 LLM 通过参数合并或知识蒸馏统一为一个模型，无需从零训练 `#模型融合 #LLM #融合方法`
 - [模型微调](wiki/concepts/model-finetuning.md) — 在预训练大模型上继续训练使之适配下游任务，含 Full Fine-tuning / PEFT / LoRA / QLoRA 等变体 `#训练方法 #LLM`
-- [MCP 模型上下文协议](wiki/concepts/mcp-model-context-protocol.md) — Anthropic 提出的开放协议，标准化 AI 模型与外部工具之间的通信接口 `#协议 #Agent #标准化`
+- [MCP 模型上下文协议](wiki/concepts/mcp-model-context-protocol.md) — Anthropic 提出的开放协议，标准化 AI 模型与外部工具之间的通信接口，已获 ChatGPT/VS Code/Cursor 等广泛支持 `#协议 #Agent #标准化 #工具集成`
 - [AI Agent](wiki/concepts/ai-agent.md) — 具备自主感知-规划-行动能力的 AI 系统，支持工具使用、记忆管理和多步推理 `#Agent #自动化`
 - [RAG 检索增强生成](wiki/concepts/rag-retrieval-augmented-generation.md) — 检索 + 生成的混合架构，已从独立系统演进为 Agent 组件 `#检索 #知识库 #LLM #Agentic`
 - [红绿回归测试](wiki/concepts/red-green-regression-testing.md) — AI 自动执行红-绿-回归三道测试关卡，通过后才交付代码的验证管道 `#测试 #AI编程 #自动化`
