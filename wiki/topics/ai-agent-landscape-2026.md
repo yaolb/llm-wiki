@@ -2,7 +2,7 @@
 type: topic
 tags: [AI Agent, Agent架构, 多Agent协作, Skill体系, Spec驱动, 技术全景, 2026]
 created: 2026-07-04
-updated: 2026-07-04
+updated: 2026-07-06
 ---
 
 # AI Agent 技术全景报告 2026
@@ -47,6 +47,11 @@ updated: 2026-07-04
 - Agent 定位转变：被动工具 → 主动参与者 → 同事
 - 自进化 Agent（[[Hermes Agent]]、[[OpenClaw]]）能自主学习和改进
 
+### 7. 本地 Agent 与实时感知
+
+- 本地 Agent 崛起：Ollama 驱动的完全本地 Agent，零云端依赖
+- [[PYTHIA]] 融合 Osiris（实时情报）和 MiroFish（多智能体预测），解决 Agent 对现实世界
+
 ## Agent 架构范式
 
 ### ReAct 循环（基础模型）
@@ -82,3 +87,5 @@ updated: 2026-07-04
 - [[Superpowers]]
 - [[OpenSpec]]
 - [[PageAgent]]
+- [[PYTHIA]]
+- [[UZI-Skill]]

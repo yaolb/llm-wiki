@@ -25,6 +25,8 @@
 - [MUX0](wiki/entities/mux0.md) — 专为 Claude Code 设计的开源 AI 编程终端，基于 Ghostty `#工具 #AI编程 #终端`
 - [MemPalace](wiki/entities/mempalace.md) — 开源 AI 记忆系统，55k Star，ChromaDB + 语义搜索，本地优先 `#工具 #记忆系统 #开源`
 - [Apache Burr](wiki/entities/apache-burr.md) — 状态机驱动的 Agent 框架，LangChain 替代方案 `#工具 #Agent框架 #状态机`
+- [PYTHIA](wiki/entities/pythia.md) — 本地无密钥 AI Agent 工具，融合 Osiris 实时情报与 MiroFish 多智能体预测，Ollama 运行 `#工具 #AI-Agent #实时感知 #开源情报`
+- [UZI-Skill](wiki/entities/uzi-skill.md) — 开源 AI 股票深度分析插件，22维×66评委×22种机构方法，支持 A/港股/美股 `#工具 #股票分析 #投资 #金融`
 - [Comet](wiki/entities/comet.md) — 基于 OpenSpec + Superpowers 的自动化 Spec Skills 编排工具 `#工具 #AI编程 #自动化`
 - [RAG-Anything](wiki/entities/rag-anything.md) — 港大多模态 RAG，知识图谱统一处理文本/图像/表格 `#工具 #RAG #多模态`
 - [cc-switch](wiki/entities/cc-switch.md) — 跨平台 AI 助手桌面工具，104k Star，Rust + Tauri `#工具 #桌面工具 #跨平台`
@@ -60,6 +62,7 @@
 - [Prompt Caching](wiki/concepts/prompt-caching.md) — AI Agent 工程关键优化技术，缓存系统提示词降低延迟和成本 `#性能优化 #Agent工程 #Claude-Code`
 - [Loop Engineering](wiki/concepts/loop-engineering.md) — 设计 Agent 自主执行循环的方法论，替代单次 Prompt 工程 `#AI-Agent #自动化 #方法论`
 - [Agent工具选择问题](wiki/concepts/agent-tool-selection.md) — 当 Agent 拥有过多 Tool 时的选择困难与解决方向 `#AI-Agent #Tool管理`
+- [AI 网关与模型路由](wiki/concepts/ai-gateway.md) — 聚合多模型提供商，统一 API 接入与自动路由，零成本调用 237 个 AI 免费额度 `#API网关 #模型路由 #成本优化 #Agent基础设施`
 - [上下文工程](wiki/concepts/context-engineering.md) — 系统化管理 AI Agent 在大型项目中的代码上下文，解决 Context Rot `#AI编程 #上下文管理`
 - [OKF 开放知识格式](wiki/concepts/okf-open-knowledge-format.md) — Google 提出的 AI Agent 可消费结构化知识标准 `#知识格式 #Google #AI-Agent`
 
@@ -88,4 +91,4 @@
 
 ---
 
-_最后更新于 2026-07-05_ | 全站 66 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
+_最后更新于 2026-07-06_ | 全站 69 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
