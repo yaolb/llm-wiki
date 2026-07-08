@@ -55,7 +55,7 @@ function readHash(): string | null {
 
 export default function App() {
   const [activePath, setActivePath] = useState<string | null>(() => readHash());
-  const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set(['综述']));
+  const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set(['实体', '概念', '论文', '综述']));
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSidebar, setMobileSidebar] = useState(false);
   const [activeTag, setActiveTag] = useState<string | null>(null);
