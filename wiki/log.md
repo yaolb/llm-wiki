@@ -116,3 +116,9 @@
 - 新增 wiki/topics/starrocks-catalog-acceleration-strategy.md
 - 分析同构(SR→SR)与异构(MySQL→SR) Catalog 的加速方案对比
 - 更新 index.md 和 tags-index.md
+
+## [2026-07-08] ingest | StarRocks 物化视图深度解析
+
+- 新增 wiki/concepts/starrocks-materialized-view.md
+- 覆盖同步vs异步MV技术原理、SPJG改写算法、刷新策略、使用场景
+- 更新 index.md、tags-index.md

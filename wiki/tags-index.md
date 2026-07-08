@@ -418,6 +418,10 @@
 - [OpenSpec](entities/openspec.md)
 - [Spec驱动开发 (SDD)](concepts/spec-driven-development.md)
 
+## SPJG
+
+- [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
+
 ## Schema Linking
 
 - [AutoLink](entities/autolink.md)
@@ -455,6 +459,7 @@
 ## StarRocks
 
 - [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+- [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
 
 ## Superpowers
@@ -544,6 +549,10 @@
 ## 具身智能
 
 - [FlashRT](entities/flashrt.md)
+
+## 刷新策略
+
+- [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
 
 ## 动画
 
@@ -751,6 +760,14 @@
 
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](topics/agentic-rag.md)
 
+## 查询加速
+
+- [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
+
+## 查询改写
+
+- [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
+
 ## 标准化
 
 - [MCP 模型上下文协议（Model Context Protocol）](concepts/mcp-model-context-protocol.md)
@@ -826,6 +843,7 @@
 ## 物化视图
 
 - [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+- [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
 
 ## 状态机
 

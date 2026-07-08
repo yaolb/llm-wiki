@@ -68,6 +68,7 @@
 - [AI 网关与模型路由](wiki/concepts/ai-gateway.md) — 聚合多模型提供商，统一 API 接入与自动路由，零成本调用 237 个 AI 免费额度 `#API网关 #模型路由 #成本优化 #Agent基础设施`
 - [上下文工程](wiki/concepts/context-engineering.md) — 系统化管理 AI Agent 在大型项目中的代码上下文，解决 Context Rot `#AI编程 #上下文管理`
 - [OKF 开放知识格式](wiki/concepts/okf-open-knowledge-format.md) — Google 提出的 AI Agent 可消费结构化知识标准 `#知识格式 #Google #AI-Agent`
+- [StarRocks 物化视图深度解析](wiki/concepts/starrocks-materialized-view.md) — 同步/异步物化视图技术原理、SPJG 查询改写算法、刷新策略、使用场景与最佳实践 `#StarRocks #物化视图 #查询改写`
 
 ## 主题
 <!-- 技术领域、研究方向、行业动态 -->
