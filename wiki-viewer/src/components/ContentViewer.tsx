@@ -12,6 +12,10 @@ interface ContentViewerProps {
 
 export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [editing, setEditing] = useState(false);
+  const [editContent, setEditContent] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
+  const [editMsg, setEditMsg] = useState('');
 
   // Event delegation: intercept clicks on wikilinks (rendered as #wiki: paths)
   useEffect(() => {
@@ -129,6 +133,44 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
     }
   };
 
+  // Edit mode handlers
+  const startEditing = () => {
+    setEditContent(page?.raw || '');
+    setEditing(true);
+    setEditMsg('');
+  };
+
+  const cancelEditing = () => {
+    setEditing(false);
+    setEditContent('');
+    setEditMsg('');
+  };
+
+  const saveEditing = async () => {
+    if (!page) return;
+    setEditSaving(true);
+    setEditMsg('');
+    try {
+      const relPath = page.path.replace(/.*\/wiki\//, 'wiki/');
+      const resp = await fetch('/api/save-page', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: relPath, content: editContent }),
+      });
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.error || 'save failed');
+      }
+      setEditMsg('✅ 保存成功！刷新页面查看变更');
+      setEditSaving(false);
+      // Refresh after short delay
+      setTimeout(() => window.location.reload(), 1500);
+    } catch (err: any) {
+      setEditMsg('❌ 保存失败: ' + err.message);
+      setEditSaving(false);
+    }
+  };
+
   if (!page) {
     return (
       <div className="content-empty">
@@ -143,6 +185,32 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
   }
 
   const { meta } = page;
+
+  // Edit mode: show editor
+  if (editing) {
+    return (
+      <div ref={containerRef} className="content">
+        <div className="content-inner">
+          <div className="edit-bar">
+            <span className="edit-bar-title">编辑: {page.path.replace(/.*\/wiki\//, '')}</span>
+            <div className="edit-actions">
+              {editMsg && <span className="edit-msg">{editMsg}</span>}
+              <button className="edit-btn edit-btn-secondary" onClick={cancelEditing} disabled={editSaving}>取消</button>
+              <button className="edit-btn edit-btn-primary" onClick={saveEditing} disabled={editSaving}>
+                {editSaving ? '保存中...' : '💾 保存'}
+              </button>
+            </div>
+          </div>
+          <textarea
+            className="edit-textarea"
+            value={editContent}
+            onChange={(e) => setEditContent(e.target.value)}
+            spellCheck={false}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="content">
@@ -205,6 +273,11 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
             {processedContent}
           </ReactMarkdown>
         </div>
+
+        {/* Edit button */}
+        <button className="edit-page-btn" onClick={startEditing} title="编辑此页面">
+          ✏️
+        </button>
       </div>
     </div>
   );
