@@ -38,9 +38,34 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
       </div>
 
       <nav className="sidebar-nav">
-        {/* Tag Cloud */}
+        {categories.map((cat) => (
+          <div key={cat.name} style={{ marginBottom: 4 }}>
+            <button onClick={() => onToggleCategory(cat.name)} className="cat-btn">
+              <span className={`arrow ${cat.collapsed ? '' : 'open'}`}>&#9654;</span>
+              {cat.name}
+              <span className="count">{cat.pages.length}</span>
+            </button>
+            {!cat.collapsed && (
+              <div className="cat-pages">
+                {cat.pages.map((page) => (
+                  <div key={page.path}>
+                    <button
+                      onClick={() => onSelect(page)}
+                      className={`page-btn${activePath === page.path ? ' active' : ''}`}
+                      title={page.summary || page.title}
+                    >
+                      {page.title}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* Tag Cloud — placed at bottom */}
         {allTags.length > 0 && (
-          <div style={{ padding: '8px 0', marginBottom: 8, borderBottom: '1px solid var(--border)' }}>
+          <div style={{ padding: '8px 0', marginTop: 8, borderTop: '1px solid var(--border)' }}>
             <button
               onClick={() => setTagCollapsed(!tagCollapsed)}
               className="cat-btn"
@@ -88,32 +113,6 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
             )}
           </div>
         )}
-
-
-        {categories.map((cat) => (
-          <div key={cat.name} style={{ marginBottom: 4 }}>
-            <button onClick={() => onToggleCategory(cat.name)} className="cat-btn">
-              <span className={`arrow ${cat.collapsed ? '' : 'open'}`}>&#9654;</span>
-              {cat.name}
-              <span className="count">{cat.pages.length}</span>
-            </button>
-            {!cat.collapsed && (
-              <div className="cat-pages">
-                {cat.pages.map((page) => (
-                  <div key={page.path}>
-                    <button
-                      onClick={() => onSelect(page)}
-                      className={`page-btn${activePath === page.path ? ' active' : ''}`}
-                      title={page.summary || page.title}
-                    >
-                      {page.title}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
       </nav>
 
       <div className="sidebar-footer">LLM Wiki Viewer · 自动索引</div>
