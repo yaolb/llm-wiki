@@ -119,32 +119,76 @@
       .tag-search-input:focus { border-color: var(--accent); }
       .tag-search-input::placeholder { color: var(--text-muted); }
 
-      /* Table of Contents */
-      .toc {
+      /* Floating Table of Contents */
+      .toc-float {
+        position: fixed; right: max(12px, calc((100vw - 720px - 288px) / 2 - 200px));
+        top: 50%; transform: translateY(-50%); z-index: 30;
+        display: flex; flex-direction: column; align-items: flex-end;
+      }
+      .toc-toggle {
+        width: 36px; height: 36px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
         background: var(--surface-light); border: 1px solid var(--border);
-        border-radius: 12px; margin-bottom: 24px; overflow: hidden;
+        color: var(--text-secondary); cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.15s; position: relative;
       }
-      .toc-header {
-        width: 100%; display: flex; align-items: center; gap: 6px;
+      .toc-toggle:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+      .toc-toggle-count {
+        position: absolute; top: -6px; right: -6px;
+        font-size: 9px; min-width: 16px; height: 16px;
+        border-radius: 999px; background: var(--accent); color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: 600;
+      }
+      .toc-float-body {
+        position: absolute; right: 44px; top: 50%; transform: translateY(-50%);
+        width: 240px; max-height: 60vh;
+        background: var(--surface-light); border: 1px solid var(--border);
+        border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        overflow: hidden; display: flex; flex-direction: column;
+      }
+      .toc-float-header {
+        display: flex; align-items: center; justify-content: space-between;
         padding: 10px 14px; font-size: 13px; font-weight: 600;
-        color: var(--text-primary); cursor: pointer;
+        color: var(--text-primary); border-bottom: 1px solid var(--border);
       }
-      .toc-header:hover { background: var(--surface-hover); }
-      .toc-header .arrow { font-size: 10px; transition: transform 0.15s; }
-      .toc-header .arrow.open { transform: rotate(90deg); }
-      .toc-header .count {
-        margin-left: auto; font-size: 10px; color: var(--text-muted);
-        background: var(--surface); padding: 1px 8px; border-radius: 999px;
+      .toc-close {
+        font-size: 12px; width: 24px; height: 24px; border-radius: 6px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--text-muted); cursor: pointer;
       }
-      .toc-body { padding: 0 14px 10px; display: flex; flex-direction: column; gap: 2px; }
+      .toc-close:hover { background: var(--surface-hover); color: var(--text-primary); }
+      .toc-float-nav {
+        overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 1px;
+        max-height: calc(60vh - 44px);
+      }
       .toc-link {
         font-size: 12px; color: var(--text-secondary); text-decoration: none;
-        padding: 3px 8px; border-radius: 6px; transition: all 0.1s;
+        padding: 4px 10px; border-radius: 6px; transition: all 0.1s;
+        border-left: 2px solid transparent;
       }
       .toc-link:hover { background: var(--surface); color: var(--accent); }
-      .toc-level-2 { font-weight: 500; }
-      .toc-level-3 { padding-left: 20px; font-size: 11px; }
-      .toc-level-4 { padding-left: 36px; font-size: 11px; }
+      .toc-link.toc-active {
+        color: var(--accent); font-weight: 600;
+        border-left-color: var(--accent);
+        background: rgba(180,83,9,0.06);
+      }
+      .toc-level-2 { }
+      .toc-level-3 { padding-left: 22px; font-size: 11px; }
+      .toc-level-4 { padding-left: 38px; font-size: 11px; }
+
+      @media (max-width: 1200px) {
+        .toc-float { right: 12px; }
+        .toc-float-body { right: 44px; width: 200px; }
+      }
+      @media (max-width: 1023px) {
+        .toc-float { right: 12px; }
+        .toc-float-body { right: 44px; width: 200px; }
+      }
+      @media (max-width: 640px) {
+        .toc-float-body { width: 180px; }
+      }
 
       /* Markdown */
       .md-content h1 { font-size: 24px; font-weight: 600; margin-top: 0; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }

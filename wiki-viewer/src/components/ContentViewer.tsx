@@ -32,6 +32,8 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
   }, [onNavigate]);
 
   const [tocCollapsed, setTocCollapsed] = useState(false);
+  const [activeHeading, setActiveHeading] = useState('');
+  const headingObserver = useRef<IntersectionObserver | null>(null);
 
   // Extract headings for table of contents
   const headings = useMemo(() => {
@@ -82,7 +84,50 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
   useEffect(() => {
     const el = containerRef.current;
     if (el) el.scrollTop = 0;
+    setActiveHeading('');
   }, [page?.path]);
+
+  // Track visible heading via IntersectionObserver
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || headings.length === 0) return;
+
+    headingObserver.current?.disconnect();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let best = '';
+        let bestTop = Infinity;
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const top = entry.boundingClientRect.top;
+            if (top >= 0 && top < bestTop) {
+              bestTop = top;
+              best = entry.target.id;
+            }
+          }
+        }
+        if (best) setActiveHeading(best);
+      },
+      { root: container, rootMargin: '-80px 0px -70% 0px', threshold: 0 }
+    );
+
+    for (const h of headings) {
+      const el = document.getElementById(h.id);
+      if (el) observer.observe(el);
+    }
+
+    headingObserver.current = observer;
+    return () => observer.disconnect();
+  }, [headings, page?.path]);
+
+  const handleTocClick = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setActiveHeading(id);
+    }
+  };
 
   if (!page) {
     return (
@@ -101,6 +146,38 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
 
   return (
     <div ref={containerRef} className="content">
+      {/* Floating TOC on the right */}
+      {headings.length > 2 && (
+        <div className="toc-float">
+          <button className="toc-toggle" onClick={() => setTocCollapsed(!tocCollapsed)} title="目录">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <span className="toc-toggle-count">{headings.length}</span>
+          </button>
+          {!tocCollapsed && (
+            <div className="toc-float-body">
+              <div className="toc-float-header">
+                目录
+                <button className="toc-close" onClick={() => setTocCollapsed(true)}>✕</button>
+              </div>
+              <nav className="toc-float-nav">
+                {headings.map((h, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className={`toc-link toc-level-${h.level}${activeHeading === h.id ? ' toc-active' : ''}`}
+                    onClick={(e) => { e.preventDefault(); handleTocClick(h.id); }}
+                  >
+                    {h.text}
+                  </a>
+                ))}
+              </nav>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="content-inner">
         <div className="meta-row">
           {meta.type && <span className={`meta-type ${meta.type}`}>{meta.type}</span>}
@@ -120,35 +197,6 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
                 #{tag}
               </button>
             ))}
-          </div>
-        )}
-
-        {/* Table of Contents */}
-        {headings.length > 2 && (
-          <div className="toc">
-            <button className="toc-header" onClick={() => setTocCollapsed(!tocCollapsed)}>
-              <span className={`arrow ${tocCollapsed ? '' : 'open'}`}>&#9654;</span>
-              目录
-              <span className="count">{headings.length}</span>
-            </button>
-            {!tocCollapsed && (
-              <nav className="toc-body">
-                {headings.map((h, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className={`toc-link toc-level-${h.level}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const el = document.getElementById(h.id);
-                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }}
-                  >
-                    {h.text}
-                  </a>
-                ))}
-              </nav>
-            )}
           </div>
         )}
 
