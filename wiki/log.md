@@ -143,3 +143,10 @@
 - Streamable HTTP 传输详解与配置
 - 三层文档体系：MCP Schema + OpenAPI + Markdown门户
 - 完整项目结构、启动验证、推荐实施路线
+
+## [2026-07-08] update | Nacos + 域名统一访问层设计
+
+- 新增第五章：Nacos + 域名深度设计
+- 包含四层域名架构、分层域名设计
+- CoreDNS+Nacos插件、Spring Cloud Gateway、Nginx Upsync 三种方案
+- 生产环境完整架构图、配置示例、推荐场景

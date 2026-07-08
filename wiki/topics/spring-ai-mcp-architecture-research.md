@@ -1391,3 +1391,536 @@ curl -X POST http://localhost:8080/mcp/v1/tools/call \
 ├── Streamable HTTP     ├── 统一工具注入        └── 文档部署
 └── 端到端验证          └── 分布式调用验证
 ```
+
+---
+
+## 五、Nacos + 域名：统一访问层深度设计
+
+### 5.1 为什么需要域名
+
+在微服务 + MCP 架构中，MCP Server 通过 Nacos 注册后，AI Host 需要访问它们。如果直接使用 IP:Port：
+
+| 问题 | 说明 |
+|------|------|
+| IP 硬编码 | 扩缩容或重启后 IP 变化，需要手动更新 |
+| 无法负载均衡 | 多实例需要自行实现负载均衡 |
+| HTTPS/TLS 困难 | 每个实例单独管理证书 |
+| 运维割裂 | 服务名与访问地址脱节，排查困难 |
+
+引入域名后：
+
+```
+用户请求 → https://mcp.yourcompany.com/wanxiang/portrait
+                               ↓
+                     DNS 解析 → Nacos 服务发现
+                               ↓
+                   负载均衡 → 具体实例 IP:Port
+```
+
+### 5.2 四层域名架构
+
+```
+                            ┌──────────────────────────────┐
+                            │        外部 DNS              │
+                            │  mcp.yourcompany.com → VIP   │
+                            └────────────┬─────────────────┘
+                                         │ A记录/CNAME
+                            ┌────────────▼─────────────────┐
+                            │     负载均衡器 (SLB/Nginx)    │
+                            │  - TLS 终结                   │
+                            │  - 域名 → 反向代理            │
+                            │  - 统一 443 入口              │
+                            └────────────┬─────────────────┘
+                                         │
+            ┌────────────────────────────┼────────────────────────────┐
+            │                            │                            │
+  ┌─────────▼──────────┐    ┌───────────▼──────────┐    ┌───────────▼──────────┐
+  │  API Gateway        │    │   AI Host (MCP Client)│    │   其他内部服务       │
+  │  (Spring Cloud GW)  │    │                      │    │                      │
+  │  gw.mcp.internal    │    │  host.mcp.internal   │    │  svc.mcp.internal    │
+  └─────────┬──────────┘    └───────────┬──────────┘    └───────────┬──────────┘
+            │                            │                            │
+            └──────────────┬─────────────┴──────────────┬────────────┘
+                           │                            │
+                  ┌────────▼────────┐          ┌───────▼────────┐
+                  │   Nacos Cluster  │          │  CoreDNS       │
+                  │   (注册中心)     │          │  (内部DNS)     │
+                  │   nacos:8848    │          │                │
+                  └────────┬────────┘          └───────┬────────┘
+                           │                            │
+            ┌──────────────┼────────────────────────────┘
+            │              │              Internal DNS 解析:
+            │              │              *.mcp.internal → Nacos
+            │              │
+   ┌────────▼────────┐  ┌──▼──────────┐  ┌──────────────┐
+   │ 万象 MCP Server  │  │ ChatBI MCP  │  │ 标签 MCP     │
+   │  mcp-wanxiang    │  │ mcp-chatbi  │  │ mcp-label    │
+   │  :8081           │  │  :8082      │  │  :8083       │
+   └─────────────────┘  └─────────────┘  └──────────────┘
+```
+
+### 5.3 域名分层设计
+
+| 层级 | 域名 | 用途 | 访问范围 |
+|------|------|------|---------|
+| **外部** | `mcp.yourcompany.com` | 用户/第三方MCP调用入口 | 公网 |
+| **Gateway** | `gw.mcp.internal` | API Gateway 内部地址 | 内网 |
+| **AI Host** | `host.mcp.internal` | AI Host MCP Client 访问 | 内网 |
+| **服务** | `mcp-wanxiang.mcp.internal` | 万象 MCP Server | 内网 |
+| **服务** | `mcp-chatbi.mcp.internal` | ChatBI MCP Server | 内网 |
+| **服务** | `mcp-label.mcp.internal` | 标签 MCP Server | 内网 |
+| **Nacos** | `nacos.mcp.internal` | Nacos 集群 | 内网 |
+
+### 5.4 方案一：CoreDNS + Nacos 插件（推荐）
+
+将 Nacos 注册的服务自动导出为 DNS 域名，CoreDNS 提供服务发现，实现「服务名 ↔ 域名」的自动映射。
+
+#### 架构
+```
+MCP Server 注册到 Nacos
+       │
+       │ 服务名: mcp-wanxiang
+       ▼
+Nacos CoreDNS 插件 (sidecar)
+       │
+       │ 自动注册 DNS 记录
+       ▼
+CoreDNS 服务器
+  mcp-wanxiang.mcp.internal  A  10.0.1.10:8081
+  mcp-wanxiang.mcp.internal  A  10.0.1.11:8081  (多实例)
+       │
+       │ DNS 查询
+       ▼
+AI Host / Gateway 通过域名访问
+```
+
+#### 部署 CoreDNS + Nacos 插件
+
+```yaml
+# CoreDNS Corefile
+.:53 {
+    errors
+    health
+    ready
+    # Nacos 插件
+    nacos {
+        # Nacos 服务器地址
+        server_addr http://nacos.mcp.internal:8848
+        # 域名后缀
+        domain_suffix mcp.internal
+        # 刷新间隔（秒）
+        refresh_interval 30
+        # 默认 TTL
+        ttl 60
+    }
+    # 转发外部 DNS
+    forward . 8.8.8.8 114.114.114.114
+    cache 30
+}
+```
+
+#### Nacos CoreDNS 插件 Pod 配置
+```yaml
+# Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coredns-nacos
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: coredns-nacos
+  template:
+    metadata:
+      labels:
+        app: coredns-nacos
+    spec:
+      containers:
+      - name: coredns
+        image: coredns/coredns:latest
+        args: ["-conf", "/etc/coredns/Corefile"]
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        volumeMounts:
+        - name: config
+          mountPath: /etc/coredns
+      # Nacos 插件 sidecar
+      - name: nacos-dns-sidecar
+        image: nacos-group/nacos-coredns-plugin:latest
+        env:
+        - name: NACOS_SERVER_ADDR
+          value: "http://nacos.mcp.internal:8848"
+        - name: DOMAIN_SUFFIX
+          value: "mcp.internal"
+      volumes:
+      - name: config
+        configMap:
+          name: coredns-config
+```
+
+#### 验证 DNS 解析
+```bash
+# 查询 MCP Server 的 IP
+dig mcp-wanxiang.mcp.internal @coredns-ip
+
+# 结果
+mcp-wanxiang.mcp.internal. 60 IN A 10.0.1.10
+mcp-wanxiang.mcp.internal. 60 IN A 10.0.1.11
+
+# 查询 ChatBI MCP Server
+dig mcp-chatbi.mcp.internal @coredns-ip
+```
+
+#### AI Host 配置（使用域名）
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        connections:
+          - name: wanxiang-agent
+            url: http://mcp-wanxiang.mcp.internal:8081
+            transport: streamable-http
+          - name: chatbi-service
+            url: http://mcp-chatbi.mcp.internal:8082
+            transport: streamable-http
+```
+
+### 5.5 方案二：Spring Cloud Gateway + Nacos 统一路由
+
+不直接给 MCP Server 配域名，而是通过 Gateway 统一转发，Gateway 本身暴露一个域名。
+
+#### 架构
+```
+外部请求 → https://mcp.yourcompany.com/wanxiang/query
+                                  ↓
+                    Spring Cloud Gateway
+                    ├── gw.mcp.internal
+                    ├── 路由规则:
+                    │   /wanxiang/** → mcp-wanxiang:8081
+                    │   /chatbi/**   → mcp-chatbi:8082
+                    │   /label/**    → mcp-label:8083
+                    ├── 统一鉴权 (JWT)
+                    ├── 统一限流 (Redis)
+                    └── 统一审计
+                                  ↓
+                    Nacos 服务发现 → 负载均衡
+                                  ↓
+                    具体 MCP Server 实例
+```
+
+#### Gateway 配置
+
+```yaml
+spring:
+  application:
+    name: mcp-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos.mcp.internal:8848
+    gateway:
+      # 全局默认过滤器
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 100
+            redis-rate-limiter.burstCapacity: 200
+        - name: JwtAuthentication
+      routes:
+        # ===== MCP 协议代理 =====
+        - id: mcp-wanxiang-tools
+          uri: lb://mcp-server-wanxiang
+          predicates:
+            - Path=/wanxiang/mcp/v1/tools/**
+          filters:
+            - StripPrefix=1
+        - id: mcp-wanxiang-call
+          uri: lb://mcp-server-wanxiang
+          predicates:
+            - Path=/wanxiang/mcp/v1/call/**
+          filters:
+            - StripPrefix=1
+        
+        # ===== REST 接口代理 =====
+        - id: wanxiang-rest
+          uri: lb://mcp-server-wanxiang
+          predicates:
+            - Path=/wanxiang/api/**
+          filters:
+            - StripPrefix=1
+        
+        - id: chatbi-rest
+          uri: lb://mcp-server-chatbi
+          predicates:
+            - Path=/chatbi/api/**
+          filters:
+            - StripPrefix=1
+
+      # 自动服务发现路由
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+          # 只暴露 MCP 相关服务
+          filters:
+            - name: McpServiceFilter
+```
+
+#### 统一的鉴权过滤器
+
+```java
+@Component
+public class JwtAuthenticationFilter implements GatewayFilter, Ordered {
+    
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String path = exchange.getRequest().getURI().getPath();
+        
+        // MCP 协议检查
+        if (path.contains("/mcp/v1/tools/call")) {
+            return checkMcpAuth(exchange, chain);
+        }
+        // REST API 检查
+        return checkRestAuth(exchange, chain);
+    }
+    
+    private Mono<Void> checkMcpAuth(ServerWebExchange exchange, GatewayFilterChain chain) {
+        // 从 Header 中提取 MCP Session Token
+        String token = exchange.getRequest().getHeaders()
+            .getFirst("X-MCP-Auth");
+        if (token == null || !validateToken(token)) {
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getResponse().setComplete();
+        }
+        return chain.filter(exchange);
+    }
+}
+```
+
+### 5.6 方案三：Nginx + Nacos Upsync（传统运维友好）
+
+如果团队更熟悉 Nginx 而不是 Spring Cloud Gateway：
+
+```nginx
+# Nginx 配置
+upstream mcp-wanxiang {
+    # Nacos upsync 模块动态更新后端列表
+    nacos http://nacos.mcp.internal:8848;
+    nacos_service_name mcp-server-wanxiang;
+    nacos_group DEFAULT_GROUP;
+    nacos_subscribe on;
+    
+    keepalive 64;
+}
+
+upstream mcp-chatbi {
+    nacos http://nacos.mcp.internal:8848;
+    nacos_service_name mcp-server-chatbi;
+    nacos_group DEFAULT_GROUP;
+    nacos_subscribe on;
+}
+
+server {
+    listen 443 ssl;
+    server_name mcp.yourcompany.com;
+    
+    ssl_certificate     /etc/ssl/mcp.yourcompany.com.pem;
+    ssl_certificate_key /etc/ssl/mcp.yourcompany.com.key;
+    
+    # 统一请求体大小限制
+    client_max_body_size 10m;
+    
+    # ===== MCP 协议路由 =====
+    location ~ ^/wanxiang/mcp/(.*)$ {
+        proxy_pass http://mcp-wanxiang/mcp/$1$is_args$args;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-MCP-Forwarded true;
+        
+        # MCP Streamable HTTP 需要 SSE
+        proxy_set_header Connection '';
+        proxy_http_version 1.1;
+        chunked_transfer_encoding on;
+        proxy_buffering off;
+        proxy_cache off;
+    }
+    
+    location ~ ^/chatbi/mcp/(.*)$ {
+        proxy_pass http://mcp-chatbi/mcp/$1$is_args$args;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Connection '';
+        proxy_http_version 1.1;
+        proxy_buffering off;
+    }
+    
+    # ===== REST API 路由 =====
+    location /wanxiang/api/ {
+        proxy_pass http://mcp-wanxiang/api/;
+        proxy_set_header Host $host;
+    }
+    
+    location /chatbi/api/ {
+        proxy_pass http://mcp-chatbi/api/;
+        proxy_set_header Host $host;
+    }
+}
+```
+
+安装 Nacos Upsync 模块：
+```bash
+# 编译 Nginx 时添加 upsync 模块
+./configure --add-module=/path/to/nginx-upsync-module
+make && make install
+```
+
+### 5.7 三种方案对比
+
+| 维度 | CoreDNS+Nacos | Spring Cloud GW | Nginx+Nacos Upsync |
+|------|:-------------:|:---------------:|:------------------:|
+| 架构复杂度 | ⭐⭐低 | ⭐⭐⭐中 | ⭐⭐⭐中 |
+| 动态路由 | ✅ 自动DNS发现 | ✅ LB:// 自动发现 | ✅ Upsync 自动同步 |
+| 统一鉴权 | ❌ 需额外实现 | ✅ 内置过滤器 | ❌ Lua 脚本实现 |
+| 限流能力 | ❌ 无 | ✅ Redis RateLimiter | ⚠️ ngx_http_limit_req |
+| TLS 终结 | ❌ 需外部 LB | ✅ Gateway 层实现 | ✅ Nginx 原生 |
+| 协议支持 | DNS | HTTP/MCP/SSE | HTTP/WS/SSE |
+| 运维熟悉度 | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| K8s 友好度 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+
+### 5.8 推荐方案
+
+#### 🏆 小规模（< 5 个 MCP Server）：Spring Cloud Gateway
+
+```
+mcp.yourcompany.com
+       ↓
+Spring Cloud Gateway  (gw.mcp.internal)
+       ├── /wanxiang/**  →  mcp-wanxiang (Nacos LB)
+       ├── /chatbi/**    →  mcp-chatbi   (Nacos LB)
+       └── /label/**     →  mcp-label    (Nacos LB)
+```
+
+**理由：** 与 Spring 生态无缝集成，Gateway 自带路由+鉴权+限流，一套代码解决所有问题。
+
+#### 🏆 中大规模（> 5 个 MCP Server + K8s）：CoreDNS + Nacos
+
+```
+AI Host 通过域名调用:
+  mcp-wanxiang.mcp.internal:8081
+  mcp-chatbi.mcp.internal:8082
+
+CoreDNS 自动将 Nacos 服务名 → DNS A记录
+```
+
+**理由：** 服务名即域名，语言无关（Python/Go/Java 都能用 DNS 发现），K8s 原生友好。
+
+#### 🏆 传统运维团队：Nginx + Nacos Upsync
+
+**理由：** 运维最熟悉 Nginx，不引入新组件，Upsync 模块实现动态后端更新。
+
+### 5.9 生产环境推荐架构（完整）
+
+```
+                                        ┌──────────────────────────┐
+                                        │  外部DNS                  │
+                                        │  mcp.yourcompany.com     │
+                                        │    ↓ A记录               │
+                                        └────────┬─────────────────┘
+                                                 │
+                                        ┌────────▼─────────────────┐
+                                        │  SLB / 云负载均衡         │
+                                        │  - TLS 443 终结           │
+                                        │  - DDoS 防护              │
+                                        └────────┬─────────────────┘
+                                                 │
+                                        ┌────────▼─────────────────┐
+                                        │  Spring Cloud Gateway ×2  │
+                                        │  - 统一鉴权 (OAuth2)      │
+                                        │  - Redis 限流             │
+                                        │  - 审计日志               │
+                                        └────────┬─────────────────┘
+                                                 │
+          ┌───────────────────────────────────────┼───────────────────────┐
+          │                                       │                       │
+  ┌───────▼────────┐                    ┌─────────▼──────┐   ┌───────────▼────┐
+  │ AI Host ×2     │                    │ Nacos ×3       │   │ CoreDNS ×2     │
+  │ (MCP Client)   │                    │ (Cluster)      │   │ (Nacos Plugin) │
+  │ host.mcp.inter │                    │ nacos.mcp.in.. │   │ *.mcp.internal │
+  └───────┬────────┘                    └─────────┬──────┘   └───────────┬────┘
+          │                ┌──────────────────────┼──────────────────────┘
+          │                │                      │
+          │                │  DNS: mcp-wanxiang.mcp.internal → 10.0.1.x
+          │                │
+  ┌───────▼────────────────▼──────────────────────────────────────────────┐
+  │                   Kubernetes / 物理机集群                               │
+  │                                                                        │
+  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐        │
+  │  │ mcp-wanxiang    │  │ mcp-chatbi      │  │ mcp-label       │        │
+  │  │ 2 pods / 2实例  │  │ 2 pods / 2实例  │  │ 1 pod  / 1实例  │        │
+  │  │ Streamable HTTP │  │ Streamable HTTP │  │ Streamable HTTP │        │
+  │  │ @McpTool        │  │ @McpTool        │  │ @McpTool        │        │
+  │  └─────────────────┘  └─────────────────┘  └─────────────────┘        │
+  └────────────────────────────────────────────────────────────────────────┘
+```
+
+### 5.10 配置示例汇总
+
+#### Nacos 配置
+```yaml
+# 所有 MCP Server 统一配置
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos.mcp.internal:8848
+        namespace: mcp-platform       # 命名空间隔离
+        group: MCP_SERVER_GROUP       # 分组
+        # 注册时附加元数据
+        metadata:
+          mcp-protocol: streamable-http
+          mcp-version: "1.0"
+          mcp-tools: portrait,tags
+```
+
+#### AI Host 动态发现 + 域名调用
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        # 方式1：静态域名（推荐 CoreDNS 方案）
+        connections:
+          - name: wanxiang-agent
+            url: http://mcp-wanxiang.mcp.internal:8081
+            transport: streamable-http
+          - name: chatbi-service
+            url: http://mcp-chatbi.mcp.internal:8082
+            transport: streamable-http
+
+# 方式2：Nacos 动态发现（Gateway 方案）
+# AI Host 通过 Gateway 统一入口
+mcp:
+  gateway:
+    url: https://mcp.yourcompany.com
+    auth-token: ${MCP_AUTH_TOKEN}
+```
+
+#### 外部域名 DNS 配置
+```
+# DNS 解析记录
+mcp.yourcompany.com.      300 IN A     <SLB公网IP>
+gw.mcp.internal.          300 IN A     10.0.0.10
+gw.mcp.internal.          300 IN A     10.0.0.11
+host.mcp.internal.        300 IN A     10.0.1.10
+host.mcp.internal.        300 IN A     10.0.1.11
+nacos.mcp.internal.       300 IN A     10.0.2.10
+nacos.mcp.internal.       300 IN A     10.0.2.11
+nacos.mcp.internal.       300 IN A     10.0.2.12
+```
