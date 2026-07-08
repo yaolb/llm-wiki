@@ -93,6 +93,10 @@
 - [AI增强开发三件套](wiki/synthesis/ai-dev-trifecta.md) — OpenSpec + Superpowers + gstack 把 Vibe Coding 拉回工程交付 `#AI编程 #工程交付 #三件套`
 - [LLM 模型融合深度报告](wiki/synthesis/model-fusion-deep-report.md) — 从原理、技术路线、实现方式、评测四维度系统性梳理模型融合全貌 `#模型融合 #综述 #评测`
 
+## 标签
+
+- 📑 [标签索引](tags-index.md) — 按标签浏览分类，共 210+ 个标签
+
 ---
 
 _最后更新于 2026-07-07_ | 全站 73 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
