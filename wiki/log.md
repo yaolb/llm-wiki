@@ -150,3 +150,9 @@
 - 包含四层域名架构、分层域名设计
 - CoreDNS+Nacos插件、Spring Cloud Gateway、Nginx Upsync 三种方案
 - 生产环境完整架构图、配置示例、推荐场景
+
+## [2026-07-08] update | 补充 StarRocks Data Cache 配置详解
+
+- 新增 Data Cache 配置章节：架构、版本差异、完整配置步骤
+- 按表粒度控制、验证方法、JDBC Catalog 行为说明
+- 常见问题 FAQ
