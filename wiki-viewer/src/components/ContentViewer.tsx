@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useRef } from 'react';
+import React, { useMemo, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { WikiPage } from '../types';
@@ -31,10 +31,58 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
     return () => el.removeEventListener('click', handler);
   }, [onNavigate]);
 
+  const [tocCollapsed, setTocCollapsed] = useState(false);
+
+  // Extract headings for table of contents
+  const headings = useMemo(() => {
+    if (!page) return [];
+    const raw = page.content;
+    const regex = /^(#{2,4})\s+(.+)$/gm;
+    const result: { level: number; text: string; id: string }[] = [];
+    let m;
+    while ((m = regex.exec(raw)) !== null) {
+      const level = m[1].length;
+      const text = m[2].trim().replace(/`(.+?)`/g, '$1');
+      const id = text
+        .toLowerCase()
+        .replace(/[^\w\u4e00-\u9fff\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+      result.push({ level, text, id });
+    }
+    return result;
+  }, [page]);
+
+  // Custom renderers with heading IDs
+  const renderers = useMemo(() => ({
+    h2: ({ children, ...props }: any) => {
+      const text = extractPlainText(children);
+      const id = slugify(text);
+      return React.createElement('h2', { id, ...props }, children);
+    },
+    h3: ({ children, ...props }: any) => {
+      const text = extractPlainText(children);
+      const id = slugify(text);
+      return React.createElement('h3', { id, ...props }, children);
+    },
+    h4: ({ children, ...props }: any) => {
+      const text = extractPlainText(children);
+      const id = slugify(text);
+      return React.createElement('h4', { id, ...props }, children);
+    },
+  }), []);
+
   const processedContent = useMemo(() => {
     if (!page) return '';
     return convertWikilinks(page.content);
   }, [page]);
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    const el = containerRef.current;
+    if (el) el.scrollTop = 0;
+  }, [page?.path]);
 
   if (!page) {
     return (
@@ -75,12 +123,58 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
           </div>
         )}
 
+        {/* Table of Contents */}
+        {headings.length > 2 && (
+          <div className="toc">
+            <button className="toc-header" onClick={() => setTocCollapsed(!tocCollapsed)}>
+              <span className={`arrow ${tocCollapsed ? '' : 'open'}`}>&#9654;</span>
+              目录
+              <span className="count">{headings.length}</span>
+            </button>
+            {!tocCollapsed && (
+              <nav className="toc-body">
+                {headings.map((h, i) => (
+                  <a
+                    key={i}
+                    href="#"
+                    className={`toc-link toc-level-${h.level}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const el = document.getElementById(h.id);
+                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                  >
+                    {h.text}
+                  </a>
+                ))}
+              </nav>
+            )}
+          </div>
+        )}
+
         <div className="md-content">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>
             {processedContent}
           </ReactMarkdown>
         </div>
       </div>
     </div>
   );
+}
+
+// Helpers
+function extractPlainText(children: any): string {
+  if (typeof children === 'string') return children;
+  if (Array.isArray(children)) return children.map(extractPlainText).join('');
+  if (children?.props?.children) return extractPlainText(children.props.children);
+  return '';
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\u4e00-\u9fff\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
 }
