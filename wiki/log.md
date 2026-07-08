@@ -134,3 +134,12 @@
 - 新增 wiki/topics/spring-ai-mcp-architecture-research.md
 - 三大方案对比：原生Starter / AI Gateway / 分层Sidecar
 - 推荐渐进式演进路线：Phase1原生Starter→Phase2引入Gateway
+
+## [2026-07-08] update | 方案一深度展开：MCP + 接口 + 文档三位一体
+
+- 新增 4.1~4.9 完整展开方案一
+- 接口即MCP：@AiApi 统一注解 + 自动桥接处理器
+- 分布式MCP调用：McpClientManager + Nacos动态发现
+- Streamable HTTP 传输详解与配置
+- 三层文档体系：MCP Schema + OpenAPI + Markdown门户
+- 完整项目结构、启动验证、推荐实施路线

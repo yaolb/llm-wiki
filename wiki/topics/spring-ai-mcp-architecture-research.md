@@ -601,3 +601,793 @@ spring:
 | 动态配置 | ⚠️ 本地配置 | ✅ 配置中心统一 |
 
 **最终推荐：先用方案一（原生 Spring AI MCP Starter）快速上线，再按需演进到 Gateway 架构。** 不要一开始就追求大而全的 Gateway，防止过度设计耽误业务迭代。
+
+---
+
+## 四、方案一深度展开：MCP + 接口 + 文档三位一体
+
+### 4.1 核心架构理念
+
+方案一的目标是构建一个 **三位一体** 的框架，让每个业务方法同时具备三重身份：
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     @Service 业务方法                     │
+│                                                          │
+│           ┌──────────┼────────────┐                      │
+│           ▼          ▼            ▼                      │
+│    ┌──────────┐ ┌──────────┐ ┌──────────┐               │
+│    │ REST API │ │ MCP Tool │ │  文档     │               │
+│    │(HTTP JSON)│ │(Streamable)│ │(OpenAPI) │               │
+│    └──────────┘ └──────────┘ └──────────┘               │
+│                                                          │
+│  ┌────────────────────────────────────────────────┐     │
+│  │        自动注册 & 文档生成引擎                    │     │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐     │     │
+│  │  │OpenAPI   │  │MCP Schema│  │Markdown  │     │     │
+│  │  │ 生成器   │  │  生成器  │  │ 文档页   │     │     │
+│  │  └──────────┘  └──────────┘  └──────────┘     │     │
+│  └────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────┘
+```
+
+**核心原则：接口即 MCP，一次定义，三处可用。**
+
+---
+
+### 4.2 接口即 MCP：自动桥接
+
+#### 4.2.1 统一注解体系
+
+定义一套统一的注解，一个方法同时注册 REST 和 MCP：
+
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AiApi {
+    String name();                          // 方法名（也是 MCP tool name）
+    String path() default "";              // REST 路径，为空则自动生成
+    String description() default "";       // 描述
+    HttpMethod method() default HttpMethod.POST;  // HTTP 方法
+    String[] tags() default {};             // 分组标签
+    boolean enableMcp() default true;       // 是否暴露为 MCP Tool
+    boolean enableRest() default true;      // 是否暴露为 REST API
+}
+```
+
+#### 4.2.2 自动桥接处理器
+
+```java
+@Component
+public class AiApiBridgeRegistry implements BeanPostProcessor {
+    
+    private final List<AiApiEndpoint> endpoints = new CopyOnWriteArrayList<>();
+    
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) {
+        for (Method method : bean.getClass().getMethods()) {
+            AiApi ann = method.getAnnotation(AiApi.class);
+            if (ann == null) continue;
+            
+            // 1. 注册 REST 端点
+            if (ann.enableRest()) {
+                registerRestEndpoint(bean, method, ann);
+            }
+            
+            // 2. 注册 MCP Tool
+            if (ann.enableMcp()) {
+                registerMcpTool(bean, method, ann);
+            }
+            
+            // 3. 生成文档
+            endpoints.add(new AiApiEndpoint(bean, method, ann));
+        }
+        return bean;
+    }
+    
+    private void registerRestEndpoint(Object bean, Method method, AiApi ann) {
+        // 动态注册到 Spring MVC
+        // 方案：使用 RequestMappingHandlerMapping 动态添加
+        log.info("✅ REST端点注册: {} -> {}", ann.path(), method.getName());
+    }
+    
+    private void registerMcpTool(Object bean, Method method, AiApi ann) {
+        // 动态注册为 MCP Tool（通过 ToolCallback 注入到 ChatClient）
+        // Spring AI 的 ToolCallback 可以编程式注册
+        log.info("✅ MCP工具注册: {} -> {}", ann.name(), method.getName());
+    }
+}
+```
+
+#### 4.2.3 使用示例
+
+```java
+@Service
+public class UserPortraitService {
+    
+    @AiApi(
+        name = "query_user_portrait",
+        path = "/api/wanxiang/portrait",
+        description = "查询用户画像标签数据",
+        tags = {"万象", "用户画像"}
+    )
+    public PortraitResult queryPortrait(
+        @ApiParam("用户ID") String userId,
+        @ApiParam(value = "维度列表", example = "["年龄","性别","消费力"]") List<String> dimensions
+    ) {
+        // 业务逻辑
+        return portraitService.query(userId, dimensions);
+    }
+    
+    @AiApi(
+        name = "batch_query_tags",
+        path = "/api/wanxiang/tags/batch",
+        description = "批量查询标签值"
+    )
+    public Map<String, Object> batchQueryTags(@RequestBody BatchQueryRequest request) {
+        return tagService.batchQuery(request);
+    }
+}
+```
+
+#### 4.2.4 自动映射规则
+
+| 维度 | REST API | MCP Tool |
+|------|----------|----------|
+| 路径 | `@AiApi.path` → `/api/{module}/{name}` | Streamable HTTP endpoint |
+| 参数 | JSON body → Java对象 | JSON Schema 自动生成 |
+| 返回 | HTTP Response JSON | `@McpTool` 返回值 |
+| 鉴权 | JWT/Token拦截器 | MCP Session鉴权 |
+| 限流 | Gateway过滤器 | MCP Client限流 |
+| 文档 | OpenAPI 3.1 | MCP Schema (JSON-RPC) |
+
+---
+
+### 4.3 分布式 MCP 调用
+
+#### 4.3.1 架构总览
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   AI Host (统一入口)                         │
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │              McpClientManager                         │   │
+│  │  ┌──────────────────────────────────────────────┐    │   │
+│  │  │           MCP Service Discovery                │    │   │
+│  │  │  ┌──────────┐ ┌──────────┐ ┌──────────┐      │    │   │
+│  │  │  │ 万象服务  │ │ ChatBI   │ │ 标签服务  │      │    │   │
+│  │  │  │ MCP Client│ │ MCP      │ │ MCP      │      │    │   │
+│  │  │  │           │ │ Client   │ │ Client   │      │    │   │
+│  │  │  └─────┬─────┘ └────┬─────┘ └────┬─────┘      │    │   │
+│  │  └────────┼────────────┼────────────┼───────────┘    │   │
+│  └───────────┼────────────┼────────────┼──────────────┘   │
+└──────────────┼────────────┼────────────┼──────────────────┘
+               │ Streamable │ Streamable │ Streamable
+               │ HTTP       │ HTTP       │ HTTP
+    ┌──────────▼──────┐ ┌───▼────────┐ ┌─▼──────────────┐
+    │ 万象 MCP Server  │ │ChatBI MCP  │ │ 标签 MCP Server │
+    │ (8081)          │ │Server(8082)│ │ (8083)         │
+    │                  │ │            │ │                 │
+    │ @McpTool        │ │ @McpTool   │ │ @McpTool       │
+    │ - queryPortrait │ │ - askBI    │ │ - listTags     │
+    │ - batchTags     │ │ - genSQL   │ │ - tagValues    │
+    └─────────────────┘ └────────────┘ └─────────────────┘
+               │                │                │
+         ┌─────┴────────────────┴────────────────┴─────┐
+         │          Nacos / Consul 注册中心              │
+         │  (服务发现 + 健康检查)                        │
+         └──────────────────────────────────────────────┘
+```
+
+#### 4.3.2 MCP Server 端（每个微服务独立部署）
+
+**依赖：**
+```xml
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+</dependency>
+```
+
+**配置：**
+```yaml
+server:
+  port: 8081
+
+spring:
+  application:
+    name: mcp-server-wanxiang
+  ai:
+    mcp:
+      server:
+        name: wanxiang-agent
+        version: 1.0.0
+        protocol: STREAMABLE    # ← Streamable HTTP 传输
+        transport: streamable-http
+        sse-poll-interval: 500  # SSE 轮询间隔(ms)
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        service: mcp-server-wanxiang
+```
+
+**代码：**
+```java
+@SpringBootApplication
+@EnableDiscoveryClient
+public class WanxiangMcpServer {
+    public static void main(String[] args) {
+        SpringApplication.run(WanxiangMcpServer.class, args);
+    }
+}
+
+@McpTool
+public class WanxiangAgentTools {
+    
+    private final UserPortraitService portraitService;
+    private final TagService tagService;
+    
+    @McpTool(
+        name = "query_user_portrait",
+        description = "查询用户画像标签，支持年龄/性别/消费力/兴趣等维度"
+    )
+    public PortraitResult queryUserPortrait(
+        @McpParam("用户ID（数字格式）") String userId,
+        @McpParam("查询维度列表，如 [\"年龄\",\"性别\",\"消费力\"]") 
+        @JsonProperty("dimensions") List<String> dimensions
+    ) {
+        return portraitService.query(userId, dimensions);
+    }
+    
+    @McpTool(name = "batch_query_tags", description = "批量查询标签值")
+    public Map<String, Object> batchQueryTags(
+        @McpParam("批量查询请求") BatchQueryRequest request
+    ) {
+        return tagService.batchQuery(request);
+    }
+}
+```
+
+#### 4.3.3 MCP Client 端（AI Host，统一发现与调用）
+
+**依赖：**
+```xml
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+</dependency>
+```
+
+**配置：**
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        # 静态连接配置（适合少量确定的服务）
+        connections:
+          - name: wanxiang-agent
+            url: http://localhost:8081
+            transport: streamable-http
+          - name: chatbi-service
+            url: http://localhost:8082
+            transport: streamable-http
+```
+
+**动态服务发现（从注册中心自动发现 MCP Server）：**
+```java
+@Configuration
+public class McpClientAutoDiscovery {
+    
+    @Bean
+    @ConditionalOnBean(NamingService.class)
+    public McpClientManager mcpClientManager(
+            NamingService namingService,
+            ObjectProvider<McpClient.Builder> clientBuilder
+    ) {
+        return new McpClientManager(namingService, clientBuilder);
+    }
+}
+
+@Component
+public class McpClientManager {
+    
+    private final Map<String, McpClient> clients = new ConcurrentHashMap<>();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    
+    public McpClientManager(NamingService naming, ObjectProvider<McpClient.Builder> builderProvider) {
+        // 每 30 秒刷新服务列表
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                // 发现所有标记为 MCP 的服务
+                List<Instance> instances = naming.getAllInstances(
+                    "mcp-server-*", true  // 支持通配符匹配
+                );
+                for (Instance instance : instances) {
+                    String serviceName = instance.getServiceName();
+                    if (!clients.containsKey(serviceName)) {
+                        McpClient client = builderProvider.getObject()
+                            .name(serviceName)
+                            .url(String.format("http://%s:%d", 
+                                instance.getIp(), instance.getPort()))
+                            .transport(McpTransport.STREAMABLE_HTTP)
+                            .build();
+                        clients.put(serviceName, client);
+                        log.info("🔄 MCP Client 自动连接: {} -> {}:{}", 
+                            serviceName, instance.getIp(), instance.getPort());
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("MCP服务发现刷新失败", e);
+            }
+        }, 0, 30, TimeUnit.SECONDS);
+    }
+    
+    public McpClient getClient(String serviceName) {
+        return clients.get(serviceName);
+    }
+    
+    public Map<String, McpClient> getAllClients() {
+        return Collections.unmodifiableMap(clients);
+    }
+}
+```
+
+**统一工具注入到 ChatClient：**
+```java
+@Component
+public class UnifiedToolInjector {
+    
+    @Bean
+    public ChatClient chatClient(
+            ChatClient.Builder builder,
+            McpClientManager clientManager) {
+        
+        // 收集所有 MCP Server 的 ToolCallbackProvider
+        List<ToolCallbackProvider> providers = clientManager.getAllCliets()
+            .entrySet().stream()
+            .map(e -> new SyncMcpToolCallbackProvider(e.getValue()))
+            .collect(Collectors.toList());
+        
+        // 合并所有工具
+        ToolCallbackProvider combined = ToolCallbackProvider.combine(providers);
+        
+        return builder
+            .defaultTools(combined)
+            .build();
+    }
+}
+```
+
+#### 4.3.4 分布式调用流程
+
+```
+User: "帮我查一下北京地区高消费力男性用户的画像"
+       │
+       ▼
+AI Host ChatClient
+       │
+       ├── 模型选择路由 → DeepSeek-V4 (推理强)
+       │
+       ├── 工具发现阶段
+       │    └── ToolCallbackProvider 返回所有 MCP Server 的 Tool 列表
+       │
+       ├── 模型决策 → 需要调用 query_user_portrait
+       │
+       ├── MCP 调用
+       │    ├── 1. McpClientManager 定位服务: mcp-server-wanxiang
+       │    ├── 2. 构建 JSON-RPC 请求
+       │    │    {
+       │    │      "method": "tools/call",
+       │    │      "params": {
+       │    │        "name": "query_user_portrait",
+       │    │        "arguments": {
+       │    │          "user_id": "12345",
+       │    │          "dimensions": ["年龄","性别","消费力"]
+       │    │        }
+       │    │      }
+       │    │    }
+       │    ├── 3. Streamable HTTP 发送 → POST /mcp/v1/tools/call
+       │    │    └── 头部: Content-Type: application/json
+       │    │    └── 响应: SSE 流式返回或 JSON 一次性返回
+       │    ├── 4. 万象 MCP Server 接收
+       │    │    ├── 反序列化参数
+       │    │    ├── 调用 @McpTool 方法
+       │    │    ├── 执行画像查询
+       │    │    └── 返回结果
+       │    └── 5. 结果返回 AI Model
+       │
+       └── AI 组织最终回答
+```
+
+---
+
+### 4.4 Streamable HTTP 传输详解
+
+#### 4.4.1 为什么选择 Streamable HTTP
+
+| 传输方式 | 适用场景 | 优势 | 劣势 |
+|---------|---------|------|------|
+| STDIO | 本地单进程 | 简单直接 | 不能跨网络 |
+| SSE (传统) | 简单推送 | 单向推送 | 连接开销大 |
+| **Streamable HTTP** | **分布式生产环境** | **双向、低延迟、可扩展** | **配置略复杂** |
+
+#### 4.4.2 Streamable HTTP 工作原理
+
+```
+MCP Client (AI Host)                    MCP Server (业务服务)
+       │                                       │
+       │  1. POST /mcp/v1/tools/list            │
+       │  ─────────────────────────────────►    │
+       │  ◄─────────────────────────────────    │
+       │  Response: Tool[] (JSON)               │
+       │                                       │
+       │  2. POST /mcp/v1/tools/call             │
+       │  Content-Type: application/json        │
+       │  {name, arguments}                      │
+       │  ─────────────────────────────────►    │
+       │                                       │
+       │  Option A: 一次性响应                   │
+       │  ◄─────────────────────────────────    │
+       │  Response: ToolResult (JSON)           │
+       │                                       │
+       │  Option B: SSE 流式响应                │
+       │  ◄──── SSE stream ────────────────    │
+       │  data: {"type":"progress",...}        │
+       │  data: {"type":"result",...}          │
+       │                                       │
+       │  3. GET /mcp/v1/events (SSE订阅)       │
+       │  (服务端主动推送工具变更通知)            │
+       │  ◄──── SSE stream ────────────────    │
+       │  data: {"type":"tool_list_changed"}   │
+```
+
+#### 4.4.3 Spring Boot 配置
+
+```yaml
+spring:
+  ai:
+    mcp:
+      server:
+        protocol: STREAMABLE
+        transport: streamable-http
+        # 可选：SSE 相关配置
+        sse-poll-interval: 500          # 轮询间隔 (ms)
+        sse-max-connections: 100        # 最大 SSE 连接数
+        idle-timeout: 300000            # 空闲超时 (ms)
+```
+
+**WebMVC 实现（推荐，适合多数场景）：**
+```
+依赖: spring-ai-starter-mcp-server-webmvc
+默认自动配置:
+  - POST /mcp/v1/tools/call
+  - POST /mcp/v1/tools/list
+  - GET  /mcp/v1/events (SSE)
+  - GET  /mcp/v1/health
+```
+
+**WebFlux 实现（高并发）：**
+```
+依赖: spring-ai-starter-mcp-server-webflux
+优势: 非阻塞、背压支持、高吞吐
+```
+
+---
+
+### 4.5 自动文档生成
+
+#### 4.5.1 三层文档体系
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                  统一文档门户                               │
+│                                                           │
+│  ┌──────────────────┐  ┌──────────────┐  ┌────────────┐  │
+│  │  MCP Schema       │  │ OpenAPI 3.1  │  │  Markdown   │  │
+│  │  (JSON-RPC)       │  │ (REST)       │  │ (人可读)    │  │
+│  │                   │  │              │  │            │  │
+│  │ /mcp/v1/tools/list │  │ /v3/api-docs │  │ /docs/mcp  │  │
+│  │ 自动 JSON Schema  │  │ SpringDoc    │  │ 格式化文档 │  │
+│  └──────────────────┘  └──────────────┘  └────────────┘  │
+│                                                           │
+│  统一数据源: @AiApi / @McpTool 注解元数据                   │
+└──────────────────────────────────────────────────────────┘
+```
+
+#### 4.5.2 MCP Schema 自动生成
+
+MCP 的 Schema 是自动的——`@McpTool` 注解天然生成 JSON Schema：
+
+```json
+// GET /mcp/v1/tools/list 响应 (自动生成)
+{
+  "tools": [
+    {
+      "name": "query_user_portrait",
+      "description": "查询用户画像标签",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "用户ID（数字格式）"
+          },
+          "dimensions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "查询维度列表"
+          }
+        },
+        "required": ["user_id", "dimensions"]
+      }
+    }
+  ]
+}
+```
+
+#### 4.5.3 REST API 文档自动生成（OpenAPI 3.1 + SpringDoc）
+
+依赖：
+```xml
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.8.0</version>
+</dependency>
+```
+
+自动生成 OpenAPI 文档：
+```yaml
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  packages-to-scan: com.yourcompany.mcp
+```
+
+#### 4.5.4 MCP-OpenAPI 统一描述（关键创新）
+
+将 MCP Tool 映射为 OpenAPI 的 扩展字段，实现 **统一描述**：
+
+```yaml
+openapi: 3.1.0
+info:
+  title: 万象 MCP API
+  version: 1.0.0
+  x-mcp-server: true                    # ← MCP 标记
+paths:
+  /api/wanxiang/portrait:
+    post:
+      operationId: query_user_portrait
+      x-mcp-tool: true                   # ← 同时也是 MCP Tool
+      x-mcp-tool-name: query_user_portrait
+      summary: 查询用户画像
+      x-mcp-param-mapping:
+        # REST body 参数到 MCP arguments 的映射
+        body.user_id -> arguments.user_id
+        body.dimensions -> arguments.dimensions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                  description: 用户ID
+                dimensions:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - user_id
+                - dimensions
+      responses:
+        '200':
+          description: 查询成功
+          x-mcp-result: true             # ← 同时也是 MCP 返回
+```
+
+#### 4.5.5 文档聚合门户
+
+```java
+@RestController
+@RequestMapping("/docs")
+public class ApiDocumentationController {
+    
+    private final McpServerInstance mcpServer;
+    private final List<AiApiEndpoint> endpoints;
+    
+    // 1. 统一服务列表
+    @GetMapping("/services")
+    public List<McpServiceDoc> listServices() {
+        // 聚合所有已注册的 MCP Server 及其工具
+        return mcpServer.discovery();
+    }
+    
+    // 2. MCP Schema 查看器（可读版）
+    @GetMapping("/mcp")
+    public String mcpDocPage() {
+        // 生成 MCP 工具的 Markdown/HTML 文档
+        return buildMcpDocPage();
+    }
+    
+    // 3. 接口状态监控
+    @GetMapping("/health")
+    public Map<String, HealthStatus> healthCheck() {
+        // 检查所有注册的 MCP Server 健康状态
+        return healthChecker.checkAll();
+    }
+    
+    // 4. 在线调试
+    @PostMapping("/playground/try")
+    public Object tryTool(@RequestBody McpTryRequest request) {
+        // 在线调试 MCP Tool
+        return mcpServer.callTool(request.getToolName(), request.getArguments());
+    }
+}
+```
+
+**生成的文档内容示例：**
+
+```markdown
+# 万象 MCP 服务文档
+
+## 服务信息
+- 服务名: mcp-server-wanxiang
+- 版本: 1.0.0
+- 传输协议: Streamable HTTP
+- 状态: ✅ 健康 (响应时间 12ms)
+
+## 可用工具 (3)
+
+### 1. query_user_portrait
+- **描述**: 查询用户画像标签
+- **REST等效**: POST /api/wanxiang/portrait
+- **参数**:
+  | 名称 | 类型 | 必填 | 描述 |
+  |------|------|------|------|
+  | user_id | string | ✅ | 用户ID（数字格式）|
+  | dimensions | array[string] | ✅ | 查询维度列表 |
+- **调试**: [在线测试 →](/docs/playground?tool=query_user_portrait)
+
+### 2. batch_query_tags
+- **描述**: 批量查询标签值
+...
+```
+
+---
+
+### 4.6 完整项目结构
+
+```
+mcp-platform/
+├── mcp-api/                          # 公共 API 定义
+│   └── src/main/java/.../
+│       ├── annotation/
+│       │   └── AiApi.java            # 统一注解
+│       ├── dto/
+│       │   ├── McpRequest.java
+│       │   └── McpResponse.java
+│       └── bridge/
+│           └── AiApiBridgeRegistry.java  # 自动桥接
+├── mcp-server-wanxiang/              # 万象 MCP Server
+│   ├── pom.xml
+│   └── src/main/...
+│       ├── WanxiangMcpServer.java
+│       ├── tools/
+│       │   ├── UserPortraitTools.java   # @McpTool
+│       │   └── TagQueryTools.java
+│       └── application.yml
+├── mcp-server-chatbi/                # ChatBI MCP Server
+│   ├── pom.xml
+│   └── src/main/...
+│       ├── ChatbiMcpServer.java
+│       ├── tools/
+│       │   ├── ChatBiTools.java
+│       │   └── SqlGenTools.java
+│       └── application.yml
+├── mcp-server-label/                 # 标签 MCP Server
+│   └── ...
+├── mcp-host/                         # AI Host 统一入口
+│   ├── pom.xml
+│   └── src/main/...
+│       ├── AiHostApplication.java
+│       ├── client/
+│       │   ├── McpClientManager.java     # 动态发现
+│       │   └── UnifiedToolInjector.java   # 统一注入
+│       ├── controller/
+│       │   └── AiChatController.java     # 对话接口
+│       ├── docs/
+│       │   └── ApiDocumentationController.java  # 文档门户
+│       └── application.yml
+└── pom.xml                           # 父 POM
+```
+
+---
+
+### 4.7 启动与验证
+
+```bash
+# 1. 启动注册中心
+docker compose up -d nacos
+
+# 2. 启动各 MCP Server
+cd mcp-server-wanxiang && mvn spring-boot:run  # :8081
+cd mcp-server-chatbi  && mvn spring-boot:run  # :8082
+cd mcp-server-label   && mvn spring-boot:run  # :8083
+
+# 3. 启动 AI Host
+cd mcp-host && mvn spring-boot:run             # :8080
+
+# 4. 验证
+curl http://localhost:8080/mcp/v1/tools/list
+# → 返回所有已注册 MCP Server 的工具列表
+
+curl http://localhost:8080/docs/services
+# → 返回服务列表及文档
+```
+
+**验证工具自动发现：**
+```bash
+# 手动触发 MCP 调用
+curl -X POST http://localhost:8080/mcp/v1/tools/call \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "query_user_portrait",
+    "arguments": {
+      "user_id": "12345",
+      "dimensions": ["年龄", "性别", "消费力"]
+    }
+  }'
+```
+
+---
+
+### 4.8 方案一能力覆盖矩阵
+
+| 需求 | 实现方式 | 状态 |
+|------|---------|:----:|
+| MCP 协议接入 | `@McpTool` 注解 + `spring-ai-starter-mcp-server-webmvc` | ✅ 原生 |
+| Streamable HTTP | `protocol: STREAMABLE` + Streamable HTTP transport | ✅ 原生 |
+| 分布式 MCP 调用 | 每个微服务独立 MCP Server + Nacos 注册发现 + McpClientManager | ✅ 方案 |
+| 接口即 MCP | `@AiApi` 统一注解 → 自动注册 REST + MCP | ✅ 框架 |
+| MCP Schema 文档 | 自动生成 (`/mcp/v1/tools/list`) | ✅ 自动 |
+| REST API 文档 | SpringDoc OpenAPI 3.1 (`/swagger-ui.html`) | ✅ Spring生态 |
+| 统一文档门户 | `ApiDocumentationController` 聚合展示 | ✅ 方案 |
+| 在线调试 | `/docs/playground/try` 端点 | ✅ 方案 |
+| 服务健康检查 | `/mcp/v1/health` + Nacos 健康检查 | ✅ 自动 |
+|
+
+---
+
+### 4.9 推荐实施路线
+
+```
+第1周                   第2周                   第3-4周
+─────────────          ─────────────           ──────────────
+搭建 MCP 基础框架       扩展分布式 MCP          完善文档体系
+├── 创建 mcp-api 模块   ├── 部署 Nacos          ├── 集成 SpringDoc
+├── 实现 @AiApi 注解    ├── 各服务注册发现      ├── 开发文档门户
+├── 首个 MCP Server     ├── McpClientManager    ├── 在线调试
+├── Streamable HTTP     ├── 统一工具注入        └── 文档部署
+└── 端到端验证          └── 分布式调用验证
+```
