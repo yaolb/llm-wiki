@@ -121,7 +121,7 @@
 
       /* Floating Table of Contents */
       .toc-float {
-        position: fixed; right: max(12px, calc((100vw - 720px - 288px) / 2 - 200px));
+        position: fixed; right: max(30px, calc((100vw - 720px - 288px) / 2 - 280px));
         top: 50%; transform: translateY(-50%); z-index: 30;
         display: flex; flex-direction: column; align-items: flex-end;
       }
@@ -179,15 +179,12 @@
       .toc-level-4 { padding-left: 38px; font-size: 11px; }
 
       @media (max-width: 1200px) {
-        .toc-float { right: 12px; }
-        .toc-float-body { right: 44px; width: 200px; }
+        .toc-float { right: 20px; }
+        .toc-float-body { right: 48px; width: 200px; }
       }
       @media (max-width: 1023px) {
-        .toc-float { right: 12px; }
-        .toc-float-body { right: 44px; width: 200px; }
-      }
-      @media (max-width: 640px) {
-        .toc-float-body { width: 180px; }
+        .toc-float { right: 16px; }
+        .toc-float-body { right: 48px; width: 200px; }
       }
 
       /* Markdown */
