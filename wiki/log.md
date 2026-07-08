@@ -13,6 +13,20 @@
 - 全站累计：31 实体 + 21 概念 + 11 主题 + 5 综述 = 69 页面
 - 更新 index.md
 
+## [2026-07-07] ingest | Spec Kit / html-video / StarRocks 跨源查询
+- 新增实体页：[[Spec Kit]]（GitHub 官方 SDD 工具包，118k Star）、[[html-video]]（HTML 转 MP4 视频工具）
+- 新增主题页：[[StarRocks 跨数据源查询方案]]（Catalog 方案实现跨源 JOIN，587 行深度调研）
+- 更新实体页：[[Claude Code]]（新增隐私与遥测配置章节）
+- 全站累计：30 实体 + 21 概念 + 12 主题 + 5 综述 = 72 页面
+- 更新 index.md
+
+## [2026-07-07] update | Claude Code 隐私配置 + Codex CLI 实体
+- 更新实体页：[[Claude Code]]（完整补充 10+ 隐私环境变量配置）
+- 新增实体页：[[Codex CLI]]（GitHub 开源终端 AI 编程工具 + 隐私配置）
+- 来源：微信公众号「灵感回路」
+- 全站累计：31 实体 + 21 概念 + 12 主题 + 5 综述 = 73 页面
+- 更新 index.md
+
 ## [2026-07-06] update | MCP 概念页 — 官方文档更新
 - 保存原始素材到 raw/mcp-official-intro.md
 - 更新概念页：[[MCP 模型上下文协议]]（补充官方定义
@@ -89,3 +103,10 @@
 - 更新 RAG 概念页：新增评估相关链接
 - 全站累计：29 实体 + 20 概念 + 11 主题 + 5 综述 = 66 页面
 - 更新 index.md
+
+## [2026-07-08] feat | 增加标签云功能
+
+- wiki-viewer: 侧边栏增加标签云，点击标签按标签筛选文档
+- wiki-viewer: 页面标签可点击，点击后自动按标签过滤
+- wiki: 新增 tags-index.md 标签索引页（自动生成）
+- scripts: 新增 regenerate-tags.sh 脚本

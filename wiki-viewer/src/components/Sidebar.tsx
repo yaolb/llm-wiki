@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import type { Category, PageEntry, TagCount } from '../types';
 
 interface SidebarProps {
@@ -13,6 +14,12 @@ interface SidebarProps {
 }
 
 export function Sidebar({ categories, activePath, onSelect, onToggleCategory, onSearch, pageCount, allTags, activeTag, onTagSelect }: SidebarProps) {
+  const [tagCollapsed, setTagCollapsed] = useState(true);
+
+  // Auto-expand when a tag filter is activated
+  useEffect(() => {
+    if (activeTag) setTagCollapsed(false);
+  }, [activeTag]);
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -35,15 +42,15 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
         {allTags.length > 0 && (
           <div style={{ padding: '8px 0', marginBottom: 8, borderBottom: '1px solid var(--border)' }}>
             <button
-              onClick={() => onTagSelect('')}
+              onClick={() => setTagCollapsed(!tagCollapsed)}
               className="cat-btn"
               style={{ marginBottom: 4 }}
             >
-              <span className={`arrow ${activeTag ? '' : 'open'}`}>&#9654;</span>
+              <span className={`arrow ${tagCollapsed ? '' : 'open'}`}>&#9654;</span>
               标签
               <span className="count">{allTags.length}</span>
             </button>
-            {!activeTag && (
+            {!tagCollapsed && !activeTag && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, padding: '4px 8px' }}>
                 {allTags.map((tag) => (
                   <button
@@ -57,7 +64,18 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
                 ))}
               </div>
             )}
-            {activeTag && (
+            {!tagCollapsed && activeTag && (
+              <div style={{ padding: '4px 8px', fontSize: 12, color: 'var(--text-muted)' }}>
+                已选: <strong style={{ color: 'var(--accent)' }}>#{activeTag}</strong>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onTagSelect(activeTag); }}
+                  style={{ marginLeft: 8, fontSize: 11, color: 'var(--text-muted)', textDecoration: 'underline' }}
+                >
+                  清除
+                </button>
+              </div>
+            )}
+            {tagCollapsed && activeTag && (
               <div style={{ padding: '4px 8px', fontSize: 12, color: 'var(--text-muted)' }}>
                 已选: <strong style={{ color: 'var(--accent)' }}>#{activeTag}</strong>
                 <button
