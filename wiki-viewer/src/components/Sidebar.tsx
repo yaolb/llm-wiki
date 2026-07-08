@@ -13,6 +13,13 @@ interface SidebarProps {
   onTagSelect: (tag: string) => void;
 }
 
+const TAG_INDEX_PAGE: PageEntry = {
+  title: '📑 标签索引',
+  path: 'wiki/tags-index.md',
+  summary: '按标签浏览所有页面',
+  tags: [],
+};
+
 export function Sidebar({ categories, activePath, onSelect, onToggleCategory, onSearch, pageCount, allTags, activeTag, onTagSelect }: SidebarProps) {
   const [tagCollapsed, setTagCollapsed] = useState(true);
   const [tagQuery, setTagQuery] = useState('');
@@ -138,6 +145,15 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
                 </button>
               </div>
             )}
+            {/* 标签索引页链接 */}
+            <button
+              onClick={() => { onSelect(TAG_INDEX_PAGE); }}
+              className={`page-btn${activePath === TAG_INDEX_PAGE.path ? ' active' : ''}`}
+              style={{ margin: '4px 8px', fontSize: 12 }}
+              title="按标签浏览所有页面"
+            >
+              📑 标签索引
+            </button>
           </div>
         )}
       </nav>
