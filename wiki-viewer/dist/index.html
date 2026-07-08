@@ -111,6 +111,13 @@
         background: rgba(0,0,0,0.08); min-width: 14px; text-align: center;
       }
       .tag-btn:hover .tag-count { background: rgba(255,255,255,0.2); }
+      .tag-search-input {
+        width: 100%; padding: 6px 10px; font-size: 11px; border-radius: 6px;
+        border: 1px solid var(--border); background: var(--surface);
+        color: var(--text-primary); outline: none; transition: border-color 0.15s;
+      }
+      .tag-search-input:focus { border-color: var(--accent); }
+      .tag-search-input::placeholder { color: var(--text-muted); }
 
       /* Markdown */
       .md-content h1 { font-size: 24px; font-weight: 600; margin-top: 0; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
@@ -153,7 +160,7 @@
       /* Status bar */
       .status-bar { display: flex; align-items: center; gap: 16px; padding: 4px 16px; background: var(--surface-light); border-top: 1px solid var(--border); font-size: 10px; color: var(--text-muted); flex-shrink: 0; }
     </style>
-    <script type="module" crossorigin src="/assets/index-D5HKqjUG.js"></script>
+    <script type="module" crossorigin src="/assets/index-CBUFAgjc.js"></script>
   </head>
   <body>
     <div id="root"></div>

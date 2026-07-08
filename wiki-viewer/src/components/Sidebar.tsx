@@ -15,11 +15,23 @@ interface SidebarProps {
 
 export function Sidebar({ categories, activePath, onSelect, onToggleCategory, onSearch, pageCount, allTags, activeTag, onTagSelect }: SidebarProps) {
   const [tagCollapsed, setTagCollapsed] = useState(true);
+  const [tagQuery, setTagQuery] = useState('');
 
   // Auto-expand when a tag filter is activated
   useEffect(() => {
     if (activeTag) setTagCollapsed(false);
   }, [activeTag]);
+
+  // Reset search when collapsing
+  useEffect(() => {
+    if (tagCollapsed) setTagQuery('');
+  }, [tagCollapsed]);
+
+  // Filter tags by fuzzy query
+  const q = tagQuery.toLowerCase().trim();
+  const filteredTags = q.length >= 1
+    ? allTags.filter((t) => t.name.toLowerCase().includes(q))
+    : allTags;
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -76,17 +88,32 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
               <span className="count">{allTags.length}</span>
             </button>
             {!tagCollapsed && !activeTag && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, padding: '4px 8px' }}>
-                {allTags.map((tag) => (
-                  <button
-                    key={tag.name}
-                    onClick={(e) => { e.stopPropagation(); onTagSelect(tag.name); }}
-                    className="tag-btn"
-                  >
-                    {tag.name}
-                    <span className="tag-count">{tag.count}</span>
-                  </button>
-                ))}
+              <div>
+                {/* Tag search input */}
+                <div style={{ padding: '4px 8px 6px' }}>
+                  <input
+                    type="text"
+                    value={tagQuery}
+                    onChange={(e) => setTagQuery(e.target.value)}
+                    placeholder="搜索标签..."
+                    className="tag-search-input"
+                  />
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, padding: '4px 8px', maxHeight: 300, overflowY: 'auto' }}>
+                  {filteredTags.length === 0 && (
+                    <span style={{ fontSize: 11, color: 'var(--text-muted)', padding: '4px 0' }}>无匹配标签</span>
+                  )}
+                  {filteredTags.map((tag) => (
+                    <button
+                      key={tag.name}
+                      onClick={(e) => { e.stopPropagation(); onTagSelect(tag.name); }}
+                      className="tag-btn"
+                    >
+                      {tag.name}
+                      <span className="tag-count">{tag.count}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             {!tagCollapsed && activeTag && (
