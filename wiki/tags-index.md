@@ -21,6 +21,7 @@
 ## AI Agent
 
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
+- [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
 - [AI Agent 技术全景报告 2026](topics/ai-agent-landscape-2026.md)
 - [Agent工具选择问题](concepts/agent-tool-selection.md)
 - [Agent记忆系统](concepts/agent-memory-system.md)
@@ -174,6 +175,7 @@
 
 ## ChatBI
 
+- [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
 
 ## ChromaDB
@@ -375,6 +377,10 @@
 
 - [FDE (Forward Deployed Engineer)](concepts/fde.md)
 
+## Pandas
+
+- [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
+
 ## Prompt
 
 - [Loop Engineering](concepts/loop-engineering.md)
@@ -519,12 +525,17 @@
 ## 万象
 
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
+- [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
 
 ## 上下文工程
 
 - [GSD (Get Shit Done)](entities/gsd.md)
 - [上下文工程 (Context Engineering)](concepts/context-engineering.md)
+
+## 上半年
+
+- [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
 
 ## 中山大学
 
@@ -908,6 +919,10 @@
 ## 结构化知识
 
 - [LLM Wiki — 基于 LLM 的结构化知识库方法论](topics/llm-wiki-methodology.md)
+
+## 绩效
+
+- [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
 
 ## 综述
 

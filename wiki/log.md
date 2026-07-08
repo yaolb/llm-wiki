@@ -122,3 +122,9 @@
 - 新增 wiki/concepts/starrocks-materialized-view.md
 - 覆盖同步vs异步MV技术原理、SPJG改写算法、刷新策略、使用场景
 - 更新 index.md、tags-index.md
+
+## [2026-07-08] ingest | 2026年上半年绩效自评
+
+- 新增 wiki/topics/h1-2026-performance-review.md
+- 基于周报复盘撰写绩效汇报，包含企业价值观自评、万象&Pandas工作内容、多维总评
+- 更新 index.md
