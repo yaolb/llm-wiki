@@ -17,7 +17,7 @@ updated: 2026-07-06
 
 - 过去：写一个复杂 Prompt，期望 LLM 一次搞定所有事
 - 现在：把能力拆解为独立 Skills，按需组合
-- 代表：[[Superpowers]]、[[gstack]]、[[ECC]]
+- 代表：[[Superpowers]]、[[gstack]]、[[ECC (Everything Claude Code)]]
 
 ### 2. 从外部调用到内嵌运行
 
@@ -50,7 +50,7 @@ updated: 2026-07-06
 ### 7. 本地 Agent 与实时感知
 
 - 本地 Agent 崛起：Ollama 驱动的完全本地 Agent，零云端依赖
-- [[PYTHIA]] 融合 Osiris（实时情报）和 MiroFish（多智能体预测），解决 Agent 对现实世界
+- [[PYTHIA（本地 AI Agent 实时感知工具）]] 融合 Osiris（实时情报）和 MiroFish（多智能体预测），解决 Agent 对现实世界
 
 ## Agent 架构范式
 
@@ -75,11 +75,11 @@ updated: 2026-07-06
 - Token 成本：提示词缓存（[[Prompt Caching]]）是工程化的关键
 
 ## 相关概念
-- [[AI Agent]]
+- [[AI Agent（智能体）]]
 - [[Agent记忆系统]]
-- [[Spec驱动开发]]
+- [[Spec驱动开发 (SDD)]]
 - [[Loop Engineering]]
-- [[FDE]]
+- [[FDE (Forward Deployed Engineer)]]
 
 ## 相关实体
 - [[OpenClaw]]
@@ -87,5 +87,5 @@ updated: 2026-07-06
 - [[Superpowers]]
 - [[OpenSpec]]
 - [[PageAgent]]
-- [[PYTHIA]]
-- [[UZI-Skill]]
+- [[PYTHIA（本地 AI Agent 实时感知工具）]]
+- [[UZI-Skill（游资技能库）]]

@@ -43,9 +43,9 @@ Superpowers：Skill A + Skill B + Skill C → 按需组合，精准执行
 AI 增强开发三件套：**OpenSpec**（规范驱动）+ **Superpowers**（纪律驱动）+ **gstack**（角色化执行）
 
 ## 相关概念
-- [[AI编程]]
-- [[统一开发范式]]
-- [[测试驱动开发 TDD]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[统一开发范式 (OpenSpec × Superpowers)]]
+- [[测试驱动开发（Test-Driven Development, TDD）]]
 
 ## 相关实体
 - [[Claude Code]]

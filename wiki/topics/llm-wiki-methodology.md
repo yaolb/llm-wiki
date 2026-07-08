@@ -79,13 +79,13 @@ llm-wiki 完全遵循此方法论构建：
 
 ## 相关实体
 - [[Claude Code]] — 本项目使用的 LLM Agent
-- [[Obsidian]] — 配合使用的知识库浏览器
+- [Obsidian](https://obsidian.md) — 配合使用的知识库浏览器
 
 ## 相关概念
-- [[RAG 检索增强生成]] — LLM Wiki 要替代的传统检索模式
-- [[上下文工程]] — 系统化管理 AI 在大型项目中的代码上下文
-- [[AI Agent]] — LLM Wiki 的维护者本质上是一个 Agent
-- [[本体论 Ontology]] — 知识的结构化形式化描述
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]] — LLM Wiki 要替代的传统检索模式
+- [[上下文工程 (Context Engineering)]] — 系统化管理 AI 在大型项目中的代码上下文
+- [[AI Agent（智能体）]] — LLM Wiki 的维护者本质上是一个 Agent
+- [[本体论 (Ontology)]] — 知识的结构化形式化描述
 - [[Agent记忆系统]] — L0-L3 记忆架构与 Wiki 持久化存储互补
 
 ## 拓展阅读

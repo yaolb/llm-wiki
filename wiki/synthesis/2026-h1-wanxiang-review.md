@@ -35,7 +35,7 @@ updated: 2026-07-04
 - 测试驱动开发（红绿回归）在 Agent 开发中验证有效
 
 ## 相关概念
-- [[AI Agent]]
-- [[MCP 模型上下文协议]]
+- [[AI Agent（智能体）]]
+- [[MCP 模型上下文协议（Model Context Protocol）]]
 - [[万象AI分析平台]]
 - [[AutoLink]]

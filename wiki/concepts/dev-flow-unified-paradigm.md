@@ -39,5 +39,5 @@ Explore     Specify     Execute     Verify      Archive
 
 ## 相关概念
 - [[自改进AI Agent]]
-- [[红绿回归测试]]
-- [[AI编程]]
+- [[红绿回归测试（Red-Green-Regression Pipeline）]]
+- [[AI 编程（AI Programming / AI Coding）]]

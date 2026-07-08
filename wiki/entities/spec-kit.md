@@ -62,7 +62,7 @@ specify init my-project --integration copilot
 - [[OpenSpec]] — 同领域 SDD 框架，不同流派
 - [[BMAD]] — 重量级 SDD 平台
 - [[Superpowers]] — TDD 驱动的 Skills 框架，可与 Spec Kit 互补
-- [[统一开发范式]] — 融合 SDD + TDD 的开发方法论
+- [[统一开发范式 (OpenSpec × Superpowers)]] — 融合 SDD + TDD 的开发方法论
 
 ## 参考
 

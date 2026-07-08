@@ -71,8 +71,8 @@ related_sources: 3
 - [[mergekit]]
 
 ## 相关概念
-- [[模型微调]]
-- [[AI 编程]]
+- [[模型微调（Fine-tuning）]]
+- [[AI 编程（AI Programming / AI Coding）]]
 
 ## 延展阅读
 - [Merge LLMs with mergekit](https://huggingface.co/blog/mlabonne/merge-models) — HuggingFace 官方教程

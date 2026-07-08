@@ -27,8 +27,8 @@ SeedER 将知识图谱检索建模为强化学习问题：
 通过 RL 训练 Agent 学会在图中高效导航，找到多跳关系路径。
 
 ## 相关概念
-- [[RAG 检索增强生成]]
-- [[本体论]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
+- [[本体论 (Ontology)]]
 
 ## 相关实体
 - [[LightRAG]]

@@ -35,10 +35,10 @@ Firecrawl 已成为 AI 生态中**网页数据采集的事实标准**之一，MC
 
 ## 相关实体
 - [[Firecrawl]]
-- [[firecrawl-mcp-server]]
-- [[Playwright]]
+- [firecrawl-mcp-server](https://github.com/nicholasgriffintn/firecrawl-mcp-server)
+- [Playwright](https://playwright.dev)
 
 ## 相关概念
-- [[MCP 模型上下文协议]]
-- [[LLM 网页数据采集]]
-- [[AI Agent]]
+- [[MCP 模型上下文协议（Model Context Protocol）]]
+- [LLM 网页数据采集（Web Scraping for LLM）](https://www.firecrawl.dev)
+- [[AI Agent（智能体）]]

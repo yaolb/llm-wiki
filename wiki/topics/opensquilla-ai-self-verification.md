@@ -36,7 +36,7 @@ OpenSquilla 代表了 AI 编程从"辅助生成"向"自主验证"的关键跨越
 - [[OpenSquilla]]
 
 ## 相关概念
-- [[红绿回归测试]]
-- [[AI 自验证]]
-- [[测试驱动开发 TDD]]
-- [[AI 编程]]
+- [[红绿回归测试（Red-Green-Regression Pipeline）]]
+- [AI 自验证（Self-Verification）](https://arxiv.org/search/?query=self-verification+AI[AI 自验证（Self-Verification in AI）](https://arxiv.org/search/?query=self-verification+AI[[AI 自验证]]searchtype=all)searchtype=all)
+- [[测试驱动开发（Test-Driven Development, TDD）]]
+- [[AI 编程（AI Programming / AI Coding）]]

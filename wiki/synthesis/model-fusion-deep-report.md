@@ -401,9 +401,9 @@ trainer.train()
 - [[mergekit]]
 
 ## 相关概念
-- [[模型融合]]
-- [[模型微调]]
-- [[AI 编程]]
+- [[模型融合（Model Fusion / Model Merging）]]
+- [[模型微调（Fine-tuning）]]
+- [[AI 编程（AI Programming / AI Coding）]]
 
 ## 延展阅读
 - [TIES-Merging Paper](https://arxiv.org/abs/2306.01708)

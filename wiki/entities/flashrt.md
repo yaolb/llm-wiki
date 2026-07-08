@@ -24,4 +24,4 @@ FlashRT 是一个高性能实时推理引擎，专注于小批量、低延迟场
 - 支持 VLA（Vision-Language-Action）模型的实时推理
 
 ## 相关概念
-- [[AI Agent]]
+- [[AI Agent（智能体）]]

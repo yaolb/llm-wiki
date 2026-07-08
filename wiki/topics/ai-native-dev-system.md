@@ -44,7 +44,7 @@ AI Native 研发体系是指以 AI 为核心重新设计软件开发全流程，
 - 万象平台：基于 MCP 的 AI 分析工具链
 
 ## 相关概念
-- [[AI编程]]
-- [[Spec驱动开发]]
-- [[FDE]]
-- [[统一开发范式]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[Spec驱动开发 (SDD)]]
+- [[FDE (Forward Deployed Engineer)]]
+- [[统一开发范式 (OpenSpec × Superpowers)]]

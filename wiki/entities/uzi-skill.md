@@ -49,8 +49,8 @@ DCF、Comps、LBO、DDM、EVA、SOTP、Risk-Adjusted PE、Monte Carlo 等。
 | `dcf <代码>` | DCF 估值专项 | ~2 min |
 
 ## 相关概念
-- [[AI Agent]]
-- [[AI 投资分析]]
+- [[AI Agent（智能体）]]
+- [AI 投资分析（AI Investment Analysis）](https://www.investopedia.com/articles/investing/ai-in-investing.asp)
 - [[OpenClaw]]
 
 ## 延展阅读

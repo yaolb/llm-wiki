@@ -41,6 +41,6 @@ updated: 2026-07-04
 - **Gemini CLI**：Google 生态集成，多模态能力
 
 ## 相关概念
-- [[AI编程]]
-- [[AI Agent]]
-- [[MCP 模型上下文协议]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[AI Agent（智能体）]]
+- [[MCP 模型上下文协议（Model Context Protocol）]]

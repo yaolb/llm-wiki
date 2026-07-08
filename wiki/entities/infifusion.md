@@ -56,7 +56,7 @@ InfiFusion 提出两种融合策略：
 - 数据类型：bfloat16
 
 ## 相关概念
-- [[模型融合]]
+- [[模型融合（Model Fusion / Model Merging）]]
 
 ## 延展阅读
 - [InfiFusion-14B](https://huggingface.co/InfiX-ai/InfiFusion-14B) — HuggingFace 模型页面

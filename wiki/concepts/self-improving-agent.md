@@ -32,6 +32,6 @@ updated: 2026-07-04
 4. 评估经验重要性 → 决定是否提升为项目记忆
 
 ## 相关概念
-- [[统一开发范式]]
-- [[AI Agent]]
-- [[红绿回归测试]]
+- [[统一开发范式 (OpenSpec × Superpowers)]]
+- [[AI Agent（智能体）]]
+- [[红绿回归测试（Red-Green-Regression Pipeline）]]

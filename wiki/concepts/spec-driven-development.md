@@ -33,9 +33,9 @@ SDD 开发：需求 → 人写 Spec → AI 写代码 → AI 写测试 → AI 验
 - **BMAD**：重量级 SDD 平台，BMC 分析 → 架构 → 数据模型 → 实现
 
 ## 相关概念
-- [[AI编程]]
-- [[统一开发范式]]
-- [[测试驱动开发 TDD]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[统一开发范式 (OpenSpec × Superpowers)]]
+- [[测试驱动开发（Test-Driven Development, TDD）]]
 
 ## 相关实体
 - [[OpenSpec]]

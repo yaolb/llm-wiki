@@ -36,5 +36,5 @@ updated: 2026-07-04
 - [[OpenSpec]]
 
 ## 相关概念
-- [[Spec驱动开发]]
-- [[AI编程]]
+- [[Spec驱动开发 (SDD)]]
+- [[AI 编程（AI Programming / AI Coding）]]

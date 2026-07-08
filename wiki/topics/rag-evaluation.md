@@ -222,8 +222,8 @@ Faithfulness 低？
 ---
 
 ## 相关概念
-- [[RAG 检索增强生成]]
-- [[AI Agent]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
+- [[AI Agent（智能体）]]
 
 ## 延展阅读
 - [RAGAS Docs](https://docs.ragas.io/)

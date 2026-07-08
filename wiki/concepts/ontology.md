@@ -34,8 +34,8 @@ updated: 2026-07-04
 - **语义搜索**：基于本体的查询扩展和推理
 
 ## 相关概念
-- [[AI Agent]]
-- [[RAG 检索增强生成]]
+- [[AI Agent（智能体）]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
 
 ## 相关实体
 - [[AutoLink]]

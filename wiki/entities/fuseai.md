@@ -48,8 +48,8 @@ FuseAI 在参数空间合并阶段的核心算法：
 无需额外训练即可实现矩阵级别的精细融合。
 
 ## 相关概念
-- [[模型融合]]
-- [[Spec驱动开发 SDD]]
+- [[模型融合（Model Fusion / Model Merging）]]
+- [[Spec驱动开发 (SDD)]]
 
 ## 延展阅读
 - [FuseAI HuggingFace](https://huggingface.co/FuseAI)

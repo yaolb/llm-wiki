@@ -30,5 +30,5 @@ ECC（Everything Claude Code）是 Claude Code 生态中最大的插件集合库
 - [[gstack]]
 
 ## 相关概念
-- [[AI编程]]
-- [[MCP 模型上下文协议]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[MCP 模型上下文协议（Model Context Protocol）]]

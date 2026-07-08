@@ -69,8 +69,8 @@ Agent 自主决定：
 - **私有知识库访问**（外部模型不能直接访问的企业内部数据）
 
 ## 相关概念
-- [[RAG 检索增强生成]]
-- [[AI Agent]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
+- [[AI Agent（智能体）]]
 
 ## 延展阅读
 - [Agentic RAG — Weaviate](https://weaviate.io/blog/what-is-agentic-rag)

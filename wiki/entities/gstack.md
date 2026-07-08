@@ -34,8 +34,8 @@ AI 增强开发三件套：
 - **gstack** — 角色化执行（谁来做）
 
 ## 相关概念
-- [[AI编程]]
-- [[统一开发范式]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[统一开发范式 (OpenSpec × Superpowers)]]
 
 ## 相关实体
 - [[Claude Code]]

@@ -34,13 +34,13 @@ related_sources: 1
 
 ## 与传统 TDD 的区别
 
-传统的 [[测试驱动开发 TDD]] 由**人类开发者**按红-绿-重构的节奏编写代码。红绿回归测试将其**自动化**——AI 成为执行 TDD 循环的主体，人类从"写代码的人"变成"审代码的人"。
+传统的 [[测试驱动开发（Test-Driven Development, TDD）]] 由**人类开发者**按红-绿-重构的节奏编写代码。红绿回归测试将其**自动化**——AI 成为执行 TDD 循环的主体，人类从"写代码的人"变成"审代码的人"。
 
 ## 关键指标
 
 - 开发成本降低：60%~80%（据 OpenSquilla 0.4.0 数据）
 
 ## 相关概念
-- [[测试驱动开发 TDD]]
-- [[AI 自验证]]
-- [[AI 编程]]
+- [[测试驱动开发（Test-Driven Development, TDD）]]
+- [AI 自验证（Self-Verification）](https://arxiv.org/search/?query=self-verification+AI[AI 自验证（Self-Verification in AI）](https://arxiv.org/search/?query=self-verification+AI[[AI 自验证]]searchtype=all)searchtype=all)
+- [[AI 编程（AI Programming / AI Coding）]]

@@ -41,7 +41,7 @@ Spec 定义 → Role 分配 → Skill 执行 → 验证 → 交付
 - [[gstack]]
 
 ## 相关概念
-- [[AI编程]]
-- [[Spec驱动开发]]
-- [[测试驱动开发 TDD]]
-- [[统一开发范式]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[Spec驱动开发 (SDD)]]
+- [[测试驱动开发（Test-Driven Development, TDD）]]
+- [[统一开发范式 (OpenSpec × Superpowers)]]

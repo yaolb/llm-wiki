@@ -44,6 +44,6 @@ updated: 2026-07-04
 - [[AutoLink]]
 
 ## 相关概念
-- [[AI Agent]]
-- [[MCP 模型上下文协议]]
-- [[RAG 检索增强生成]]
+- [[AI Agent（智能体）]]
+- [[MCP 模型上下文协议（Model Context Protocol）]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]

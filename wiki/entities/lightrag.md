@@ -33,8 +33,8 @@ LightRAG：文档 → 实体/关系抽取 → 知识图谱 → 图检索 → LLM
 - 检索结果更具上下文完整性
 
 ## 相关概念
-- [[RAG 检索增强生成]]
-- [[AI Agent]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
+- [[AI Agent（智能体）]]
 
 ## 延展阅读
 - [LightRAG GitHub](https://github.com/HKUDS/LightRAG)

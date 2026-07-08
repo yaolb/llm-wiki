@@ -27,9 +27,9 @@ updated: 2026-07-04
 
 ## 代表方案
 
-- [[GSD]]（Get Shit Done）：面向大型项目的上下文工程系统
+- [[GSD (Get Shit Done)]]（Get Shit Done）：面向大型项目的上下文工程系统
 - CLAUDE.md：项目级行为约束和知识基线
 
 ## 相关概念
-- [[AI编程]]
-- [[RAG 检索增强生成]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]

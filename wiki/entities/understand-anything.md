@@ -24,8 +24,8 @@ Understand Anything 是一个代码库分析工具，将任意代码仓库转换
 - 作为 Skill 嵌入 AI Agent 工作流
 
 ## 相关概念
-- [[AI编程]]
-- [[上下文工程]]
+- [[AI 编程（AI Programming / AI Coding）]]
+- [[上下文工程 (Context Engineering)]]
 
 ## 相关实体
 - [[Claude Code]]

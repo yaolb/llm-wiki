@@ -85,7 +85,7 @@ mergekit-yaml config.yml output-model
 - 被 HuggingFace 官方教程列为推荐的模型创建方式
 
 ## 相关概念
-- [[模型融合]]
+- [[模型融合（Model Fusion / Model Merging）]]
 
 ## 延展阅读
 - [Merge LLMs with mergekit](https://huggingface.co/blog/mlabonne/merge-models) — HuggingFace 官方教程

@@ -5,17 +5,17 @@
 ---
 
 ## [2026-07-06] ingest | AI Agent 概念补充 + PYTHIA / UZI-Skill / AI 网关
-- 新增实体页：[[PYTHIA]]（本地无密钥实时感知 Agent）、[[UZI-Skill]]（股票深度分析插件）
+- 新增实体页：[[PYTHIA（本地 AI Agent 实时感知工具）]]（本地无密钥实时感知 Agent）、[[UZI-Skill（游资技能库）]]（股票深度分析插件）
 - 新增概念页：[[AI 网关与模型路由]]（聚合多模型免费额度，自动路由与 fallback）
-- 更新概念页：[[AI Agent]]（补充反应式/深思型/学习型分类体系 + 关键能力维度 + 2026 趋势）
+- 更新概念页：[[AI Agent（智能体）]]（补充反应式/深思型/学习型分类体系 + 关键能力维度 + 2026 趋势）
 - 更新主题页：[[AI Agent 技术全景报告 2026]]（新增本地 Agent 与实时感知趋势）
 - 保存3份原始素材到 raw/
 - 全站累计：31 实体 + 21 概念 + 11 主题 + 5 综述 = 69 页面
 - 更新 index.md
 
 ## [2026-07-07] ingest | Spec Kit / html-video / StarRocks 跨源查询
-- 新增实体页：[[Spec Kit]]（GitHub 官方 SDD 工具包，118k Star）、[[html-video]]（HTML 转 MP4 视频工具）
-- 新增主题页：[[StarRocks 跨数据源查询方案]]（Catalog 方案实现跨源 JOIN，587 行深度调研）
+- 新增实体页：[[GitHub Spec Kit]]（GitHub 官方 SDD 工具包，118k Star）、[[html-video]]（HTML 转 MP4 视频工具）
+- 新增主题页：[[StarRocks 跨数据源查询方案（深度调研）]]（Catalog 方案实现跨源 JOIN，587 行深度调研）
 - 更新实体页：[[Claude Code]]（新增隐私与遥测配置章节）
 - 全站累计：30 实体 + 21 概念 + 12 主题 + 5 综述 = 72 页面
 - 更新 index.md
@@ -29,7 +29,7 @@
 
 ## [2026-07-06] update | MCP 概念页 — 官方文档更新
 - 保存原始素材到 raw/mcp-official-intro.md
-- 更新概念页：[[MCP 模型上下文协议]]（补充官方定义
+- 更新概念页：[[MCP 模型上下文协议（Model Context Protocol）]]（补充官方定义
 
 ## [2026-07-04] init | Wiki 初始化
 - 创建项目骨架

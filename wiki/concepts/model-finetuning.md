@@ -44,7 +44,7 @@ related_sources: 1
 - [[Unsloth]] — 消费级 GPU 高效微调框架
 
 ## 相关概念
-- [[混合专家模型 MoE]]
-- [[CUDA 优化]]
-- [[RLHF]]
-- [[LoRA]]
+- [[混合专家模型（Mixture of Experts, MoE）]]
+- [CUDA 优化](https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html)
+- [RLHF (Reinforcement Learning from Human Feedback)](https://arxiv.org/abs/2009.01325)
+- [LoRA (Low-Rank Adaptation)](https://arxiv.org/abs/2106.09685)
