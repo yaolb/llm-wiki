@@ -1,6 +1,8 @@
 # LLM Wiki — 全站索引
 
 > 自动维护，每次 ingest 后更新。按分类组织，每行一条：链接 + 摘要 + 标签。
+>
+> 📑 [按标签浏览](tags-index.md) — 通过标签筛选和分类文档
 
 ---
 
@@ -13,6 +15,7 @@
 - [OpenSquilla](wiki/entities/opensquilla.md) — AI 编程工具，引入红绿回归证据链实现代码自验证与自修复，成本降低 60%~80% `#工具 #AI编程 #测试驱动`
 - [AutoLink](wiki/entities/autolink.md) — 面向大数据场景的语义 Schema Linking 开源工具，将数据库结构转为向量嵌入实现 NL2SQL `#工具 #Text-to-SQL #开源`
 - [Claude Code](wiki/entities/claude-code.md) — Anthropic 推出的命令行 AI 编程工具，多 Agent 分层架构，支持 subAgent 委派和项目记忆 `#工具 #AI编程 #Agent`
+- [Codex CLI](wiki/entities/codex-cli.md) — GitHub 开源的终端 AI 编程 CLI 工具，支持 Agents/Skills 模式 `#工具 #AI编程 #GitHub`
 - [PageAgent](wiki/entities/pageagent.md) — 阿里开源 32KB JS 网页 AI 操控框架，DOM 脱水技术，比 Browser-use 轻 100 倍 `#工具 #Web自动化 #AI-Agent`
 - [LightRAG](wiki/entities/lightrag.md) — 港大 GraphRAG 框架，知识图谱替代传统 Chunk，EMNLP 2025，36.7k Star `#工具 #RAG #知识图谱`
 - [OpenClaw](wiki/entities/openclaw.md) — 自进化单 Agent 框架，4 层记忆系统（L0-L3），支持 NAS Docker 部署 `#工具 #AI-Agent #记忆系统`
@@ -20,6 +23,7 @@
 - [Superpowers](wiki/entities/superpowers.md) — 116k+ Star AI 编程 Skills 框架，TDD 驱动的模块化能力扩展体系 `#工具 #AI编程 #Skills`
 - [gstack](wiki/entities/gstack.md) — YC CEO Garry Tan 的 Claude Code 技能包，111k Star，角色化 Agent 执行 `#工具 #AI编程 #角色化`
 - [OpenSpec](wiki/entities/openspec.md) — 规范驱动开发（SDD）框架，Spec → Execute → Verify → Archive 五阶段流程 `#工具 #AI编程 #SDD`
+- [Spec Kit](wiki/entities/spec-kit.md) — GitHub 官方开源的规格驱动开发（SDD）工具包，支持 30+ AI Coding Agent，118k Star，MIT 协议 `#工具 #AI编程 #SDD #GitHub`
 - [BMAD](wiki/entities/bmad.md) — 重量级 SDD 平台，BMC 分析 → 架构 → 数据模型 → 代码生成全流程 `#工具 #AI编程 #SDD`
 - [ECC](wiki/entities/ecc.md) — Everything Claude Code，21.7 万 Star 的 Claude Code 最强插件合集 `#工具 #AI编程 #插件`
 - [MUX0](wiki/entities/mux0.md) — 专为 Claude Code 设计的开源 AI 编程终端，基于 Ghostty `#工具 #AI编程 #终端`
@@ -37,6 +41,7 @@
 - [Huashu Design](wiki/entities/huashu-design.md) — 花叔开源 Claude Code 设计 Skill，19k Star `#工具 #设计 #UI`
 - [khazix-skills](wiki/entities/khazix-skills.md) — 数字生命卡兹克开源 AI Skills 合集 `#工具 #AI编程 #Skills`
 - [Understand Anything](wiki/entities/understand-anything.md) — 代码库 → 交互式知识图谱转换工具 `#工具 #代码分析 #知识图谱`
+- [html-video](wiki/entities/html-video.md) — 把 HTML + CSS 通过 AI Agent 直接渲染为 MP4 视频，本地运行，插件化引擎，21 模板 `#工具 #视频生成 #AI编程`
 - [FuseAI](wiki/entities/fuseai.md) — 中山大学/腾讯发起的开源 LLM 知识融合研究社区 `#模型融合 #开源 #研究`
 - [InfiFusion](wiki/entities/infifusion.md) — Reallm-Labs 的统一 LLM 融合框架，首个融合 4 个 14B+ 异构模型 `#模型融合 #知识蒸馏 #LLM融合`
 - [mergekit](wiki/entities/mergekit.md) — HuggingFace 流行的模型合并工具，SLERP/TIES/DARE 无需 GPU 即可合并 `#模型融合 #工具 #模型合并`
@@ -78,6 +83,7 @@
 - [Karpathy AI编码方法论](wiki/topics/karpathy-ai-coding-methodology.md) — 65行 CLAUDE.md 定义的四条铁律：先想再写、简洁第一、手术式修改、目标驱动 `#AI编程 #方法论 #Karpathy`
 - [AI Native 研发体系](wiki/topics/ai-native-dev-system.md) — 以 AI 为核心重新设计软件开发全流程，从辅助工具到 Agent 自主执行 `#AI-Native #研发体系 #软件2.0`
 - [Agentic RAG](wiki/topics/agentic-rag.md) — RAG 从独立系统降级为 Agent 工具箱中的组件，由 Agent 自主决定检索策略 `#RAG #Agent #Agentic-RAG`
+- [StarRocks 跨数据源查询方案](wiki/topics/starrocks-cross-data-source-query.md) — StarRocks Catalog 方案实现 Hive/Iceberg/MySQL/ES 等跨源 JOIN 查询，v3.0+ 推荐 `#StarRocks #数据查询 #跨数据源`
 - [RAG 评估体系与方法论](wiki/topics/rag-evaluation.md) — 评估三维度、LLM-as-Judge / RAGAS / DeepEval 框架对比、论文支撑 `#RAG #评估 #LLM-as-Judge`
 
 ## 综述
@@ -91,4 +97,4 @@
 
 ---
 
-_最后更新于 2026-07-06_ | 全站 69 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域
+_最后更新于 2026-07-07_ | 全站 73 页面，覆盖 AI Agent、AI 编程、RAG、知识图谱、SDD、知识管理方法论、模型融合等核心领域

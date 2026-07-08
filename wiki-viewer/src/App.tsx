@@ -3,7 +3,7 @@ import { Sidebar } from './components/Sidebar';
 import { ContentViewer } from './components/ContentViewer';
 import { SearchModal } from './components/SearchModal';
 import { parseWikiPage, buildTitleMapFromPages, setGlobalTitleMap, searchPages, resolveWikilink } from './utils/wikilinks';
-import type { Category, PageEntry, WikiPage } from './types';
+import type { Category, PageEntry, WikiPage, TagCount } from './types';
 
 const wikiFileModules = import.meta.glob('../../wiki/**/*.md', {
   query: '?raw',
@@ -58,6 +58,7 @@ export default function App() {
   const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set(['综述']));
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSidebar, setMobileSidebar] = useState(false);
+  const [activeTag, setActiveTag] = useState<string | null>(null);
 
   // Sync activePath → URL hash
   useEffect(() => {
@@ -75,13 +76,15 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  const { allPages, categories } = useMemo(() => {
+  const { allPages, categories, allTags } = useMemo(() => {
     const pages: WikiPage[] = [];
     const catMap = new Map<string, PageEntry[]>();
+    const tagMap = new Map<string, number>();
     for (const [filePath, raw] of Object.entries(wikiFileModules)) {
       if (filePath.includes('/index.md') || filePath.includes('/log.md')) continue;
       try {
-        const page = parseWikiPage(raw, filePath);
+        const relPath = filePath.replace(/.*\/wiki\//, 'wiki/');
+        const page = parseWikiPage(raw, relPath);
         pages.push(page);
       } catch (e) {
         console.error('[App] Failed to parse:', filePath, e);
@@ -89,6 +92,10 @@ export default function App() {
       const info = extractPageInfo(raw, filePath);
       const dir = filePath.split('/').slice(-2, -1)[0] || '';
       const catName = CATEGORY_MAP[dir] || dir;
+      // Collect tags for tag cloud
+      for (const tag of info.tags) {
+        tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+      }
       if (!catMap.has(catName)) catMap.set(catName, []);
       catMap.get(catName)!.push(info);
     }
@@ -103,7 +110,11 @@ export default function App() {
     for (const [name, pgs] of catMap) {
       cats.push({ name, pages: pgs, collapsed: collapsedCats.has(name) });
     }
-    return { allPages: pages, categories: cats };
+    // Build sorted tag list
+    const tags: TagCount[] = Array.from(tagMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+    return { allPages: pages, categories: cats, allTags: tags };
   }, [collapsedCats]);
 
   useEffect(() => {
@@ -120,6 +131,7 @@ export default function App() {
 
   const handleSelect = useCallback((page: PageEntry) => {
     setActivePath(page.path);
+    setActiveTag(null);
     setMobileSidebar(false);
   }, []);
 
@@ -137,7 +149,15 @@ export default function App() {
   }, []);
 
   const handleSearch = useCallback((query: string) => searchPages(query, allPages), [allPages]);
-  const handleSearchSelect = useCallback((path: string) => { setActivePath(path); }, []);
+
+  const handleSearchSelect = useCallback((path: string) => {
+    setActivePath(path);
+    setActiveTag(null);
+  }, []);
+
+  const handleTagSelect = useCallback((tag: string) => {
+    setActiveTag(activeTag === tag ? null : tag);
+  }, [activeTag]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -147,7 +167,19 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
+  // Filter categories by active tag
+  const filteredCategories = useMemo(() => {
+    if (!activeTag) return categories;
+    return categories.map((cat) => ({
+      ...cat,
+      pages: cat.pages.filter((p) => p.tags.includes(activeTag!)),
+    })).filter((cat) => cat.pages.length > 0);
+  }, [categories, activeTag]);
+
   const totalPages = allPages.length;
+  const filteredPageCount = activeTag
+    ? filteredCategories.reduce((s, c) => s + c.pages.length, 0)
+    : totalPages;
 
   return (
     <div className="app">
@@ -168,12 +200,15 @@ export default function App() {
       <div className="main-area">
         <div className="sidebar-desktop" style={{ height: '100%' }}>
           <Sidebar
-            categories={categories}
+            categories={filteredCategories}
             activePath={activePath}
             onSelect={handleSelect}
             onToggleCategory={handleToggleCategory}
             onSearch={() => setSearchOpen(true)}
-            pageCount={totalPages}
+            pageCount={filteredPageCount}
+            allTags={allTags}
+            activeTag={activeTag}
+            onTagSelect={handleTagSelect}
           />
         </div>
 
@@ -182,23 +217,31 @@ export default function App() {
             <div className="mobile-overlay-bg" onClick={() => setMobileSidebar(false)} />
             <div className="mobile-overlay-sidebar">
               <Sidebar
-                categories={categories}
+                categories={filteredCategories}
                 activePath={activePath}
                 onSelect={handleSelect}
                 onToggleCategory={handleToggleCategory}
                 onSearch={() => { setMobileSidebar(false); setSearchOpen(true); }}
-                pageCount={totalPages}
+                pageCount={filteredPageCount}
+                allTags={allTags}
+                activeTag={activeTag}
+                onTagSelect={handleTagSelect}
               />
             </div>
           </div>
         )}
 
-        <ContentViewer page={activePage} onNavigate={handleNavigate} />
+        <ContentViewer
+          page={activePage}
+          onNavigate={handleNavigate}
+          onTagSelect={handleTagSelect}
+        />
       </div>
 
       <div className="status-bar">
-        <span>{totalPages} 个页面</span>
-        {activePage && <><span style={{ color: 'var(--border)' }}>|</span><span>{activePage.path}</span></>}
+        <span>{filteredPageCount} 个页面</span>
+        {activeTag && <><span>·</span><span style={{ color: 'var(--accent)' }}>标签: #{activeTag}</span></>}
+        {activePage && !activeTag && <><span style={{ color: 'var(--border)' }}>|</span><span>{activePage.path}</span></>}
       </div>
 
       <SearchModal

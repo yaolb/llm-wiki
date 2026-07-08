@@ -7,9 +7,10 @@ import { convertWikilinks } from '../utils/wikilinks';
 interface ContentViewerProps {
   page: WikiPage | null;
   onNavigate: (path: string) => void;
+  onTagSelect: (tag: string) => void;
 }
 
-export function ContentViewer({ page, onNavigate }: ContentViewerProps) {
+export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Event delegation: intercept clicks on wikilinks (rendered as #wiki: paths)
@@ -61,7 +62,16 @@ export function ContentViewer({ page, onNavigate }: ContentViewerProps) {
 
         {meta.tags.length > 0 && (
           <div className="tags-row">
-            {meta.tags.map((tag) => <span key={tag} className="tag">#{tag}</span>)}
+            {meta.tags.map((tag) => (
+              <button
+                key={tag}
+                className="tag tag-clickable"
+                onClick={() => onTagSelect(tag)}
+                title="按此标签筛选"
+              >
+                #{tag}
+              </button>
+            ))}
           </div>
         )}
 

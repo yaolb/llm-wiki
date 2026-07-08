@@ -32,3 +32,8 @@ export interface SearchResult {
   snippet: string;
   score: number;
 }
+
+export interface TagCount {
+  name: string;
+  count: number;
+}

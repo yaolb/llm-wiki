@@ -1,4 +1,4 @@
-import type { Category, PageEntry } from '../types';
+import type { Category, PageEntry, TagCount } from '../types';
 
 interface SidebarProps {
   categories: Category[];
@@ -7,9 +7,12 @@ interface SidebarProps {
   onToggleCategory: (name: string) => void;
   onSearch: () => void;
   pageCount: number;
+  allTags: TagCount[];
+  activeTag: string | null;
+  onTagSelect: (tag: string) => void;
 }
 
-export function Sidebar({ categories, activePath, onSelect, onToggleCategory, onSearch, pageCount }: SidebarProps) {
+export function Sidebar({ categories, activePath, onSelect, onToggleCategory, onSearch, pageCount, allTags, activeTag, onTagSelect }: SidebarProps) {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -28,6 +31,47 @@ export function Sidebar({ categories, activePath, onSelect, onToggleCategory, on
       </div>
 
       <nav className="sidebar-nav">
+        {/* Tag Cloud */}
+        {allTags.length > 0 && (
+          <div style={{ padding: '8px 0', marginBottom: 8, borderBottom: '1px solid var(--border)' }}>
+            <button
+              onClick={() => onTagSelect('')}
+              className="cat-btn"
+              style={{ marginBottom: 4 }}
+            >
+              <span className={`arrow ${activeTag ? '' : 'open'}`}>&#9654;</span>
+              标签
+              <span className="count">{allTags.length}</span>
+            </button>
+            {!activeTag && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, padding: '4px 8px' }}>
+                {allTags.map((tag) => (
+                  <button
+                    key={tag.name}
+                    onClick={(e) => { e.stopPropagation(); onTagSelect(tag.name); }}
+                    className="tag-btn"
+                  >
+                    {tag.name}
+                    <span className="tag-count">{tag.count}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {activeTag && (
+              <div style={{ padding: '4px 8px', fontSize: 12, color: 'var(--text-muted)' }}>
+                已选: <strong style={{ color: 'var(--accent)' }}>#{activeTag}</strong>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onTagSelect(activeTag); }}
+                  style={{ marginLeft: 8, fontSize: 11, color: 'var(--text-muted)', textDecoration: 'underline' }}
+                >
+                  清除
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+
         {categories.map((cat) => (
           <div key={cat.name} style={{ marginBottom: 4 }}>
             <button onClick={() => onToggleCategory(cat.name)} className="cat-btn">
