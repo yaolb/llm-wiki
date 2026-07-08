@@ -36,6 +36,10 @@
 - [Snail AI — Java 生态的企业级 AI Agent 平台](topics/snail-ai-agent-platform.md)
 - [自改进AI Agent](concepts/self-improving-agent.md)
 
+## AI Gateway
+
+- [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
+
 ## AI Native
 
 - [AI Native 研发体系](topics/ai-native-dev-system.md)
@@ -100,6 +104,10 @@
 
 - [Snail AI](entities/snail-ai.md)
 - [Snail AI — Java 生态的企业级 AI Agent 平台](topics/snail-ai-agent-platform.md)
+
+## API管理
+
+- [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 
 ## API网关
 
@@ -327,7 +335,12 @@
 - [ECC (Everything Claude Code)](entities/ecc.md)
 - [Firecrawl](entities/firecrawl.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
+- [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
+
+## Model Context Protocol
+
+- [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 
 ## NAS
 
@@ -456,6 +469,10 @@
 ## Spec驱动
 
 - [AI Agent 技术全景报告 2026](topics/ai-agent-landscape-2026.md)
+
+## Spring AI
+
+- [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 
 ## Spring Boot
 
@@ -770,6 +787,10 @@
 ## 架构演进
 
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](topics/agentic-rag.md)
+
+## 架构设计
+
+- [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 
 ## 查询加速
 

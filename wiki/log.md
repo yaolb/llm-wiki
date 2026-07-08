@@ -128,3 +128,9 @@
 - 新增 wiki/topics/h1-2026-performance-review.md
 - 基于周报复盘撰写绩效汇报，包含企业价值观自评、万象&Pandas工作内容、多维总评
 - 更新 index.md
+
+## [2026-07-08] ingest | Spring AI + MCP 接口统一管理方案研究
+
+- 新增 wiki/topics/spring-ai-mcp-architecture-research.md
+- 三大方案对比：原生Starter / AI Gateway / 分层Sidecar
+- 推荐渐进式演进路线：Phase1原生Starter→Phase2引入Gateway

@@ -85,6 +85,7 @@
 - [StarRocks 跨数据源查询方案](wiki/topics/starrocks-cross-data-source-query.md) — StarRocks Catalog 方案实现 Hive/Iceberg/MySQL/ES 等跨源 JOIN 查询，v3.0+ 推荐 `#StarRocks #数据查询 #跨数据源`
 - [StarRocks Catalog 数据加速策略](wiki/topics/starrocks-catalog-acceleration-strategy.md) — 同构(SR→SR)与异构(MySQL→SR) Catalog 的数据加速策略深度分析与选型推荐 `#StarRocks #数据加速 #Catalog #物化视图`
 - [RAG 评估体系与方法论](wiki/topics/rag-evaluation.md) — 评估三维度、LLM-as-Judge / RAGAS / DeepEval 框架对比、论文支撑 `#RAG #评估 #LLM-as-Judge`
+- [Spring AI + MCP 方案研究](wiki/topics/spring-ai-mcp-architecture-research.md) — 基于 Spring AI 2.x 的 MCP 协议接入与接口统一管理三大方案对比，推荐渐进式演进 `#Spring AI #MCP #架构设计`
 
 ## 综述
 <!-- 多源对比、综合分析、阶段性总结 -->
