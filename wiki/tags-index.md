@@ -1,8 +1,3 @@
----
-title: 标签索引
-summary: 按标签浏览所有 Wiki 页面
----
-
 # 标签索引
 
 > 按标签浏览 Wiki 页面，自动生成。
@@ -173,6 +168,10 @@ summary: 按标签浏览所有 Wiki 页面
 - [Claude Code](entities/claude-code.md)
 - [Codex CLI](entities/codex-cli.md)
 
+## Catalog
+
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+
 ## ChatBI
 
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
@@ -195,6 +194,10 @@ summary: 按标签浏览所有 Wiki 页面
 - [gstack](entities/gstack.md)
 - [khazix-skills](entities/khazix-skills.md)
 
+## Colocate Join
+
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+
 ## Context Rot
 
 - [上下文工程 (Context Engineering)](concepts/context-engineering.md)
@@ -202,6 +205,10 @@ summary: 按标签浏览所有 Wiki 页面
 ## Cursor
 
 - [AI编程Agent框架对比分析](synthesis/agent-framework-comparison.md)
+
+## Data Cache
+
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
 
 ## DeepEval
 
@@ -447,6 +454,7 @@ summary: 按标签浏览所有 Wiki 页面
 
 ## StarRocks
 
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
 
 ## Superpowers
@@ -702,6 +710,10 @@ summary: 按标签浏览所有 Wiki 页面
 
 - [khazix-skills](entities/khazix-skills.md)
 
+## 数据加速
+
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+
 ## 数据平台
 
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
@@ -811,6 +823,10 @@ summary: 按标签浏览所有 Wiki 页面
 
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
 
+## 物化视图
+
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+
 ## 状态机
 
 - [Apache Burr](entities/apache-burr.md)
@@ -894,6 +910,7 @@ summary: 按标签浏览所有 Wiki 页面
 
 ## 联邦查询
 
+- [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
 
 ## 股票分析

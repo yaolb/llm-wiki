@@ -110,3 +110,9 @@
 - wiki-viewer: 页面标签可点击，点击后自动按标签过滤
 - wiki: 新增 tags-index.md 标签索引页（自动生成）
 - scripts: 新增 regenerate-tags.sh 脚本
+
+## [2026-07-08] ingest | StarRocks Catalog 数据加速策略分析
+
+- 新增 wiki/topics/starrocks-catalog-acceleration-strategy.md
+- 分析同构(SR→SR)与异构(MySQL→SR) Catalog 的加速方案对比
+- 更新 index.md 和 tags-index.md
