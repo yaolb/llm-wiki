@@ -16,6 +16,12 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
   const [editContent, setEditContent] = useState('');
   const [editSaving, setEditSaving] = useState(false);
   const [editMsg, setEditMsg] = useState('');
+  const [liveOverride, setLiveOverride] = useState<string | null>(null);
+
+  // Reset live override when navigating to a different page
+  useEffect(() => {
+    setLiveOverride(null);
+  }, [page?.path]);
 
   // Event delegation: intercept clicks on wikilinks (rendered as #wiki: paths)
   useEffect(() => {
@@ -80,9 +86,10 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
   }), []);
 
   const processedContent = useMemo(() => {
+    if (liveOverride) return convertWikilinks(liveOverride);
     if (!page) return '';
     return convertWikilinks(page.content);
-  }, [page]);
+  }, [page, liveOverride]);
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -135,7 +142,7 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
 
   // Edit mode handlers
   const startEditing = () => {
-    setEditContent(page?.raw || '');
+    setEditContent(liveOverride || page?.raw || '');
     setEditing(true);
     setEditMsg('');
   };
@@ -161,10 +168,10 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
         const err = await resp.json();
         throw new Error(err.error || 'save failed');
       }
-      setEditMsg('✅ 保存成功！刷新页面查看变更');
+      setLiveOverride(editContent);
+      setEditing(false);
+      setEditMsg('✅ 保存成功！');
       setEditSaving(false);
-      // Refresh after short delay
-      setTimeout(() => window.location.reload(), 1500);
     } catch (err: any) {
       setEditMsg('❌ 保存失败: ' + err.message);
       setEditSaving(false);
