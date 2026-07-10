@@ -444,72 +444,30 @@ gray:
 
 Nacos 在灰度中承担三个角色，分别在灰度流程的不同层面发挥作用：
 
-```
-┌──────────────────────────────────────────────────┐
-│  第一层：配置中心 → 权重策略控制                    │
-│  ┌──────────────────────────────────────────┐    │
-│  │ metric-gray-config.yaml                  │    │
-│  │  Data ID 下的灰度配置（权重、路由头定义）  │    │
-│  │  Nacos 推送到 Nginx Lua / Gateway        │    │
-│  └──────────────────────────────────────────┘    │
-│                                                    │
-│  第二层：注册中心 → 版本元数据 + 节点管理          │
-│  ┌──────────────────────────────────────────┐    │
-│  │ 节点注册时带的 metadata.version 区分版本   │    │
-│  │ stable / canary-2.1.0                    │    │
-│  │ 运维可通过 Nacos API 调节单个节点权重      │    │
-│  └──────────────────────────────────────────┘    │
-│                                                    │
-│  第三层：配置中心 → 动态路由规则                   │
-│  ┌──────────────────────────────────────────┐    │
-│  │ Gateway 动态路由规则（灰度白名单、Header） │    │
-│  │ X-Route-Version 映射到 version=canary 节点 │    │
-│  │ 支持 Nacos 动态刷新，无需重启              │    │
-│  └──────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────┘
-```
+1. **配置中心 → 权重策略控制**
+   - `metric-gray-config.yaml`：Data ID 下的灰度配置（权重、路由头定义）
+   - Nacos 推送到 Nginx Lua / Gateway 生效
+
+2. **注册中心 → 版本元数据 + 节点管理**
+   - 节点注册时通过 `metadata.version` 区分版本（`stable` / `canary-2.1.0`）
+   - 运维可通过 Nacos API 调节单个节点权重
+
+3. **配置中心 → 动态路由规则**
+   - Gateway 动态路由规则（灰度白名单、Header 路由）
+   - `X-Route-Version` 映射到 `version=canary` 的节点
+   - 支持 Nacos 动态刷新，无需重启节点
 
 #### 7.6.2 灰度上线完整流程
 
-```
-时间线          操作                             生效机制
-──────────────────────────────────────────────────────────────
-
-T-10min  │ 新版本部署到 node3
-         │    └─ 修改 application.yml:
-         │       metadata.version = canary-2.1.0
-         │       启动 node3
-         │
-T-5min   │ Nacos 注册完成
-         │    └─ 控制台显示 node3 ✓ (version=canary-2.1.0)
-         │       此时 node3 权重为默认值（尚未加入生产流量）
-         │
-T0       │ 操作：Nacos 灰度配置 → 设置 weight=10
-         │    └─ 配置中心推送 metric-gray-config.yaml
-         │       api_nodes[2].weight: 0 → 10
-         │    └─ Nginx 侧 OpenResty Lua 轮询到新配置
-         │       自动调整 upstream 权重
-         │    └─ 效果：10% Token 哈希落到 node3
-         │
-T+10min  │ 观察监控
-         │    └─ 看 node3 错误率、延迟、查询正确性
-         │       对比 node1/node2 基线
-         │    └─ QA 带 X-Route-Version: canary 手动验证
-         │
-T+30min  │ 操作：调大灰度权重 10→30
-         │    └─ Nacos 配置中心改 weight
-         │    └─ 效果：更多用户切到新版
-         │
-T+1h     │ 全量上线
-         │    └─ 停止旧版节点，重启为新版
-         │    └─ 修改 Nacos 配置 weight 均分
-         │    └─ 删除 or 归档 canary 配置
-         │
-T+X      │ 回滚（如发现问题）
-         │    └─ Nacos 配置 canary weight 改为 0
-         │    └─ 流量全回旧版节点
-         │    └─ 下线问题节点，修复后再灰度
-```
+| 时间 | 操作 | 生效机制 |
+|------|------|----------|
+| T-10min | 新版本部署到 node3 | 修改 `application.yml` → `metadata.version = canary-2.1.0`，启动 node3 |
+| T-5min | Nacos 注册完成 | 控制台显示 node3 ✓ `(version=canary-2.1.0)`，此时权重为默认值（尚未加入生产流量） |
+| **T0** | **Nacos 灰度配置 → 设置 weight=10** | 配置中心推送 `metric-gray-config.yaml` → `api_nodes[2].weight: 0 → 10` → Nginx Lua 轮询感知 → 10% Token 哈希落到 node3 |
+| T+10min | 观察监控 | 看 node3 错误率/延迟/查询正确性，对比 node1/node2 基线；QA 带 `X-Route-Version: canary` 手动验证 |
+| T+30min | 调大灰度权重 10→30 | Nacos 配置中心改 weight → 更多用户切到新版 |
+| T+1h | **全量上线** | 停止旧版节点重启为新版 → Nacos weight 均分 → 归档 canary 配置 |
+| T+X | **回滚**（如发现问题） | Nacos canary weight 改 0 → 流量全回旧版 → 下线问题节点修复后再灰度 |
 
 #### 7.6.3 Nacos 配置变更操作（运维界面）
 
