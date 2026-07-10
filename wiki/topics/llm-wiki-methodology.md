@@ -83,6 +83,7 @@ llm-wiki 完全遵循此方法论构建：
 
 ## 相关概念
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]] — LLM Wiki 要替代的传统检索模式
+- [[OKF 开放知识格式]] — Google 将 LLM Wiki 理念标准化为 OKF 规范
 - [[上下文工程 (Context Engineering)]] — 系统化管理 AI 在大型项目中的代码上下文
 - [[AI Agent（智能体）]] — LLM Wiki 的维护者本质上是一个 Agent
 - [[本体论 (Ontology)]] — 知识的结构化形式化描述

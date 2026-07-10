@@ -11,7 +11,7 @@ source_url: https://app.notion.com/p/OpenSquilla-0-4-0-AI-3912a6ec1af8816f82e7cf
 
 ## 概述
 
-OpenSquilla 0.4.0 引入了一套***红绿回归证据链（Red-Green-Regression Pipeline）***机制，让 AI 编程从"生成代码"进化到"验证代码"的可审计阶段。
+OpenSquilla 0.4.0 引入了一套 ***红绿回归证据链（Red-Green-Regression Pipeline）***机制，让 AI 编程从"生成代码"进化到"验证代码"的可审计阶段。
 
 核心流程：AI 先写预期失败的测试（红）→ 修改代码让测试通过（绿）→ 跑全部已有测试确保无回归（回归）。三道关全过才交付。测试未通过时，AI 自动进入**修复闭环**：重改 → 再测 → 直到通过。
 

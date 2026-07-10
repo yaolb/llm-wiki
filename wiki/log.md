@@ -156,3 +156,10 @@
 - 新增 Data Cache 配置章节：架构、版本差异、完整配置步骤
 - 按表粒度控制、验证方法、JDBC Catalog 行为说明
 - 常见问题 FAQ
+
+## [2026-07-10] update | OKF 开放知识格式全面更新
+
+- 补充 OKF v0.1 完整内容：YAML Frontmatter、Permissive Consumption Model、Reserved Files
+- 新增 Karpathy LLM Wiki ↔ OKF 深度对比矩阵
+- 补充 Google 参考实现（Enrichment Agent / Static Viz / 示例包）
+- 补充 LLM Wiki 页面引用 OKF 的关联链接
