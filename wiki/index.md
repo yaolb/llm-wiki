@@ -3,10 +3,10 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 96
+- Total pages: 100
 - Claims: 0
 - Sources: 7
-- Entities: 36
+- Entities: 40
 - Concepts: 38
 - Syntheses: 5
 - Reports: 10
@@ -57,6 +57,10 @@
 - [Understand Anything](entities/understand-anything.md)
 - [Unsloth](entities/unsloth.md)
 - [UZI-Skill（游资技能库）](entities/uzi-skill.md)
+- [Llama-3](entities/llama-3.md)
+- [Mistral](entities/mistral.md)
+- [DeepSeek](entities/deepseek.md)
+- [Qwen](entities/qwen.md)
 
 ### Concepts
 - [2026年上半年绩效自评](concepts/h1-2026-performance-review.md)

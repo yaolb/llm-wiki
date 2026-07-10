@@ -35,10 +35,10 @@ Unsloth 是一个开源框架，专注在**消费级 GPU** 上高效微调大语
 
 ## 相关实体
 - [[Unsloth]]
-- [Llama-3](https://llama.meta.com)（待创建）
-- [Mistral](https://mistral.ai)（待创建）
-- [DeepSeek](https://platform.deepseek.com)（待创建）
-- [Qwen](https://github.com/QwenLM/Qwen)（待创建）
+- [[Llama-3]]
+- [[Mistral]]
+- [[DeepSeek]]
+- [[Qwen]]
 
 ## 相关概念
 - [[模型微调（Fine-tuning）]]

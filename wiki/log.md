@@ -170,3 +170,9 @@
 - 创建 synthesis/agent-memory-five-papers.md 综述页
 - 更新 concept/agent-memory-system.md 补充论文对照表
 - 更新 index.md 添加综述入口
+
+## [2026-07-10] ingest | Llama-3 / Mistral / DeepSeek / Qwen 实体页
+
+- 创建四个主流 LLM 实体页，含 GitHub/官网链接
+- 更新 unsloth 主题页引用（待创建→[[wikilink]]）
+- 更新 index.md 添加入口（Entities: 36→40）
