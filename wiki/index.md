@@ -105,6 +105,7 @@
 - [AI编程Agent框架对比分析](syntheses/agent-framework-comparison.md)
 - [BMAD vs OpenSpec：AI驱动开发的航母与特种兵](syntheses/bmad-vs-openspec.md)
 - [LLM 模型融合深度报告：原理、路线、实现与评测](syntheses/model-fusion-deep-report.md)
+- [Agent Memory 五篇关键论文综述](syntheses/agent-memory-five-papers.md)
 
 ### Reports
 - [Claim Health](reports/claim-health.md)

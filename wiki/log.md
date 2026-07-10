@@ -163,3 +163,10 @@
 - 新增 Karpathy LLM Wiki ↔ OKF 深度对比矩阵
 - 补充 Google 参考实现（Enrichment Agent / Static Viz / 示例包）
 - 补充 LLM Wiki 页面引用 OKF 的关联链接
+
+## [2026-07-10] ingest | Agent Memory 五篇关键论文综述
+
+- 摄入微信公众号文章：Generative Agents / MemGPT / MemoryBank / LoCoMo / A-MEM
+- 创建 synthesis/agent-memory-five-papers.md 综述页
+- 更新 concept/agent-memory-system.md 补充论文对照表
+- 更新 index.md 添加综述入口
