@@ -3,7 +3,7 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 100
+- Total pages: 101
 - Claims: 0
 - Sources: 7
 - Entities: 40
@@ -64,7 +64,8 @@
 
 ### Concepts
 - [2026年上半年绩效自评](concepts/h1-2026-performance-review.md)
-- [58 集团统一指标系统 — API 网关方案设计](concepts/58-indicator-api-gateway-design.md)
+- [58 集团统一指标系统 — API 网关方案设计](topics/58-indicator-api-gateway-design.md)
+- [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](concepts/agentic-rag.md)
 - [Agent工具选择问题](concepts/agent-tool-selection.md)
 - [Agent记忆系统](concepts/agent-memory-system.md)

@@ -176,3 +176,11 @@
 - 创建四个主流 LLM 实体页，含 GitHub/官网链接
 - 更新 unsloth 主题页引用（待创建→[[wikilink]]）
 - 更新 index.md 添加入口（Entities: 36→40）
+
+## [2026-07-10] ingest | 星火灰度上线方案（58 美事文档）
+
+- 摄入星火灰度上线方案文档（作者：张自博）
+- 创建 topic/xinghuo-grayscale-deployment.md
+- 重点分析：云平台通过环境变量覆盖 spring.application.name 区分灰度/线上环境
+- 补充 Spring Cloud Gateway + Nacos 灰度路由完整实现
+- 增加与指标网关灰度方案的对比矩阵
