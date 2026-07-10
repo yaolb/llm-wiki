@@ -2,8 +2,9 @@
 type: entity
 tags: [工具, LLM, 微调, 开源]
 created: 2026-07-04
-updated: 2026-07-04
+updated: 2026-07-10
 related_sources: 1
+source_url: https://github.com/unslothai/unsloth
 ---
 
 # Unsloth
@@ -16,6 +17,8 @@ Unsloth 是一个开源的大语言模型高效微调框架，通过 CUDA/Triton
 - **全称**：Unsloth
 - **类型**：工具（模型训练/微调框架）
 - **相关方**：开源社区
+- **GitHub**: [unslothai/unsloth](https://github.com/unslothai/unsloth)
+- **官网**: [unsloth.ai](https://unsloth.ai)
 - **时间线**：2026 年推出 Unsloth Studio
 
 ## 详细说明
