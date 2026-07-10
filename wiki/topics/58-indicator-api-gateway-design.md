@@ -3,7 +3,7 @@
 type: topic
 tags: [API网关, 架构设计, MCP, Spring AI, 灰度发布, Spring Cloud Gateway]
 created: 2026-07-09
-updated: 2026-07-09
+updated: 2026-07-10
 ---
 
 

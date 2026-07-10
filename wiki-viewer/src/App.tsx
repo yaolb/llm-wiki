@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { ContentViewer } from './components/ContentViewer';
 import { SearchModal } from './components/SearchModal';
-import { parseWikiPage, buildTitleMapFromPages, setGlobalTitleMap, searchPages, resolveWikilink } from './utils/wikilinks';
+import { parseWikiPage, buildTitleMapFromPages, buildTitleMapFromListing, setGlobalTitleMap, searchPages, resolveWikilink } from './utils/wikilinks';
 import type { Category, PageEntry, WikiPage, TagCount } from './types';
 
 interface PageInfo {
@@ -124,14 +124,19 @@ export default function App() {
     return { categories: cats, allTags: tags };
   }, [pageInfos, collapsedCats]);
 
-  // ── Build title map for wikilink resolution ──
+  // ── Build title map for wikilink resolution (from both listing + cached content) ──
   const allPages = useMemo(() => {
     return Array.from(pageCache.values());
   }, [pageCache]);
 
   useEffect(() => {
-    setGlobalTitleMap(buildTitleMapFromPages(allPages));
-  }, [allPages]);
+    // Build from API listing first (covers all pages even before loading)
+    const fromListing = buildTitleMapFromListing(pageInfos);
+    // Merge with cached page content (adds H1 titles from loaded pages)
+    const fromCache = buildTitleMapFromPages(allPages);
+    const merged = new Map([...fromListing, ...fromCache]);
+    setGlobalTitleMap(merged);
+  }, [pageInfos, allPages]);
 
   // ── Get active page content ──
   const activePage = useMemo<WikiPage | null>(() => {

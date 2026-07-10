@@ -98,6 +98,23 @@ export function buildTitleMapFromPages(pages: WikiPage[]): Map<string, string> {
   return map;
 }
 
+// Build title map from API page listing (used before pages are loaded into cache)
+export function buildTitleMapFromListing(
+  entries: { title: string; path: string }[]
+): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const entry of entries) {
+    if (entry.title) {
+      map.set(entry.title, entry.path);
+    }
+    const basename = entry.path.split('/').pop()?.replace('.md', '') || '';
+    if (basename && !map.has(basename)) {
+      map.set(basename, entry.path);
+    }
+  }
+  return map;
+}
+
 // Convert wikilinks [[target]] or [[target|text]] in markdown to HTML links
 // Returns the modified markdown with wikilinks converted
 export function convertWikilinks(markdown: string): string {
