@@ -8,9 +8,10 @@ interface ContentViewerProps {
   page: WikiPage | null;
   onNavigate: (path: string) => void;
   onTagSelect: (tag: string) => void;
+  onSave?: (path: string) => void;
 }
 
-export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerProps) {
+export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: ContentViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState('');
@@ -168,10 +169,13 @@ export function ContentViewer({ page, onNavigate, onTagSelect }: ContentViewerPr
         const err = await resp.json();
         throw new Error(err.error || 'save failed');
       }
-      setLiveOverride(editContent);
       setEditing(false);
       setEditMsg('✅ 保存成功！');
       setEditSaving(false);
+      // 通知父组件刷新页面内容（避免 liveOverride 含 frontmatter 导致格式异常）
+      if (onSave && page) {
+        setTimeout(() => onSave(page.path), 300);
+      }
     } catch (err: any) {
       setEditMsg('❌ 保存失败: ' + err.message);
       setEditSaving(false);

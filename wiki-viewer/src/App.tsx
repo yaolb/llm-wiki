@@ -225,6 +225,26 @@ export default function App() {
     }
   }, [pageCache, loadPageContent]);
 
+  // ── Handle page save: clear cache and reload ──
+  const handlePageSave = useCallback(async (path: string) => {
+    // Clear cache for this path
+    setPageCache((prev) => {
+      const next = new Map(prev);
+      next.delete(path);
+      return next;
+    });
+    // Also re-fetch the page listing to update metadata
+    try {
+      const resp = await fetch('/api/pages');
+      if (resp.ok) {
+        const { pages } = await resp.json();
+        setPageInfos(pages);
+      }
+    } catch {}
+    // Re-fetch page content from API
+    loadPageContent(path);
+  }, [loadPageContent]);
+
   const handleTagSelect = useCallback((tag: string) => {
     setActiveTag(activeTag === tag ? null : tag);
   }, [activeTag]);
@@ -251,13 +271,6 @@ export default function App() {
   const filteredPageCount = activeTag
     ? filteredCategories.reduce((s, c) => s + c.pages.length, 0)
     : totalPages;
-
-  // ── After page content loads, re-select to refresh viewer ──
-  useEffect(() => {
-    if (activePath && pageCache.has(activePath)) {
-      // trigger re-render via activePage
-    }
-  }, [pageCache, activePath]);
 
   if (!loaded) {
     return (
@@ -324,6 +337,7 @@ export default function App() {
           page={activePage}
           onNavigate={handleNavigate}
           onTagSelect={handleTagSelect}
+          onSave={handlePageSave}
         />
       </div>
 
