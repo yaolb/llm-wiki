@@ -5,48 +5,18 @@ import { SearchModal } from './components/SearchModal';
 import { parseWikiPage, buildTitleMapFromPages, setGlobalTitleMap, searchPages, resolveWikilink } from './utils/wikilinks';
 import type { Category, PageEntry, WikiPage, TagCount } from './types';
 
-const wikiFileModules = import.meta.glob('../../wiki/**/*.md', {
-  query: '?raw',
-  import: 'default',
-  eager: true,
-}) as Record<string, string>;
-
-const CATEGORY_MAP: Record<string, string> = {
-  entities: '实体',
-  concepts: '概念',
-  papers: '论文',
-  topics: '主题',
-  synthesis: '综述',
-};
-
-function extractPageInfo(raw: string, filePath: string): PageEntry {
-  const lines = raw.split('\n');
-  const frontmatter: Record<string, any> = {};
-  let bodyStart = 0;
-  if (lines[0]?.trim() === '---') {
-    const end = lines.indexOf('---', 1);
-    if (end > 0) {
-      const fm = lines.slice(1, end).join('\n');
-      bodyStart = end + 1;
-      fm.split('\n').forEach((line) => {
-        const m = line.match(/^(\w+):\s*(.+)$/);
-        if (m) frontmatter[m[1]] = m[2].trim();
-      });
-    }
-  }
-  const content = lines.slice(bodyStart).join('\n');
-  const h1Match = content.match(/^#\s+(.+)/m);
-  const title = h1Match ? h1Match[1].trim() : (frontmatter.title || filePath.split('/').pop()?.replace('.md', '') || 'Untitled');
-  const dir = filePath.split('/').slice(-2, -1)[0] || '';
-  const category = CATEGORY_MAP[dir] || dir;
-  let tags: string[] = [];
-  if (frontmatter.tags) {
-    if (Array.isArray(frontmatter.tags)) tags = frontmatter.tags;
-    else if (typeof frontmatter.tags === 'string') tags = frontmatter.tags.split(',').map((t: string) => t.trim());
-  }
-  const relPath = filePath.replace(/.*\/wiki\//, 'wiki/');
-  return { title, path: relPath, summary: frontmatter.summary || '', tags };
+interface PageInfo {
+  path: string;
+  title: string;
+  type: string;
+  tags: string[];
+  summary: string;
+  category: string;
+  created: string;
+  updated: string;
 }
+
+const CATEGORY_ORDER = ['实体', '概念', '论文', '主题', '综述'];
 
 function readHash(): string | null {
   const h = window.location.hash.slice(1);
@@ -59,8 +29,117 @@ export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileSidebar, setMobileSidebar] = useState(false);
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
-  // Sync activePath → URL hash
+  // Runtime state: fetched from API
+  const [pageInfos, setPageInfos] = useState<PageInfo[]>([]);
+  const [pageCache, setPageCache] = useState<Map<string, WikiPage>>(new Map());
+
+  // ── Fetch page listing on mount ──
+  useEffect(() => {
+    (async () => {
+      try {
+        const resp = await fetch('/api/pages');
+        if (!resp.ok) throw new Error('Failed to fetch pages');
+        const { pages } = await resp.json();
+        setPageInfos(pages);
+
+        // If there's a hash, preload that page
+        const hash = readHash();
+        if (hash) {
+          const matching = pages.find((p: PageInfo) => p.path === hash);
+          if (matching) {
+            loadPageContent(hash);
+          }
+        }
+      } catch (err) {
+        console.error('[App] Failed to load pages:', err);
+      } finally {
+        setLoaded(true);
+      }
+    })();
+  }, []);
+
+  // ── Load page content from API ──
+  const loadPageContent = useCallback(async (path: string) => {
+    setPageCache((prev) => {
+      // already cached
+      return prev;
+    });
+    try {
+      const resp = await fetch(`/api/page?path=${encodeURIComponent(path)}`);
+      if (!resp.ok) throw new Error(`Failed to load: ${path}`);
+      const { content: raw } = await resp.json();
+      const relPath = path.startsWith('wiki/') ? `../../${path}` : path;
+      const parsed = parseWikiPage(raw, relPath);
+      setPageCache((prev) => {
+        const next = new Map(prev);
+        next.set(path, parsed);
+        return next;
+      });
+    } catch (err) {
+      console.error('[App] Failed to load page content:', err);
+    }
+  }, []);
+
+  // ── Build sidebar categories from API data ──
+  const { categories, allTags } = useMemo(() => {
+    const catMap = new Map<string, PageEntry[]>();
+    const tagMap = new Map<string, number>();
+
+    for (const info of pageInfos) {
+      const cat = info.category;
+      if (!catMap.has(cat)) catMap.set(cat, []);
+      catMap.get(cat)!.push({
+        title: info.title,
+        path: info.path,
+        summary: info.summary,
+        tags: info.tags,
+      });
+      for (const tag of info.tags) {
+        tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
+      }
+    }
+
+    // Build sorted categories
+    const cats: Category[] = [];
+    const seen = new Set<string>();
+    for (const name of CATEGORY_ORDER) {
+      const pgs = catMap.get(name);
+      if (pgs && pgs.length > 0) {
+        cats.push({ name, pages: pgs, collapsed: collapsedCats.has(name) });
+        seen.add(name);
+      }
+    }
+    for (const [name, pgs] of catMap) {
+      if (!seen.has(name)) {
+        cats.push({ name, pages: pgs, collapsed: collapsedCats.has(name) });
+      }
+    }
+
+    const tags: TagCount[] = Array.from(tagMap.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+    return { categories: cats, allTags: tags };
+  }, [pageInfos, collapsedCats]);
+
+  // ── Build title map for wikilink resolution ──
+  const allPages = useMemo(() => {
+    return Array.from(pageCache.values());
+  }, [pageCache]);
+
+  useEffect(() => {
+    setGlobalTitleMap(buildTitleMapFromPages(allPages));
+  }, [allPages]);
+
+  // ── Get active page content ──
+  const activePage = useMemo<WikiPage | null>(() => {
+    if (!activePath) return null;
+    return pageCache.get(activePath) || null;
+  }, [activePath, pageCache]);
+
+  // ── Sync activePath → URL hash ──
   useEffect(() => {
     if (activePath) {
       window.location.hash = '#' + activePath;
@@ -69,76 +148,38 @@ export default function App() {
     }
   }, [activePath]);
 
-  // Listen for browser back/forward
+  // ── Listen for browser back/forward ──
   useEffect(() => {
-    const onHashChange = () => setActivePath(readHash());
+    const onHashChange = () => {
+      const hash = readHash();
+      setActivePath(hash);
+      if (hash && !pageCache.has(hash)) {
+        loadPageContent(hash);
+      }
+    };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  const { allPages, categories, allTags } = useMemo(() => {
-    const pages: WikiPage[] = [];
-    const catMap = new Map<string, PageEntry[]>();
-    const tagMap = new Map<string, number>();
-    for (const [filePath, raw] of Object.entries(wikiFileModules)) {
-      if (filePath.includes('/index.md') || filePath.includes('/log.md')) continue;
-      try {
-        const relPath = filePath.replace(/.*\/wiki\//, 'wiki/');
-        const page = parseWikiPage(raw, relPath);
-        pages.push(page);
-      } catch (e) {
-        console.error('[App] Failed to parse:', filePath, e);
-      }
-      const info = extractPageInfo(raw, filePath);
-      const dir = filePath.split('/').slice(-2, -1)[0] || '';
-      const catName = CATEGORY_MAP[dir] || dir;
-      // Collect tags for tag cloud
-      for (const tag of info.tags) {
-        tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
-      }
-      if (!catMap.has(catName)) catMap.set(catName, []);
-      catMap.get(catName)!.push(info);
-    }
-    const cats: Category[] = [];
-    for (const name of ['实体', '概念', '论文', '主题', '综述']) {
-      const pgs = catMap.get(name);
-      if (pgs && pgs.length > 0) {
-        cats.push({ name, pages: pgs, collapsed: collapsedCats.has(name) });
-        catMap.delete(name);
-      }
-    }
-    for (const [name, pgs] of catMap) {
-      cats.push({ name, pages: pgs, collapsed: collapsedCats.has(name) });
-    }
-    // Build sorted tag list
-    const tags: TagCount[] = Array.from(tagMap.entries())
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
-    return { allPages: pages, categories: cats, allTags: tags };
-  }, [collapsedCats]);
-
-  useEffect(() => {
-    setGlobalTitleMap(buildTitleMapFromPages(allPages));
-  }, [allPages]);
-
-  const activePage = useMemo<WikiPage | null>(() => {
-    if (!activePath) return null;
-    const globPath = '../../' + activePath;
-    const raw = wikiFileModules[globPath];
-    if (!raw) return null;
-    return parseWikiPage(raw, globPath);
-  }, [activePath]);
-
+  // ── Handlers ──
   const handleSelect = useCallback((page: PageEntry) => {
     setActivePath(page.path);
     setActiveTag(null);
     setMobileSidebar(false);
-  }, []);
+    // Load content if not cached
+    if (!pageCache.has(page.path)) {
+      loadPageContent(page.path);
+    }
+  }, [pageCache, loadPageContent]);
 
   const handleNavigate = useCallback((path: string) => {
     const resolved = resolveWikilink(path);
-    setActivePath(resolved || path);
-  }, []);
+    const target = resolved || path;
+    setActivePath(target);
+    if (!pageCache.has(target)) {
+      loadPageContent(target);
+    }
+  }, [pageCache, loadPageContent]);
 
   const handleToggleCategory = useCallback((name: string) => {
     setCollapsedCats((prev) => {
@@ -148,17 +189,47 @@ export default function App() {
     });
   }, []);
 
-  const handleSearch = useCallback((query: string) => searchPages(query, allPages), [allPages]);
+  const handleSearch = useCallback((query: string) => {
+    // Search across all page infos (no need to load full content)
+    if (!query || query.length < 2) return [];
+    const q = query.toLowerCase();
+    const results: { title: string; path: string; snippet: string; score: number }[] = [];
+    for (const info of pageInfos) {
+      let score = 0;
+      if (info.title.toLowerCase().includes(q)) score += 100;
+      if (info.tags.some((t) => t.toLowerCase().includes(q))) score += 50;
+      if (info.summary.toLowerCase().includes(q)) score += 10;
+      if (score > 0) {
+        results.push({
+          title: info.title,
+          path: info.path,
+          snippet: info.summary || info.title,
+          score,
+        });
+      }
+    }
+    const searchResults = searchPages(query, allPages);
+    // Merge results (allPages already cached pages have content search)
+    const seen = new Set(results.map(r => r.path));
+    for (const sr of searchResults) {
+      if (!seen.has(sr.path)) results.push(sr);
+    }
+    return results.sort((a, b) => b.score - a.score).slice(0, 10);
+  }, [pageInfos, allPages]);
 
   const handleSearchSelect = useCallback((path: string) => {
     setActivePath(path);
     setActiveTag(null);
-  }, []);
+    if (!pageCache.has(path)) {
+      loadPageContent(path);
+    }
+  }, [pageCache, loadPageContent]);
 
   const handleTagSelect = useCallback((tag: string) => {
     setActiveTag(activeTag === tag ? null : tag);
   }, [activeTag]);
 
+  // ── Keyboard shortcuts ──
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); setSearchOpen((p) => !p); }
@@ -167,7 +238,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  // Filter categories by active tag
+  // ── Filter categories by active tag ──
   const filteredCategories = useMemo(() => {
     if (!activeTag) return categories;
     return categories.map((cat) => ({
@@ -176,10 +247,28 @@ export default function App() {
     })).filter((cat) => cat.pages.length > 0);
   }, [categories, activeTag]);
 
-  const totalPages = allPages.length;
+  const totalPages = pageInfos.length;
   const filteredPageCount = activeTag
     ? filteredCategories.reduce((s, c) => s + c.pages.length, 0)
     : totalPages;
+
+  // ── After page content loads, re-select to refresh viewer ──
+  useEffect(() => {
+    if (activePath && pageCache.has(activePath)) {
+      // trigger re-render via activePage
+    }
+  }, [pageCache, activePath]);
+
+  if (!loaded) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--text-muted)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 13, marginBottom: 8 }}>加载中...</div>
+          <div style={{ fontSize: 11 }}>LLM Wiki</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app">
