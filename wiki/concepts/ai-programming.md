@@ -2,8 +2,8 @@
 type: concept
 tags: [AI编程, 自动化, 开发工具]
 created: 2026-07-04
-updated: 2026-07-04
-related_sources: 1
+updated: 2026-07-13
+related_sources: 2
 ---
 
 # AI 编程（AI Programming / AI Coding）
@@ -28,10 +28,13 @@ AI 编程工具通常基于以下能力：
 ### 第一阶段：辅助补全
 GitHub Copilot、Cursor 等工具提供行级/块级代码补全，人类仍是代码的主要作者。
 
-### 第二阶段：自主生成
-AI 根据需求描述独立生成完整功能模块（如 Vibe Coding），但仍需人工验证。
+### 第二阶段：Vibe Coding（氛围编程）
+[Karpathy 于 2025 年初提出](/topics/karpathy-ai-coding-methodology)。AI 根据自然语言描述独立生成完整功能模块，人类只管提需求、接受输出。适用于原型和个人项目。
 
-### 第三阶段：自验证
+### 第三阶段：Agentic Engineering（智能体工程）
+[Karpathy 于 2026 年提出](/topics/karpathy-ai-coding-methodology#从-vibe-coding-到-agentic-engineering2026-年演进)。人类从"代码写作者"变为"架构师"，编写 Spec、验收 AI 输出、协调多个 Agent。代表：Claude Code、Cursor Agent 模式。
+
+### 第四阶段：自验证
 AI 不仅生成代码，还**自主验证代码的正确性**。代表：[[OpenSquilla]] 的红绿回归证据链、[[红绿回归测试（Red-Green-Regression Pipeline）]]。
 
 ## 代表工具
