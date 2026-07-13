@@ -5,7 +5,7 @@ tags: [API网关, 架构设计, MCP, Spring AI, 灰度发布, Spring Cloud Gatew
 created: 2026-07-09
 updated: 2026-07-13
 
-> **提示**：本文档灰度方案基于 58 星火灰度上线方案。Gateway 层通过自定义灰度过滤器（继承 ReactiveLoadBalancerClientFilter）实现路由决策，通过 Nacos 配置中心动态管理灰度策略（JSON 格式断言 + 比例），命中灰度的请求自动路由到 `-gray` 后缀的 Nacos 服务名。
+> **提示**：本文档灰度方案基于 58 星火灰度上线方案。基于 Spring AI 2.0 GA（2026-06-12 发布），MCP 采用 Streamable HTTP 传输，注解驱动开发。Gateway 层通过自定义灰度过滤器（继承 ReactiveLoadBalancerClientFilter）实现路由决策，通过 Nacos 配置中心动态管理灰度策略（JSON 格式断言 + 比例），命中灰度的请求自动路由到 `-gray` 后缀的 Nacos 服务名。
 ---
 
 
@@ -20,15 +20,48 @@ updated: 2026-07-13
 
 ## 2. 技术栈
 
+### 2.1 核心框架
+
 | 技术 | 版本 | 用途 |
 |------|------|------|
 | Spring Boot | 4.x | 应用框架 |
-| Spring AI | 2.0 | AI 能力 & MCP 协议支持 |
+| Spring AI | 2.0 GA | AI 能力 + MCP 协议原生支持 |
+| Spring Framework | 7.0 | WebFlux 响应式栈 |
 | Spring Cloud Gateway | 最新 | 网关路由层 |
-| SpringDoc | 2.8.x | OpenAPI 3.1 文档 |
-| Swagger 注解 | `io.swagger.v3.oas.annotations` | 接口元数据 |
+| MCP Java SDK | 1.0.x（bundled） | MCP 协议引擎（Spring AI 内置） |
+| Jackson | 3.x | JSON 序列化（Spring AI 2.0 升级） |
 | Nacos | 生产版 | 注册中心 + 配置中心 |
 | StarRocks/ClickHouse | - | 数仓查询 |
+
+### 2.2 MCP 相关依赖
+
+```xml
+<!-- MCP Server（WebFlux 响应式，与本服务 Spring Cloud Gateway 一致） -->
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-starter-mcp-server-webflux</artifactId>
+</dependency>
+
+<!-- MCP 注解模块（Spring AI 2.0 内置，无需单独引入） -->
+<!-- @McpTool, @McpResource, @McpPrompt, @McpComplete 开箱即用 -->
+
+<!-- MCP Client（如果本服务也需要调用其他 MCP Server） -->
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-starter-mcp-client-webflux</artifactId>
+</dependency>
+```
+
+> **版本说明**：Spring AI 2.0 GA 于 2026-06-12 发布，MCP 传输实现已从 `io.modelcontextprotocol.sdk` 迁移到 `org.springframework.ai` 包下。使用 BOM 管理版本，无需指定版本号。
+
+### 2.3 技术选型说明
+
+| 选型 | 选择 | 理由 |
+|------|------|------|
+| WebFlux（非 WebMVC） | `mcp-server-webflux` | Gateway 本身基于 WebFlux，统一响应式栈，减少线程模型冲突 |
+| 传输协议 | **Streamable HTTP**（默认） | HTTP POST/GET + 可选 SSE 流式返回，兼容 LB/Gateway，SSE 已废弃 |
+| 注解方式 | `@McpTool` 等注解 | Spring AI 2.0 原生支持，自动生成 JSON Schema，零配置 |
+| REST 文档 | SpringDoc + `@Operation` | REST API 和 MCP Tool 共用 `@Schema` 描述字段，来源一致 |
 
 ## 3. 五层语义模型
 
@@ -47,42 +80,59 @@ updated: 2026-07-13
 ## 4. 代码架构
 
 ```
-                ┌──────────────────┐
-                │   MetricService   │  ← 唯一业务逻辑层
-                │    @Service       │
-                │  queryByNL()      │
-                │  queryByStruct()  │
-                └────────┬─────────┘
+                ┌───────────────────────┐
+                │     MetricService      │  ← 唯一业务逻辑层
+                │      @Service          │
+                │   queryByNL()          │
+                │   queryByStruct()      │
+                └────────┬──────────────┘
                          │
-          ┌──────────────┼──────────────┐
-          │              │              │
-   ┌──────▼──────┐  ┌───▼────────┐  ┌──▼───────────┐
-   │ REST Facade │  │ MCP Facade │  │ WebSocket    │
-   │ @RestController│  │ @McpTool  │  │ (预留)       │
-   │ @Operation   │  │ @Schema   │  │              │
-   │ @Schema      │  │ @JsonProperty│  │              │
-   └──────────────┘  └────────────┘  └──────────────┘
+          ┌──────────────┼──────────────────┐
+          │              │                  │
+   ┌──────▼──────┐  ┌───▼────────────┐  ┌──▼───────────┐
+   │ REST Facade │  │ MCP Facade     │  │ WebSocket    │
+   │ @RestController│  │ @Component     │  │ (预留)       │
+   │ @Operation   │  │ @McpTool       │  │              │
+   │ @Schema      │  │ @McpToolParam  │  │              │
+   └──────────────┘  └────────────────┘  └──────────────┘
 ```
 
 **核心原则**：单 Service + 双 Facade，REST 和 MCP 共用同一套业务逻辑。
 
-**MCP 模式**：Streamable HTTP（`spring.ai.mcp.server.protocol=STREAMABLE`）
+**MCP 传输协议**：Streamable HTTP（`spring.ai.mcp.server.protocol=STREAMABLE`），Spring AI 2.0 默认值。基于标准 HTTP POST/GET + 可选 SSE 流式响应，兼容各种负载均衡器和 API 网关，是生产部署的推荐方案（SSE 传输已废弃）。
 
-**注解统一**：Swagger `@Schema` 同时用于 REST OpenAPI 文档生成和 MCP Tool JSON Schema 生成，两套文档来源一致。
+**注解体系**：
+- Spring AI `@McpTool` → 自动生成 MCP Tool JSON Schema
+- REST 侧使用 `@Operation` → SpringDoc 生成 OpenAPI 3.1
+- 两者**共用 `@Schema` 注解**描述参数/返回值，保证两套文档来源一致
+
+**MCP Server 端点**（Spring AI 自动注册，无需手写 Controller）：
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/mcp/v1/tools/list` | GET | 获取 Tool 列表 |
+| `/mcp/v1/tools/call` | POST | 调用 Tool |
+| `/mcp/v1/tools/stream` | POST | 流式调用（返回 SSE） |
+| `/mcp/v1/resources/list` | GET | 获取资源列表 |
+| `/mcp/v1/prompts/list` | GET | 获取提示列表 |
 
 ## 5. 三通道接入
 
 ```
 API 通道：api.business.com  → Token 哈希 → 节点
-  ├─ POST /api/v1/metrics/query    结构化查询
-  ├─ GET  /api/v1/metrics/list     指标列表
-  └─ POST /api/v1/metrics/nl-query 自然语言查询
+  ├─ POST /api/v1/metrics/query       结构化查询
+  ├─ GET  /api/v1/metrics/list        指标列表
+  └─ POST /api/v1/metrics/nl-query    自然语言查询
 
 MCP 通道：mcp.business.com  → 用户 ID 哈希 → 节点
-  ├─ POST /mcp/v1/tools/list       Tool 列表
-  ├─ POST /mcp/v1/tools/call       Tool 调用
-  └─ SSE  /mcp/v1/tools/stream     流式调用
+  ├─ GET  /mcp/v1/tools/list          Tool 列表
+  ├─ POST /mcp/v1/tools/call          Tool 调用
+  ├─ POST /mcp/v1/tools/stream        流式调用（SSE）
+  ├─ GET  /mcp/v1/resources/list      资源列表
+  └─ GET  /mcp/v1/resources/read      读取资源
 ```
+
+> MCP 端点由 Spring AI 2.0 自动注册，无需手写 Controller。应用层只需通过 `@McpTool` 等注解暴露方法即可。
 
 ## 6. 部署架构
 
@@ -1454,6 +1504,246 @@ public class RateLimitMonitor {
 
 ---
 
+## 11. Spring AI 2.0 MCP 集成方案
+
+基于官方文档（`docs.spring.io/spring-ai`）确认的技术方案。
+
+### 11.1 架构定位
+
+MCP Server 不是独立服务，而是**嵌入在指标系统应用内部**，与应用共用同一个 Spring Boot 进程和端口，通过不同 Path 区分：
+
+```
+                         指标系统应用 (同一进程)
+                              │
+                    ┌─────────┴──────────┐
+                    │                     │
+             ┌──────▼──────┐      ┌──────▼──────┐
+             │ REST API    │      │ MCP Server  │
+             │ /api/v1/**  │      │ /mcp/v1/**  │
+             │             │      │             │
+             │ @Controller  │      │ @McpTool    │
+             │ @Operation  │      │ @Component  │
+             └──────┬──────┘      └──────┬──────┘
+                    │                    │
+                    └──────┬─────────────┘
+                           │
+                    ┌──────▼──────┐
+                    │ MetricService │
+                    │  (统一业务层)  │
+                    └─────────────┘
+```
+
+**为什么不是独立部署？**
+- MCP 本身就是 REST-like 协议，在同应用内开不同路径即可
+- 共用业务逻辑层 `MetricService`，零网络开销
+- 共用 Nacos 注册、限流、鉴权基础设施
+- 部署维护成本更低
+
+### 11.2 配置方式
+
+```yaml
+# application.yml
+spring:
+  ai:
+    mcp:
+      server:
+        # Streamable HTTP（Spring AI 2.0 默认值）
+        protocol: STREAMABLE
+        # 能力开关（默认全开）
+        capabilities:
+          tool: true
+          resource: false     # 指标系统暂时不需要 Resource
+          prompt: false       # 指标系统暂时不需要 Prompt
+          completion: false
+        # 端点基础路径（影响 /mcp/v1/** 的注册）
+        # base-path 由自动配置处理，无需手动设置
+    # Streamable HTTP 专属配置
+    server:
+      streamable-http:
+        keep-alive-interval: 30s   # 保持连接活跃
+```
+
+### 11.3 @McpTool 注解使用
+
+```java
+@Component
+public class MetricMcpTools {
+
+    private final MetricService metricService;
+
+    public MetricMcpTools(MetricService metricService) {
+        this.metricService = metricService;
+    }
+
+    /**
+     * 结构化指标查询
+     */
+    @McpTool(
+        name = "query_metrics",
+        description = "查询业务指标数据，支持按城市、业务线、时间范围过滤"
+    )
+    public List<MetricResult> queryMetrics(
+        @McpToolParam(description = "指标 ID，如 resume_delivery_count", required = true)
+        String metricId,
+
+        @McpToolParam(description = "城市名，如 北京", required = false)
+        String city,
+
+        @McpToolParam(description = "开始日期 yyyy-MM-dd", required = true)
+        String startDate,
+
+        @McpToolParam(description = "结束日期 yyyy-MM-dd", required = true)
+        String endDate,
+
+        @McpToolParam(description = "时间粒度：day/week/month", required = false)
+        String granularity
+    ) {
+        MetricQuery query = MetricQuery.builder()
+            .metricId(metricId).city(city)
+            .startDate(startDate).endDate(endDate)
+            .granularity(granularity != null ? granularity : "day")
+            .build();
+        return metricService.queryByStruct(query);
+    }
+
+    /**
+     * 自然语言查询 - 带进度跟踪
+     */
+    @McpTool(
+        name = "nl_query_metrics",
+        description = "用自然语言查询指标，如'北京3月份简历投递量'"
+    )
+    public String nlQueryMetrics(
+        McpSyncRequestContext context,
+        @McpToolParam(description = "自然语言查询语句", required = true)
+        String query
+    ) {
+        // 通过 context 发送进度通知
+        context.info("正在解析自然语言: " + query);
+        context.progress(0.3);
+
+        String sql = metricService.nlToSql(query);
+        context.info("已转换为 SQL: " + sql);
+        context.progress(0.7);
+
+        String result = metricService.executeSql(sql);
+        context.progress(1.0);
+
+        return result;
+    }
+
+    /**
+     * 获取可用指标列表
+     */
+    @McpTool(
+        name = "list_metrics",
+        description = "获取当前用户有权限查询的所有指标列表"
+    )
+    public List<MetricDefinition> listMetrics() {
+        return metricService.listAccessibleMetrics();
+    }
+}
+```
+
+### 11.4 @McpResource 使用（可选）
+
+```java
+@Component
+public class MetricResources {
+
+    @McpResource(
+        uri = "metric://indicators/{domain}",
+        name = "指标元数据",
+        description = "按业务域获取指标定义",
+        mimeType = "application/json"
+    )
+    public ReadResourceResult getIndicators(String domain) {
+        String json = metricService.getIndicatorDefinitions(domain);
+        return ReadResourceResult.builder(List.of(
+            new TextResourceContents(
+                "metric://indicators/" + domain,
+                "application/json",
+                json)
+        )).build();
+    }
+}
+```
+
+### 11.5 注解方式与 REST 的对比
+
+| 维度 | REST API | MCP Tool |
+|------|---------|----------|
+| 注解 | `@RestController` + `@Operation` | `@Component` + `@McpTool` |
+| 参数描述 | `@Parameter` / `@Schema` | `@McpToolParam` |
+| 文档生成 | SpringDoc → OpenAPI 3.1 | 自动 → MCP JSON Schema |
+| 认证 | Header Token | 共用（同进程内） |
+| 限流 | RequestRateLimiter Filter | 共用 |
+| 调用方式 | HTTP 客户端 curl/postman | AI Agent 自动发现和调用 |
+| 流式响应 | SSE / WebFlux | MCP Streamable HTTP (SSE) |
+
+**注解统一策略**：
+- REST 参数用 `@Schema(description = "...", required = true)`
+- MCP 参数用 `@McpToolParam(description = "...", required = true)`
+- 两者不互通，必要时可通过自定义注解桥接，但简单场景各自标注即可
+
+### 11.6 与灰度、限流的协同
+
+MCP 通道走 Gateway 的**同一套过滤链**：
+
+```
+请求 → Gateway → GrayFilter → RequestRateLimiter → 转发到后端
+                                      ↑
+                               (KeyResolver 识别 xh_uname)
+```
+
+- **灰度**：MCP 请求同样带 Cookie（`xh_route_keys`），走同样的灰度判定逻辑
+- **限流**：MCP 请求通过 `RequestRateLimiter` + `@userOaKeyResolver`，按 OA 限流
+- **鉴权**：MCP 请求通过 Gateway 时验证 Token，与 REST API 一致
+
+### 11.7 客户端调用示例
+
+```json
+// 请求：获取工具列表
+GET /mcp/v1/tools/list
+Authorization: Bearer eyJhbGciOiJSUzI1NiIs...
+Cookie: xh_route_keys={"xh_uname":"zhangsan"}
+→ 返回工具描述和参数 Schema
+
+// 请求：调用指标查询工具
+POST /mcp/v1/tools/call
+Authorization: Bearer eyJhbGciOiJSUzI1NiIs...
+Content-Type: application/json
+
+{
+  "method": "tools/call",
+  "params": {
+    "name": "query_metrics",
+    "arguments": {
+      "metricId": "resume_delivery_count",
+      "city": "北京",
+      "startDate": "2026-06-01",
+      "endDate": "2026-06-30"
+    }
+  }
+}
+
+// 响应
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[{\"date\":\"2026-06-01\",\"value\":1234},...]"
+      }
+    ]
+  }
+}
+```
+
+---
+
 ## 12. 鉴权与接入流程
 
 ### 10.1 Nacos 鉴权配置
@@ -1531,15 +1821,15 @@ curl -X POST ... -H "X-Route-Version: canary" ...
 | 通道 | 文档类型 | 生成方式 |
 |------|---------|---------|
 | REST API | OpenAPI 3.1 | SpringDoc 扫描 `@Operation` / `@Schema` |
-| MCP Tool | MCP JSON Schema | Spring AI 自动反射 + `@Schema` 增强 |
+| MCP Tool | MCP JSON Schema | Spring AI 自动从 `@McpTool` / `@McpToolParam` 生成 |
 | 文档门户 | Knife4j UI | 聚合展示 |
 
 ## 14. Roadmap
 
 ```
-Phase 1（当前）:  短查询 + 无状态 + Nginx 一致性哈希灰度
-Phase 2（后续）:  长对话 + MCP 会话 Redis 化 + 全链路监控
-Phase 3（远期）:  指标语义层 AI 辅助录入 + 智能指标推荐
+Phase 1（当前）:  REST API + MCP Streamable HTTP + 灰度 + 用户级限流
+Phase 2（后续）:  MCP 长对话 + 会话 Redis 化 + 全链路监控 + 指标语义层 AI 辅助录入
+Phase 3（远期）:  智能指标推荐 + Agentic Engineering 闭环
 ```
 
 ## Related
