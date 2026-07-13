@@ -3,7 +3,7 @@
 type: topic
 tags: [API网关, 架构设计, MCP, Spring AI, 灰度发布, Spring Cloud Gateway]
 created: 2026-07-09
-updated: 2026-07-10
+updated: 2026-07-13
 ---
 
 
@@ -596,7 +596,487 @@ v2.1.0     3       canary         10%
 重复上述流程进入下一轮灰度（v2.2.0 → canary）
 ```
 
-## 8. 文档体系
+---
+
+## 8. Nacos 配置体系
+
+### 8.1 命名空间与 Data ID 规划
+
+按环境隔离：
+
+```
+Namespace: metric-dev     → 开发环境
+Namespace: metric-test    → 测试环境
+Namespace: metric-prod    → 生产环境
+```
+
+每个命名空间下按 Data ID 划分配置维度：
+
+```
+# Data ID 命名规范
+metric-{domain}-{type}.{format}
+
+# 示例
+metric-gray-config.yaml          # 灰度权重配置
+metric-datasource.yaml           # 数据源映射
+metric-indicators.yaml           # 指标注册表
+metric-dimensions.yaml           # 维度字典
+metric-auth.yaml                 # 鉴权规则
+metric-limits.yaml               # 限流配置
+```
+
+### 8.2 灰度配置完整 YAML
+
+```yaml
+# Data ID: metric-gray-config.yaml
+# Group: METRIC_GATEWAY
+
+gray:
+  enabled: true
+
+  user_rules:
+    - type: whitelist
+      description: "内部白名单用户走 canary"
+      users:
+        - "user_internal_001"
+        - "user_internal_002"
+        - "qa_team_leader"
+      target_version: canary
+
+    - type: percentage
+      description: "10% 用户灰度"
+      percent: 10
+      hash_key: user_id
+      target_version: canary
+
+  version_groups:
+    stable:
+      match: version == "stable"
+      weight: 90
+      nodes:
+        - 10.0.1.1:8081
+        - 10.0.1.2:8082
+    canary:
+      match: version == "canary-*"
+      weight: 10
+      nodes:
+        - 10.0.1.3:8083
+
+  override:
+    headers:
+      X-Route-Version: version
+      X-Route-Node: node_ip
+
+  canary:
+    min_healthy_ratio: 0.5
+    auto_rollback:
+      error_threshold: 5
+      latency_threshold_ms: 2000
+      check_interval_sec: 30
+```
+
+### 8.3 指标注册表配置
+
+```yaml
+# Data ID: metric-indicators.yaml
+# Group: METRIC_GATEWAY
+
+indicators:
+  - id: resume_delivery_count
+    name: 简历投递量
+    domain: recruitment
+    type: ATOMIC
+    unit: 次
+    description: 指定周期内用户投递简历的总次数
+
+  - id: resume_delivery_rate
+    name: 简历投递率
+    domain: recruitment
+    type: RATIO
+    unit: "%"
+    formula: "resume_delivery_count / resume_view_count * 100"
+
+  - id: active_listing_count
+    name: 有效房源量
+    domain: house
+    type: ATOMIC
+    unit: 套
+```
+
+### 8.4 数据源映射与口径 SQL
+
+```yaml
+# Data ID: metric-datasource.yaml
+# Group: METRIC_GATEWAY
+
+datasources:
+  - name: starrocks_recruitment
+    type: STARROCKS
+    jdbc_url: jdbc:mysql://recruitment-cluster.query.internal:9030/recruitment_ads
+    query_timeout_sec: 30
+    max_connections: 50
+
+  - name: clickhouse_house
+    type: CLICKHOUSE
+    jdbc_url: jdbc:clickhouse://house-cluster.query.internal:8123/house_ads
+    query_timeout_sec: 60
+    max_connections: 30
+
+metrics_sql:
+  resume_delivery_count: |
+    SELECT COUNT(DISTINCT resume_id) AS value
+    FROM fact_resume_delivery
+    WHERE city = '{city}'
+      AND delivery_date BETWEEN '{start_date}' AND '{end_date}'
+      AND biz_type = '{biz_type}'
+
+  active_listing_count: |
+    SELECT COUNT(listing_id) AS value
+    FROM dim_house_listing
+    WHERE city = '{city}'
+      AND listing_status = 'ONLINE'
+      AND update_time >= '{snapshot_time}'
+```
+
+### 8.5 Nacos 客户端配置（Spring Boot 侧）
+
+```yaml
+# application-nacos.yml
+
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: ${NACOS_ADDR:10.0.0.100:8848}
+        namespace: ${NACOS_NAMESPACE:metric-prod}
+        group: METRIC_GATEWAY
+        file-extension: yaml
+        shared-configs:
+          - data-id: metric-gray-config.yaml
+            group: METRIC_GATEWAY
+            refresh: true
+          - data-id: metric-datasource.yaml
+            group: METRIC_GATEWAY
+            refresh: true
+          - data-id: metric-indicators.yaml
+            group: METRIC_GATEWAY
+            refresh: false
+          - data-id: metric-auth.yaml
+            group: METRIC_GATEWAY
+            refresh: true
+          - data-id: metric-limits.yaml
+            group: METRIC_GATEWAY
+            refresh: true
+
+      discovery:
+        server-addr: ${NACOS_ADDR:10.0.0.100:8848}
+        namespace: ${NACOS_NAMESPACE:metric-prod}
+        service: metric-gateway
+        group: METRIC_GROUP
+        metadata:
+          version: ${METRIC_VERSION:stable}
+          region: ${REGION:shanghai}
+          health_check_url: /actuator/health
+```
+
+### 8.6 Nacos 灰度配置监听（关键代码）
+
+```java
+@Component
+public class GrayConfigListener implements ApplicationListener<RefreshEvent> {
+
+    private final NacosConfigManager nacosConfigManager;
+    private final GrayRoutingService grayRoutingService;
+
+    @PostConstruct
+    public void init() {
+        nacosConfigManager.getConfigService().addListener(
+            "metric-gray-config.yaml",
+            "METRIC_GATEWAY",
+            new AbstractListener() {
+                @Override
+                public void receiveConfigInfo(String config) {
+                    GrayConfig newConfig = YamlUtil.parse(config, GrayConfig.class);
+                    grayRoutingService.updateRules(newConfig);
+                }
+            }
+        );
+    }
+}
+
+@Service
+public class GrayRoutingService {
+
+    private volatile GrayConfig currentConfig;
+
+    public String resolveTargetVersion(HttpServletRequest request) {
+        GrayConfig config = this.currentConfig;
+        if (config == null || !config.isEnabled()) return "stable";
+
+        // 1. 请求头覆盖（最高优先级）
+        String headerVersion = request.getHeader("X-Route-Version");
+        if (headerVersion != null) return headerVersion;
+
+        // 2. 白名单匹配
+        String userId = resolveUserId(request);
+        for (UserRule rule : config.getUserRules()) {
+            if ("whitelist".equals(rule.getType()) && rule.getUsers().contains(userId)) {
+                return rule.getTargetVersion();
+            }
+        }
+
+        // 3. 按比例灰度
+        for (UserRule rule : config.getUserRules()) {
+            if ("percentage".equals(rule.getType())) {
+                int hash = Objects.hash(userId) & 0x7FFFFFFF;
+                if (hash % 100 < rule.getPercent()) {
+                    return rule.getTargetVersion();
+                }
+            }
+        }
+
+        return "stable";
+    }
+}
+```
+
+---
+
+## 9. API 网关接入细节
+
+### 9.1 Spring Cloud Gateway 完整配置
+
+```yaml
+# application-gateway.yml
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - name: RequestRateLimiter
+          args:
+            key-resolver: "#{@apiKeyResolver}"
+            redis-rate-limiter:
+              replenishRate: 100
+              burstCapacity: 200
+        - name: Retry
+          args:
+            retries: 2
+            statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE
+            methods: GET, POST
+
+      routes:
+        - id: metric-api-stable
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/api/v1/**
+            - Header=X-Route-Version, stable
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: metricApiBreaker
+                fallbackUri: forward:/fallback/metrics
+
+        - id: metric-api-canary
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/api/v1/**
+            - Header=X-Route-Version, canary
+          filters:
+            - StripPrefix=1
+
+        - id: metric-api-default
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/api/v1/**
+          filters:
+            - StripPrefix=1
+            - name: GrayRouting
+
+        - id: metric-mcp-stable
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/mcp/v1/**
+            - Header=X-Route-Version, stable
+          filters:
+            - StripPrefix=1
+
+        - id: metric-mcp-canary
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/mcp/v1/**
+            - Header=X-Route-Version, canary
+          filters:
+            - StripPrefix=1
+
+        - id: metric-mcp-default
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/mcp/v1/**
+          filters:
+            - StripPrefix=1
+            - name: GrayRouting
+```
+
+### 9.2 Gateway 自定义灰度 Filter
+
+```java
+@Component
+public class GrayRoutingGatewayFilterFactory
+        extends AbstractGatewayFilterFactory<GrayRoutingGatewayFilterFactory.Config> {
+
+    private final GrayRoutingService grayRoutingService;
+
+    @Override
+    public GatewayFilter apply(Config config) {
+        return (exchange, chain) -> {
+            ServerHttpRequest request = exchange.getRequest();
+
+            if (request.getHeaders().containsKey("X-Route-Version") ||
+                request.getHeaders().containsKey("X-Route-Node")) {
+                return chain.filter(exchange);
+            }
+
+            String version = grayRoutingService.resolveTargetVersion(
+                new ServletServerHttpRequest(request).getServletRequest());
+
+            ServerHttpRequest modified = request.mutate()
+                .header("X-Route-Version", version)
+                .build();
+
+            return chain.filter(exchange.mutate().request(modified).build());
+        };
+    }
+
+    @Data
+    public static class Config {
+        private String configDataId;
+    }
+}
+```
+
+### 9.3 Nginx 层配置
+
+```nginx
+upstream metric_backend {
+    server traffic-group-vip.internal:8081 max_fails=3 fail_timeout=10s;
+}
+
+upstream metric_web {
+    hash $http_x_user_id consistent;
+    server traffic-group-vip.internal:8081;
+}
+
+upstream metric_api {
+    hash $http_authorization consistent;
+    server traffic-group-vip.internal:8081;
+}
+
+server {
+    listen 443 ssl;
+    server_name api.business.com;
+
+    location /mcp/ {
+        proxy_pass http://metric_web;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-User-Id $http_x_user_id;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 300s;
+    }
+
+    location /api/ {
+        proxy_pass http://metric_api;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Authorization $http_authorization;
+    }
+
+    location /actuator/ {
+        proxy_pass http://metric_backend;
+        proxy_set_header X-Real-IP $remote_addr;
+        allow 10.0.0.0/8;
+        deny all;
+    }
+}
+```
+
+---
+
+## 10. 鉴权与接入流程
+
+### 10.1 Nacos 鉴权配置
+
+```yaml
+# Data ID: metric-auth.yaml
+apps:
+  - app_id: data_platform
+    app_secret: ${ENC:xxxx}
+    permissions:
+      - resume_delivery_count
+      - "*"
+    rate_limit: 1000/min
+    channels: [API, MCP]
+
+  - app_id: business_ui
+    app_secret: ${ENC:yyyy}
+    permissions:
+      - resume_delivery_count
+    rate_limit: 100/min
+    channels: [API]
+
+  - app_id: ai_assistant
+    app_secret: ${ENC:zzzz}
+    permissions:
+      - "*"
+    rate_limit: 200/min
+    channels: [MCP]
+```
+
+### 10.2 接入流程
+
+```
+客户端                              API 网关
+  │                                    │
+  │ POST /auth/token                   │
+  │ { app_id, app_secret }             │
+  │────────────────────────────────►   │
+  │◄────────────────────────────────   │
+  │ { access_token, permissions }      │
+  │                                    │
+  │ GET /api/v1/metrics/query          │
+  │ Authorization: Bearer ***          │
+  │ {指标ID, 维度, 时间范围}           │
+  │────────────────────────────────►   │
+  │◄────────────────────────────────   │
+  │  结果                              │
+```
+
+### 10.3 请求示例
+
+```bash
+# 获取 Token
+curl -X POST https://api.business.com/auth/token \
+  -H "Content-Type: application/json" \
+  -d '{"app_id": "data_platform", "app_secret": "***"}'
+
+# 结构化查询
+curl -X POST https://api.business.com/api/v1/metrics/query \
+  -H "Authorization: Bearer eyJhbG..." \
+  -d '{
+    "metric_id": "resume_delivery_count",
+    "dimensions": {"city": "北京"},
+    "time_range": {"start": "2026-06-01", "end": "2026-06-30"}
+  }'
+
+# 灰度验证
+curl -X POST ... -H "X-Route-Version: canary" ...
+```
+
+---
+
+## 11. 文档体系
 
 | 通道 | 文档类型 | 生成方式 |
 |------|---------|---------|
@@ -604,7 +1084,7 @@ v2.1.0     3       canary         10%
 | MCP Tool | MCP JSON Schema | Spring AI 自动反射 + `@Schema` 增强 |
 | 文档门户 | Knife4j UI | 聚合展示 |
 
-## 9. Roadmap
+## 12. Roadmap
 
 ```
 Phase 1（当前）:  短查询 + 无状态 + Nginx 一致性哈希灰度
