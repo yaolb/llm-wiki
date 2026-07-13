@@ -1190,7 +1190,271 @@ server {
 
 ---
 
-## 10. 鉴权与接入流程
+## 10. 用户级限流（基于 OA）
+
+在 Gateway 层实现用户维度的限流，基于用户 OA（组织账号）而非 IP 或 client_id，确保同一用户多设备/多 IP 共享限流额度。
+
+### 10.1 用户 OA 提取策略
+
+| 请求来源 | 提取方式 | 提取的值 |
+|---------|---------|---------|
+| Web/MCP（有 Cookie） | `xh_route_keys` Cookie 解析 JSON → `xh_uname` | OA 用户名（如 `zhangsan`） |
+| API（有 Token） | JWT 解析 → `sub` claim，或自定义 `oa` claim | OA 用户名或用户 ID |
+| 兜底 | `loginuserid` Cookie | 登录用户 ID |
+| 无法识别 | 降级到 IP 限流 | 客户端 IP |
+
+### 10.2 限流 Key 格式
+
+```
+# 格式：rate_limit:{层级}:{route}:{oa}
+# 示例
+rate_limit:user:metric-admin:zhangsan      # 用户级
+rate_limit:user_api:/api/v1/metrics:zhangsan  # 用户+接口级
+rate_limit:user_ip:zhangsan:10.162.1.1     # 用户+IP级（防多设备绕过）
+```
+
+### 10.3 限流阈值设计
+
+```yaml
+# 三层限流（同时生效，命中任一即限流）
+rate_limits:
+  # 第一层：用户全局限流
+  user_global:
+    key_prefix: rate_limit:user
+    key_resolver: user_oa
+    capacity: 1000          # 令牌桶容量
+    rate: 100               # 每秒补充令牌数
+
+  # 第二层：用户+路由限流
+  user_route:
+    key_prefix: rate_limit:user_route
+    key_resolver: user_oa + route
+    rules:
+      - routes: [/api/v1/metrics/query]       # 指标查询
+        capacity: 200
+        rate: 20
+      - routes: [/api/v1/metrics/nl-query]     # 自然语言查询
+        capacity: 50
+        rate: 10
+      - routes: [/api/v1/metrics/list]         # 指标列表
+        capacity: 500
+        rate: 50
+      - routes: [/mcp/v1/**]                   # MCP 通道
+        capacity: 100
+        rate: 10
+
+  # 第三层：用户+路由+维度限流（防止单维度打爆）
+  user_route_dimension:
+    # 比如：同一用户查询不同城市的指标，限制并发
+    key_prefix: rate_limit:user_route_dim
+    capacity: 30
+    rate: 10
+```
+
+### 10.4 自定义 KeyResolver 实现
+
+```java
+@Component("userOaKeyResolver")
+public class UserOaKeyResolver implements KeyResolver {
+
+    private static final String XH_ROUTE_KEYS = "xh_route_keys";
+
+    @Override
+    public Mono<String> resolve(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+
+        // 1. 从 xh_route_keys Cookie 解析 OA
+        String oa = resolveFromRouteKeysCookie(request);
+        if (oa != null) return Mono.just("user_oa:" + oa);
+
+        // 2. 从 JWT Token 解析
+        String token = extractBearerToken(request);
+        if (token != null) {
+            try {
+                Claims claims = jwtParser.parseClaims(token);
+                String sub = claims.get("sub", String.class);
+                if (sub != null) return Mono.just("token_sub:" + sub);
+            } catch (Exception ignored) {}
+        }
+
+        // 3. 从 loginuserid Cookie 兜底
+        String loginUserId = extractCookie(request, "loginuserid");
+        if (loginUserId != null) return Mono.just("login_user:" + loginUserId);
+
+        // 4. 降级到 IP
+        String ip = Objects.requireNonNull(request.getRemoteAddress()).getAddress().getHostAddress();
+        return Mono.just("ip:" + ip);
+    }
+
+    private String resolveFromRouteKeysCookie(ServerHttpRequest request) {
+        String cookie = extractCookie(request, XH_ROUTE_KEYS);
+        if (cookie == null) return null;
+        try {
+            String decoded = URLDecoder.decode(cookie, StandardCharsets.UTF_8);
+            Map<String, Object> keys = JSON.parseObject(decoded);
+            return (String) keys.get("xh_uname");
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String extractCookie(ServerHttpRequest request, String name) {
+        String cookieHeader = request.getHeaders().getFirst(HttpHeaders.COOKIE);
+        if (cookieHeader == null) return null;
+        return Arrays.stream(cookieHeader.split(";"))
+            .map(String::trim)
+            .filter(c -> c.startsWith(name + "="))
+            .map(c -> c.substring(name.length() + 1))
+            .findFirst().orElse(null);
+    }
+
+    private String extractBearerToken(ServerHttpRequest request) {
+        String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        if (auth != null && auth.startsWith("Bearer ")) {
+            return auth.substring(7);
+        }
+        return null;
+    }
+}
+```
+
+### 10.5 路由级限流配置
+
+```yaml
+# 配合自定义 KeyResolver，对不同路由配置不同限流阈值
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: metric-query
+          uri: lb://metric-query-online
+          predicates:
+            - Path=/api/v1/metrics/query
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@userOaKeyResolver}"
+                redis-rate-limiter:
+                  replenishRate: 20     # 每秒 20 个令牌
+                  burstCapacity: 200    # 突发 200
+                  requestedTokens: 1
+            - StripPrefix=2
+
+        - id: metric-nl-query
+          uri: lb://metric-query-online
+          predicates:
+            - Path=/api/v1/metrics/nl-query
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@userOaKeyResolver}"
+                redis-rate-limiter:
+                  replenishRate: 10     # NL 查询更耗资源
+                  burstCapacity: 50
+                  requestedTokens: 1
+            - StripPrefix=2
+
+        - id: metric-admin
+          uri: lb://metric-admin-online
+          predicates:
+            - Path=/admin/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: "#{@userOaKeyResolver}"
+                redis-rate-limiter:
+                  replenishRate: 50
+                  burstCapacity: 500
+            - StripPrefix=1
+```
+
+### 10.6 Nacos 动态限流配置
+
+限流阈值通过 Nacos 动态管理，无需重启：
+
+```yaml
+# Data ID: metric-limits.yaml
+# Group: METRIC_GATEWAY
+
+rate_limits:
+  user:
+    default:
+      replenishRate: 100
+      burstCapacity: 1000
+
+  # 按用户的限流阈值（白名单）
+  user_overrides:
+    - oa: "admin_zhang"
+      replenishRate: 500      # 管理员放宽
+      burstCapacity: 5000
+    - oa: "etl_service"
+      replenishRate: 1000     # 服务账号放宽
+      burstCapacity: 10000
+
+  # 按路由的限流阈值
+  route:
+    /api/v1/metrics/query:
+      replenishRate: 20
+      burstCapacity: 200
+    /api/v1/metrics/nl-query:
+      replenishRate: 5
+      burstCapacity: 30
+    /api/v1/metrics/list:
+      replenishRate: 50
+      burstCapacity: 500
+
+  # 全局 IP 黑名单（超过阈值自动加入）
+  ip_blacklist:
+    enabled: true
+    threshold: 1000       # 1 分钟内超过 1000 次请求
+    ban_duration_min: 30  # 封禁 30 分钟
+```
+
+### 10.7 限流效果监控
+
+```java
+@Component
+public class RateLimitMonitor {
+
+    private final MeterRegistry meterRegistry;
+
+    /**
+     * 记录限流事件 → Prometheus / Grafana
+     */
+    @EventListener
+    public void onRateLimitEvent(RateLimitEvent event) {
+        meterRegistry.counter("gateway.rate_limit.blocked",
+            "user", event.getUserOa(),
+            "route", event.getRoute(),
+            "reason", event.getReason()
+        ).increment();
+
+        log.warn("用户 {} 触发限流: route={}, reason={}",
+            event.getUserOa(), event.getRoute(), event.getReason());
+    }
+}
+```
+
+### 10.8 限流返回格式
+
+被限流的请求统一返回：
+
+```json
+{
+  "code": 429,
+  "message": "请求过于频繁，请稍后再试",
+  "data": {
+    "retry_after_sec": 30,
+    "limit_type": "user_rate_limit",
+    "current_usage": 205,
+    "limit": 200
+  }
+}
+```
+
+---
+
+## 12. 鉴权与接入流程
 
 ### 10.1 Nacos 鉴权配置
 
@@ -1262,7 +1526,7 @@ curl -X POST ... -H "X-Route-Version: canary" ...
 
 ---
 
-## 11. 文档体系
+## 13. 文档体系
 
 | 通道 | 文档类型 | 生成方式 |
 |------|---------|---------|
@@ -1270,7 +1534,7 @@ curl -X POST ... -H "X-Route-Version: canary" ...
 | MCP Tool | MCP JSON Schema | Spring AI 自动反射 + `@Schema` 增强 |
 | 文档门户 | Knife4j UI | 聚合展示 |
 
-## 12. Roadmap
+## 14. Roadmap
 
 ```
 Phase 1（当前）:  短查询 + 无状态 + Nginx 一致性哈希灰度
