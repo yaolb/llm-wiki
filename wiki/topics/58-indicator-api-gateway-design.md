@@ -1818,11 +1818,258 @@ curl -X POST ... -H "X-Route-Version: canary" ...
 
 ## 13. 文档体系
 
+基于 **Knife4j 4.x** + **SpringDoc OpenAPI 3.1**，在 Spring Boot 4.x（Jakarta EE）下实现 REST API 和 MCP Tool 的统一文档展示。
+
+### 13.1 文档生成方式
+
 | 通道 | 文档类型 | 生成方式 |
 |------|---------|---------|
-| REST API | OpenAPI 3.1 | SpringDoc 扫描 `@Operation` / `@Schema` |
-| MCP Tool | MCP JSON Schema | Spring AI 自动从 `@McpTool` / `@McpToolParam` 生成 |
-| 文档门户 | Knife4j UI | 聚合展示 |
+| REST API | **OpenAPI 3.1** | SpringDoc 扫描 `@Operation` / `@Schema` 注解生成 |
+| MCP Tool | **MCP JSON Schema** | Spring AI 从 `@McpTool` / `@McpToolParam` 自动生成 |
+| 文档门户 | **Knife4j UI** (`/doc.html`) | 聚合展示 REST + MCP 文档，支持在线调试 |
+
+### 13.2 依赖配置
+
+```xml
+<!-- SpringDoc OpenAPI 3.1（Knife4j 4.x 底层依赖） -->
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webflux-api</artifactId>
+    <version>2.8.x</version>
+</dependency>
+
+<!-- Knife4j 4.x（Jakarta 版，适配 Spring Boot 3+/4+） -->
+<dependency>
+    <groupId>com.github.xiaoymin</groupId>
+    <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+    <version>4.5.0</version>
+</dependency>
+
+<!-- Gateway 聚合组件（可选，多服务文档聚合用） -->
+<dependency>
+    <groupId>com.github.xiaoymin</groupId>
+    <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+    <version>4.5.0</version>
+</dependency>
+```
+
+### 13.3 应用层配置
+
+```yaml
+# application.yml
+springdoc:
+  api-docs:
+    path: /v3/api-docs           # OpenAPI JSON 输出路径
+  swagger-ui:
+    path: /doc.html              # Swagger UI 路径（Knife4j 默认 /doc.html）
+    tags-sorter: alpha           # 标签按字母排序
+    operations-sorter: alpha     # 操作按字母排序
+  packages-to-scan:
+    - com.business.metric.controller  # REST 控制器扫描路径
+  paths-to-match:
+    - /api/**                    # 只扫描 /api 路径
+    - /mcp/**                    # 同时扫描 /mcp 路径（MCP HTTP 端点）
+  cache:
+    disabled: true               # 开发环境禁用缓存
+
+knife4j:
+  enable: true                   # 启用 Knife4j 增强功能
+  setting:
+    language: zh_cn              # 中文
+    enable-version: true         # 显示版本号
+    enable-swagger-models: true  # 显示 Swagger Models
+    swagger-model-name: 实体类    # 实体类标签名
+```
+
+### 13.4 Knife4j 配置类
+
+```java
+@Configuration
+public class Knife4jConfig {
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("58 统一指标系统 API")
+                .version("1.0.0")
+                .description("集团业务统一指标系统，支持 REST API 和 MCP 协议双通道接入")
+                .contact(new Contact()
+                    .name("指标系统团队")
+                    .email("metric-team@58corp.com"))
+                .license(new License()
+                    .name("58 内部")
+                    .url("https://docs.58corp.com")))
+            .addSecurityItem(new SecurityRequirement()
+                .addList("BearerAuth"))
+            .components(new Components()
+                .addSecuritySchemes("BearerAuth",
+                    new SecurityScheme()
+                        .name("Authorization")
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")));
+    }
+}
+```
+
+### 13.5 REST 控制器的注解规范
+
+```java
+@Tag(name = "指标查询", description = "结构化指标查询接口")
+@RestController
+@RequestMapping("/api/v1/metrics")
+public class MetricController {
+
+    private final MetricService metricService;
+
+    @Operation(
+        summary = "查询指标数据",
+        description = "按指标 ID、维度、时间范围查询指标值\n" +
+            "注意：城市参数不传则查全国汇总"
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "查询成功",
+            content = @Content(schema = @Schema(implementation = MetricResult.class))),
+        @ApiResponse(responseCode = "401", description = "未授权"),
+        @ApiResponse(responseCode = "429", description = "请求过于频繁")
+    })
+    @PostMapping("/query")
+    public ResponseEntity<MetricResult> queryMetrics(
+        @RequestBody @Valid
+        @Schema(description = "查询请求参数")
+        MetricQueryRequest request
+    ) {
+        return ResponseEntity.ok(metricService.queryByStruct(request));
+    }
+
+    @Operation(summary = "获取指标列表", description = "获取当前用户有权限查询的所有指标")
+    @GetMapping("/list")
+    public ResponseEntity<List<MetricDefinition>> listMetrics() {
+        return ResponseEntity.ok(metricService.listAccessibleMetrics());
+    }
+
+    @Operation(summary = "自然语言查询", description = "用自然语言查询指标")
+    @PostMapping("/nl-query")
+    public Mono<ServerSentEvent<String>> nlQuery(
+        @RequestBody @Valid NlQueryRequest request
+    ) {
+        return metricService.queryByNLStream(request.getQuery());
+    }
+}
+```
+
+### 13.6 实体类的注解规范
+
+```java
+@Schema(description = "指标查询请求")
+public class MetricQueryRequest {
+
+    @Schema(description = "指标 ID", example = "resume_delivery_count", requiredMode = RequiredMode.REQUIRED)
+    private String metricId;
+
+    @Schema(description = "城市名", example = "北京", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String city;
+
+    @Schema(description = "开始日期 yyyy-MM-dd", example = "2026-06-01", requiredMode = RequiredMode.REQUIRED)
+    private String startDate;
+
+    @Schema(description = "结束日期 yyyy-MM-dd", example = "2026-06-30", requiredMode = RequiredMode.REQUIRED)
+    private String endDate;
+
+    @Schema(description = "时间粒度：day/week/month", example = "day", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String granularity;
+}
+
+@Schema(description = "指标查询结果")
+public class MetricResult {
+
+    @Schema(description = "日期")
+    private String date;
+
+    @Schema(description = "指标值")
+    private Long value;
+
+    @Schema(description = "城市")
+    private String city;
+
+    @Schema(description = "环比增长率（%）")
+    private Double momRate;
+
+    @Schema(description = "同比增长率（%）")
+    private Double yoyRate;
+}
+```
+
+### 13.7 Gateway 层文档聚合
+
+多服务场景下，使用 `knife4j-gateway-spring-boot-starter` 在 Gateway 层聚合各子服务的 OpenAPI 文档：
+
+```yaml
+# 配置在 Nacos 中，动态生效
+knife4j:
+  gateway:
+    enable: true
+    routes:
+      - name: 指标查询服务
+        url: /metric-query/v3/api-docs?group=default
+        service-name: metric-query-online
+        order: 1
+      - name: 指标管理后台
+        url: /metric-admin/v3/api-docs?group=default
+        service-name: metric-admin-online
+        order: 2
+      - name: 指标驾驶舱
+        url: /metric-report/v3/api-docs?group=default
+        service-name: metric-report-online
+        order: 3
+```
+
+访问 `http://api.business.com/doc.html` 即可查看所有子服务的聚合文档。
+
+### 13.8 MCP 文档的特殊说明
+
+MCP Tool 的文档（JSON Schema）由 Spring AI 在 `/mcp/v1/tools/list` 端点自动暴露。与 REST API 文档的关系：
+
+```
+Knife4j UI (/doc.html)
+  ├── REST API 分组（OpenAPI 3.1）
+  │     ├── 指标查询
+  │     ├── 指标列表
+  │     └── 自然语言查询
+  │
+  └── MCP 协议分组（通过 API 网关透传）
+        ├── /mcp/v1/tools/list     → 工具发现
+        ├── /mcp/v1/tools/call     → 工具调用
+        └── /mcp/v1/tools/stream   → 流式调用
+
+MCP 侧的 Tool 方法（@McpTool）不生成 OpenAPI 文档，
+而是通过 MCP 协议自身的 Schema 暴露给 AI Agent 发现。
+人类开发者通过 Knife4j 查看 REST API 文档，
+AI Agent 通过 MCP 协议发现 Tool。
+```
+
+### 13.9 文档安全
+
+```yaml
+# 文档访问需要登录验证
+springdoc:
+  swagger-ui:
+    enabled: true          # 生产环境可关闭
+
+# Gateway 层拦截非内网文档请求
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: knife4j-docs
+          uri: lb://metric-gateway
+          predicates:
+            - Path=/doc.html,/v3/api-docs/**,/swagger-ui.html
+            - RemoteAddr=10.0.0.0/8, 172.16.0.0/12  # 仅内网可访问
+          filters:
+            - StripPrefix=0
+```
 
 ## 14. Roadmap
 
