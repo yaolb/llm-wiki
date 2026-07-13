@@ -5,7 +5,7 @@ tags: [API网关, 架构设计, MCP, Spring AI, 灰度发布, Spring Cloud Gatew
 created: 2026-07-09
 updated: 2026-07-13
 
-> **提示**：本文档灰度方案已基于 58 云集群服务分组重构。灰度路由决策在 Gateway 层完成（Cookie / Token），路由到不同的 K8s Service（stable-svc / canary-svc），不再依赖 Nginx split_clients 或 Nacos 权重分流。
+> **提示**：本文档灰度方案基于 58 星火灰度上线方案。Gateway 层通过自定义灰度过滤器（继承 ReactiveLoadBalancerClientFilter）实现路由决策，通过 Nacos 配置中心动态管理灰度策略（JSON 格式断言 + 比例），命中灰度的请求自动路由到 `-gray` 后缀的 Nacos 服务名。
 ---
 
 
@@ -233,482 +233,620 @@ spring:
 
 ## 7. 灰度部署方案
 
+基于 58 星火灰度上线方案，使用 Spring Cloud Gateway + Nacos 实现灰度路由。
+
 ### 7.1 总体架构
 
-基于**云集群服务分组（Service Group）** 实现灰度路由，不再依赖 Nacos 或 Nginx split_clients 做流量分发。
-
 ```
-                          请求入口
-                             │
-                     ┌──────┴──────┐
-                     │  API 网关    │
-                     │  (Gateway)   │
-                     │  灰度决策     │
-                     └──────┬──────┘
-                             │
-              ┌──────────────┼──────────────┐
-              │              │              │
-       ┌──────▼──────┐  ┌───▼────────┐  ┌──▼───────────┐
-       │ stable-svc  │  │ canary-svc │  │ gray-3-svc   │
-       │ (K8s Service)│  │ (K8s Service)│  │ （预留）      │
-       │              │  │              │  │              │
-       │ Pod: v1.0.0  │  │ Pod: v2.1.0  │  │              │
-       │ GRAY=stable  │  │ GRAY=canary  │  │              │
-       └──────────────┘  └──────────────┘  └──────────────┘
-                             │
-                      ┌──────┴──────┐
-                      │  云集群 SLB  │
-                      │  (服务分组)   │
-                      └─────────────┘
+                           请求入口
+                              │
+                     ┌────────┴────────┐
+                     │   Gateway 层     │
+                     │  (灰度过滤器)     │
+                     │  继承 Reactive-   │
+                     │  LoadBalancer-   │
+                     │  ClientFilter    │
+                     └────────┬────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │ 灰度匹配?      │               │
+          ┌───┴───┐      ┌───┴────┐
+          │ 是     │      │ 否     │
+          │        │      │        │
+   ┌──────▼────┐   │   ┌──▼───────────┐
+   │ 灰度分组   │   │   │ 稳定分组      │
+   │ service-  │   │   │ service      │
+   │ name-gray │   │   │ name         │
+   │ (Nacos)   │   │   │ (Nacos)      │
+   └───────────┘   │   └──────────────┘
+                   │
+              ┌────▼────┐
+              │  Nacos   │
+              │ 注册中心  │
+              │ 配置中心  │
+              └─────────┘
 ```
 
-**关键原则**：
-- 每个 K8s Service 对应一个灰度分组（stable / canary）
-- 节点通过**环境变量**标识灰度分组：`GRAY=stable` 或 `GRAY=canary`
-- API 网关根据请求特征（Cookie / Token）决策路由到哪个 Service
-- 不做 API 粒度的分流，只做**用户级**和 **Token 级**灰度
+**核心原理**：
+- Gateway 自定义灰度过滤器继承 `ReactiveLoadBalancerClientFilter`
+- 拷贝其逻辑，改写获取 Service ID 的步骤
+- 通过 `LoadBalancerClient` 获取 Nacos 中的服务实例
+- 通过 `ServerWebExchange` 获取 Request，提取路由 key（Cookie / IP 等）
+- 通过 Nacos 配置中心的灰度策略配置判断是否走灰度
+- 如需灰度，根据服务名映射配置获取灰度服务名，否则使用正式服务名
+- 重建 URL 并设置 `GATEWAY_REQUEST_URL_ATTR` 改变最终路由地址
 
-### 7.2 用户标识体系
+### 7.2 服务命名约定
 
-从 Cookie 中提取用户标识，作为灰度决策的依据：
+| 环境 | 服务名示例 | 说明 |
+|------|-----------|------|
+| 稳定分组 | `xh-saas-admin-online` | 正式服务名，部署在稳定分组 |
+| 灰度分组 | `xh-saas-admin-online-gray` | 灰度服务名，正式名 + `-gray` 后缀 |
 
-| Cookie 字段 | 用途 | 说明 |
-|-------------|------|------|
-| `xxzlclientid` | **用户级灰度路由 key** | UUID 格式，标识用户设备/客户端。灰度比例基于此值哈希 |
-| `xxzlxxid` | 跨域用户标识 | 加密字符串，可用于跨服务用户关联 |
-| `loginuserid` | 登录用户 ID | 已登录用户的唯一 ID，白名单灰度用 |
+**服务映射表**（示例）：
 
-> 对于 API 调用（无 Cookie），通过 OAuth2.0 Token 识别调用方（见 7.3）
+| 服务集群 | 稳定分组服务名 | 灰度分组服务名 |
+|---------|---------------|---------------|
+| 指标系统工作台 | `metric-admin-online` | `metric-admin-online-gray` |
+| 指标系统查询 | `metric-query-online` | `metric-query-online-gray` |
+| 指标系统驾驶舱 | `metric-report-online` | `metric-report-online-gray` |
 
-### 7.3 Token 级灰度（OAuth2.0）
+### 7.3 灰度配置 JSON 格式
 
-#### 7.3.1 Token 灰度标记
-
-OAuth2.0 Token 中携带灰度信息，JWT 格式在 claims 中加入 `gray_level` 字段：
+完整的灰度配置存储在 Nacos 中（Data ID: `com.58bj.dpd.xinghuo.gray`），采用 JSON 格式：
 
 ```json
 {
-  "sub": "2018090410120014d6740d",
-  "aud": "metric-gateway",
-  "iss": "https://passport.58corp.com",
-  "exp": 1893456000,
-  "iat": 1700000000,
-  "gray_level": "canary",       // ← 灰度标记
-  "scope": "metrics:read",
-  "client_id": "data_platform"
+  "grayItems": [
+    {
+      "config": [
+        {
+          "grayRatio": 30,
+          "predicaterGroups": [
+            {
+              "predicaters": [
+                {
+                  "includes": ["zhangsan", "lisi"],
+                  "excludes": ["wangwu"],
+                  "regex": ".*ming",
+                  "paramName": "xh_uname",
+                  "type": "COOKIE"
+                },
+                {
+                  "includes": ["10.162.37.160"],
+                  "regex": "10.10.*",
+                  "type": "IP"
+                }
+              ]
+            },
+            {
+              "predicaters": [
+                {
+                  "includes": ["POST", "PATCH"],
+                  "paramName": "METHOD",
+                  "type": "HEADER"
+                }
+              ]
+            }
+          ],
+          "routeKeys": [
+            {
+              "saltValue": 0,
+              "type": "IP"
+            },
+            {
+              "paramName": "xh_uname",
+              "type": "COOKIE"
+            }
+          ]
+        }
+      ],
+      "service": "xh-internal-admin-online"
+    }
+  ],
+  "routeKeys": [
+    {
+      "saltValue": 0,
+      "type": "IP"
+    },
+    {
+      "paramName": "xh_uname",
+      "type": "COOKIE",
+      "saltValue": 1
+    }
+  ]
 }
 ```
 
-| `gray_level` 值 | 含义 |
-|------------------|------|
-| `stable`（默认） | 走稳定版 |
-| `canary` | 走灰度版 |
-| `gray_3` | 走灰度 3 组（预留多组灰度） |
-| 不携带 | 按比例哈希判定 |
+#### 关键规则
 
-#### 7.3.2 Token 灰度标记的授予方式
+| 字段 | 说明 |
+|------|------|
+| `grayItems[].config[].grayRatio` | 灰度比例 0-100 |
+| `predicaterGroups` | **OR 关系**：满足任一 group 即命中灰度 |
+| `predicaterGroups[].predicaters` | **AND 关系**：group 内所有条件需同时满足 |
+| `includes` | 包含值列表 |
+| `excludes` | 排除值列表（优先级高于 includes） |
+| `regex` | 正则匹配，与 includes/excludes 同时生效 |
+| `routeKeys` | 路由键：基于哪个值进行一致性哈希分发 |
+| `saltValue` | 盐值，用于随机化路由分布 |
 
-```
-┌──────────────┐     Token 颁发              ┌──────────────┐
-│  认证服务器   │ ────────────────────────→  │  客户端      │
-│  passport    │   JWT + gray_level claim    │  (app/ui)    │
-│  58corp.com  │                              │              │
-└──────┬───────┘                              └──────┬───────┘
-       │                                             │
-       │  Token 颁发策略：                             │ 携带 Token
-       │  a) 白名单用户 → gray_level=canary            │
-       │  b) 按 client_id 比例 → gray_level=canary     │
-       │  c) 默认 → gray_level=stable                  │
-       │                                             ▼
-       │                                      ┌──────────────┐
-       │                                      │  API 网关     │
-       │                                      │  解析 JWT     │
-       │                                      │  gray_level   │
-       │                                      │  → 路由决策    │
-       │                                      └──────────────┘
-```
+#### 断言类型（type）
 
-**三种授予策略**：
+| 类型 | 说明 | 是否需要 paramName |
+|------|------|-------------------|
+| `IP` | 请求方 IP 地址 | ❌ |
+| `PATH` | 请求路径 | ❌ |
+| `HOST` | 请求 Host | ❌ |
+| `URL` | 完整 URL | ❌ |
+| `COOKIE` | Cookie 中的指定字段 | ✅ 指定 paramName |
+| `HEADER` | 请求头中的指定字段 | ✅ 指定 paramName |
 
-```yaml
-# 策略 a：白名单
-- 用户: ["user_qa_001", "user_qa_002", "pm_leader"]
-  → Token 中 gray_level=canary
+### 7.4 路由键（xh_route_keys Cookie）
 
-# 策略 b：按比例
-- client_id: "data_platform" 的 10% 用户
-  → Token 中 gray_level=canary
-  （由认证服务器根据 sub/xxzlclientid 哈希决定）
+业务相关字段统一通过 Cookie `xh_route_keys` 传递，value 为 JSON Map：
 
-# 策略 c：手动指定（测试用）
-- 请求头 X-Force-Gray: canary
-  → 网关覆盖 Token 的 gray_level
+```json
+{
+  "xh_uname": "zhangsan",
+  "xh_uid": "2018090410120014d6740d",
+  "xh_project_name": ["数据分析平台", "推荐系统"],
+  "xh_project_id": ["proj_001", "proj_002"],
+  "xh_cuid": "cloud_001",
+  "xh_cuname": "张三",
+  "xh_domain": "metric.business.com"
+}
 ```
 
-### 7.4 灰度决策树
+| 字段 | 描述 | 来源 |
+|------|------|------|
+| `xh_uname` | 用户名 | 登录后写入 |
+| `xh_uid` | 用户 ID | 登录后写入 |
+| `xh_project_name` | 项目组名（列表） | 用户所属项目 |
+| `xh_project_id` | 项目组 ID（列表） | 用户所属项目 |
+| `xh_cuid` | 云账号 ID | 关联云平台账号 |
+| `xh_cuname` | 云账号用户名 | 关联云平台账号 |
+| `xh_domain` | 当前域名 | 前端自动写入 |
 
-```
-                        收到请求
-                            │
-              ┌─────────────┴─────────────┐
-              │                           │
-         有 Cookie                    无 Cookie
-              │                      （API Token 调用）
-     ┌────────┴────────┐                  │
-     │                  │           ┌──────┴──────┐
-     │           有 X-Force-Gray?   │              │
-     │                  │      Token 有 gray_level?
-     │                  ├── 是 → 用指定值    │       │
-     │                  │             是──┴── 否
-     │               ┌──┴──┐              │
-     │          xxzlclientid 哈希     hash(client_id +
-     │          按比例切分:           xxzlclientid)
-     │          90% stable / 10%      按比例切分
-     │               canary                │
-     │                  │                  │
-     └──────────────────┴──────────────────┘
-                        │
-                  ┌─────┴─────┐
-                  │           │
-              gray=stable  gray=canary
-                  │           │
-           ┌─────┘           └─────┐
-           │                       │
-      stable-svc              canary-svc
+前端在登录成功后设置：
+```javascript
+// 登录后设置路由键
+function setRouteKeys(userInfo) {
+  const keys = {
+    xh_uname: userInfo.username,
+    xh_uid: userInfo.userId,
+    xh_cuid: userInfo.cloudAccountId,
+    xh_project_name: userInfo.projects?.map(p => p.name),
+    xh_project_id: userInfo.projects?.map(p => p.id),
+    xh_domain: window.location.hostname
+  };
+  document.cookie = `xh_route_keys=${encodeURIComponent(JSON.stringify(keys))}; path=/; domain=.business.com`;
+}
 ```
 
-### 7.5 Gateway 灰度决策代码
+### 7.5 Gateway 灰度过滤器实现
+
+#### 7.5.1 自定义过滤器
 
 ```java
+/**
+ * 自定义灰度过滤器，继承 ReactiveLoadBalancerClientFilter
+ * 注意：spring-cloud 版本不同，低版本是继承 LoadBalancerClientFilter
+ */
 @Component
-public class GrayRoutingGlobalFilter implements GlobalFilter, Ordered {
+public class GrayReactiveLoadBalancerClientFilter
+        extends ReactiveLoadBalancerClientFilter {
+
+    private final NacosConfigManager nacosConfigManager;
+    private volatile GrayConfig grayConfig;
+
+    public GrayReactiveLoadBalancerClientFilter(
+            LoadBalancerClientFactory clientFactory,
+            LoadBalancerProperties properties,
+            NacosConfigManager nacosConfigManager) {
+        super(clientFactory, properties);
+        this.nacosConfigManager = nacosConfigManager;
+        initGrayConfigListener();
+    }
+
+    /**
+     * 监听 Nacos 灰度配置变化
+     */
+    private void initGrayConfigListener() {
+        try {
+            nacosConfigManager.getConfigService().addListener(
+                "com.58bj.dpd.xinghuo.gray",
+                "METRIC_GATEWAY",
+                new AbstractListener() {
+                    @Override
+                    public void receiveConfigInfo(String config) {
+                        grayConfig = JSON.parseObject(config, GrayConfig.class);
+                        log.info("灰度配置已刷新");
+                    }
+                }
+            );
+        } catch (NacosException e) {
+            log.error("监听灰度配置失败", e);
+        }
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        GrayConfig config = this.grayConfig;
 
-        // 优先级 1：手动强制指定（QA 验证用）
-        String forceGray = request.getHeaders().getFirst("X-Force-Gray");
-        if (forceGray != null && isValidGrayLevel(forceGray)) {
-            return routeToGroup(exchange, chain, forceGray);
+        if (config == null || !config.hasGrayItems()) {
+            // 无灰度配置，走默认路由
+            return super.filter(exchange, chain);
         }
 
-        // 优先级 2：Cookie 用户级灰度（Web / MCP 通道）
-        String clientId = extractCookie(request, "xxzlclientid");
-        if (clientId != null) {
-            String grayLevel = resolveByConsistentHash(clientId, 100, 10);
-            // 10% 的 xxzlclientid 走 canary
-            return routeToGroup(exchange, chain, grayLevel);
+        // 1. 获取当前请求匹配的服务名（从路由配置中提取）
+        String serviceName = resolveServiceName(exchange);
+
+        // 2. 查找该服务是否有灰度配置
+        GrayItem grayItem = config.findGrayItem(serviceName);
+        if (grayItem == null) {
+            return super.filter(exchange, chain);
         }
 
-        // 优先级 3：Token 级灰度（API 通道）
-        String token = extractBearerToken(request);
-        if (token != null) {
-            try {
-                Claims claims = jwtParser.parseClaims(token);
-                String grayLevel = claims.get("gray_level", String.class);
-                if (grayLevel != null && isValidGrayLevel(grayLevel)) {
-                    return routeToGroup(exchange, chain, grayLevel);
-                }
-                // Token 无 gray_level，按 client_id + sub 哈希
-                String hashKey = claims.get("client_id", String.class) + ":"
-                    + claims.get("sub", String.class);
-                String resolved = resolveByConsistentHash(hashKey, 100, 10);
-                return routeToGroup(exchange, chain, resolved);
-            } catch (Exception e) {
-                log.warn("Token 解析失败，走 stable: {}", e.getMessage());
-            }
+        // 3. 判断是否命中灰度
+        boolean matched = grayItem.matches(request, config.getRouteKeys());
+        if (!matched) {
+            return super.filter(exchange, chain);
         }
 
-        // 兜底：stable
-        return routeToGroup(exchange, chain, "stable");
-    }
+        // 4. 命中灰度，替换 serviceId 为灰度服务名
+        String grayServiceName = serviceName + "-gray";
+        exchange.getAttributes().put("gray_service", grayServiceName);
 
-    /**
-     * 改写请求的 X-Gray-Group 头，K8s Service 根据该头路由
-     */
-    private Mono<Void> routeToGroup(ServerWebExchange exchange,
-                                     GatewayFilterChain chain, String grayLevel) {
-        ServerHttpRequest mutated = exchange.getRequest().mutate()
-            .header("X-Gray-Group", grayLevel)
-            .build();
-        return chain.filter(exchange.mutate().request(mutated).build());
-    }
+        // 5. 重写 URI，让 LoadBalancer 去 Nacos 拉灰度服务实例
+        URI uri = exchange.getRequest().getURI();
+        URI grayUri = URI.create("lb://" + grayServiceName + uri.getPath());
+        exchange.getAttributes().put(
+            ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR, grayUri);
 
-    /**
-     * 一致性哈希：保证同一 key 始终指向同一灰度组
-     */
-    private String resolveByConsistentHash(String key, int total, int canaryPercent) {
-        int hash = Objects.hash(key) & 0x7FFFFFFF;
-        return (hash % total < canaryPercent) ? "canary" : "stable";
-    }
-
-    private String extractCookie(ServerHttpRequest request, String name) {
-        String cookie = request.getHeaders().getFirst(HttpHeaders.COOKIE);
-        if (cookie == null) return null;
-        return Arrays.stream(cookie.split(";"))
-            .map(String::trim)
-            .filter(c -> c.startsWith(name + "="))
-            .map(c -> c.substring(name.length() + 1))
-            .findFirst().orElse(null);
-    }
-
-    private String extractBearerToken(ServerHttpRequest request) {
-        String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (auth != null && auth.startsWith("Bearer ")) {
-            return auth.substring(7);
-        }
-        return null;
-    }
-
-    private boolean isValidGrayLevel(String level) {
-        return "stable".equals(level) || "canary".equals(level);
-    }
-
-    @Override
-    public int getOrder() {
-        return -1;  // 最高优先级过滤器
+        return super.filter(exchange, chain);
     }
 }
 ```
 
-### 7.6 云集群服务分组配置
+#### 7.5.2 灰度匹配逻辑
 
-#### 7.6.1 环境变量标识
+```java
+public class GrayItem {
+    private List<GrayConfigItem> config;
+    private String service;
 
-每个 Pod 通过环境变量 `GRAY` 标识所属灰度分组：
+    /**
+     * 判断当前请求是否匹配此灰度项
+     * config 数组内多个 GrayConfigItem 之间为 OR 关系
+     * 每个 GrayConfigItem 内的 predicaterGroups 之间为 OR 关系
+     * 每个 predicaterGroup 内的 predicaters 之间为 AND 关系
+     */
+    public boolean matches(ServerHttpRequest request, List<RouteKey> globalRouteKeys) {
+        if (config == null || config.isEmpty()) return false;
 
-```yaml
-# stable 部署
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: metric-gateway-stable
-  namespace: metric-prod
-spec:
-  replicas: 3
-  template:
-    spec:
-      containers:
-        - name: gateway
-          image: metric-gateway:v1.0.0
-          env:
-            - name: GRAY
-              value: "stable"          # ← 标识稳定版
-            - name: NACOS_NAMESPACE
-              value: "metric-prod"
-            - name: METRIC_VERSION
-              value: "v1.0.0"
----
-# canary 部署
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: metric-gateway-canary
-  namespace: metric-prod
-spec:
-  replicas: 1
-  template:
-    spec:
-      containers:
-        - name: gateway
-          image: metric-gateway:v2.1.0
-          env:
-            - name: GRAY
-              value: "canary"          # ← 标识灰度版
-            - name: NACOS_NAMESPACE
-              value: "metric-prod"
-            - name: METRIC_VERSION
-              value: "v2.1.0"
+        for (GrayConfigItem item : config) {
+            // 1. 检查灰度比例（grayRatio）
+            if (!checkGrayRatio(request, item, globalRouteKeys)) {
+                continue;  // 比例未命中，尝试下一个 config item
+            }
+
+            // 2. 检查断言组（OR 关系）
+            if (item.getPredicaterGroups() == null || item.getPredicaterGroups().isEmpty()) {
+                return true;  // 无断言，仅按比例
+            }
+
+            for (PredicaterGroup group : item.getPredicaterGroups()) {
+                if (group.matches(request)) {
+                    return true;  // 任一 group 命中即走灰度
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 基于 routeKey 和 grayRatio 的一致性哈希校验
+     */
+    private boolean checkGrayRatio(ServerHttpRequest request,
+                                    GrayConfigItem item,
+                                    List<RouteKey> globalRouteKeys) {
+        int ratio = item.getGrayRatio();  // 0-100
+        if (ratio >= 100) return true;
+        if (ratio <= 0) return false;
+
+        // 使用路由键计算 hash
+        List<RouteKey> keys = item.getRouteKeys() != null
+            ? item.getRouteKeys() : globalRouteKeys;
+
+        String hashKey = buildHashKey(request, keys);
+        int hash = (hashKey.hashCode() & 0x7FFFFFFF) % 100;
+        return hash < ratio;
+    }
+
+    private String buildHashKey(ServerHttpRequest request, List<RouteKey> keys) {
+        StringBuilder sb = new StringBuilder();
+        for (RouteKey key : keys) {
+            String value = extractValue(request, key);
+            sb.append(value).append(":").append(key.getSaltValue()).append("|");
+        }
+        return sb.toString();
+    }
+}
 ```
 
-#### 7.6.2 K8s Service 分组
+#### 7.5.3 断言组匹配
 
-```yaml
-# 稳定版 Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: metric-stable-svc
-  namespace: metric-prod
-spec:
-  selector:
-    app: metric-gateway
-    gray: stable            # 只选中 stable 的 Pod
-  ports:
-    - port: 80
-      targetPort: 8081
+```java
+public class PredicaterGroup {
+    private List<Predicater> predicaters;
 
----
-# 灰度版 Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: metric-canary-svc
-  namespace: metric-prod
-spec:
-  selector:
-    app: metric-gateway
-    gray: canary            # 只选中 canary 的 Pod
-  ports:
-    - port: 80
-      targetPort: 8081
+    /**
+     * group 内所有条件为 AND 关系：必须全部满足
+     */
+    public boolean matches(ServerHttpRequest request) {
+        if (predicaters == null || predicaters.isEmpty()) return true;
+        return predicaters.stream().allMatch(p -> p.matches(request));
+    }
+}
+
+public class Predicater {
+    private List<String> includes;
+    private List<String> excludes;
+    private String regex;
+    private String paramName;
+    private String type;  // IP / PATH / HOST / URL / COOKIE / HEADER
+
+    public boolean matches(ServerHttpRequest request) {
+        String value = extractValue(request);
+        if (value == null) return false;
+
+        // excludes 优先级高于 includes
+        if (excludes != null && excludes.contains(value)) return false;
+
+        // includes
+        if (includes != null && includes.contains(value)) return true;
+
+        // regex
+        if (regex != null && value.matches(regex)) return true;
+
+        return false;
+    }
+
+    private String extractValue(ServerHttpRequest request) {
+        switch (type) {
+            case "IP":
+                return request.getRemoteAddress() != null
+                    ? request.getRemoteAddress().getAddress().getHostAddress() : null;
+            case "PATH":
+                return request.getURI().getPath();
+            case "HOST":
+                return request.getHeaders().getFirst(HttpHeaders.HOST);
+            case "URL":
+                return request.getURI().toString();
+            case "COOKIE":
+                return extractFromCookie(request, paramName);
+            case "HEADER":
+                return request.getHeaders().getFirst(paramName);
+            default:
+                return null;
+        }
+    }
+}
 ```
 
-#### 7.6.3 Gateway 路由配置
+### 7.6 灰度路由流程
+
+```
+请求到达 Gateway
+       │
+       ▼
+1. 从路由配置提取 serviceId（如 xh-saas-admin-online）
+       │
+       ▼
+2. 从 Nacos 加载灰度配置 com.58bj.dpd.xinghuo.gray
+       │
+       ▼
+3. 查找该 service 是否有 grayItem
+       │
+   ┌───┴───┐
+   │ 无     │ 有
+   │        ▼
+   │   4. 遍历 grayItem.config[]（OR 关系）
+   │        │
+   │        ▼
+   │   5. 检查 grayRatio（按路由 key 哈希 % 100 < ratio）
+   │        │
+   │   ┌────┴────┐
+   │   │ 不命中   │ 命中
+   │   │          ▼
+   │   │    6. 遍历 predicaterGroups（OR 关系）
+   │   │          │
+   │   │          ▼
+   │   │    7. 遍历 predicaters（AND 关系）
+   │   │          │
+   │   │    ┌────┴────┐
+   │   │    │ 全部匹配 │ 任一不匹配
+   │   │    │          │
+   │   │    ▼          │
+   │   │  命中灰度     │
+   │   │    │          │
+   │   │    ▼          ▼
+   │   │  替换 serviceId  继续下一个 config item
+   │   │  为 -gray 后缀    ─────────►
+   │   │    │
+   │   ▼    ▼
+   │   LoadBalancer 从 Nacos
+   │   获取对应服务实例
+       │
+       ▼
+   请求最终路由到目标节点
+```
+
+### 7.7 云平台部署与环境变量
+
+#### 7.7.1 云平台分组配置
+
+```
+云平台 → 配置分组 → 高级 → 环境变量配置
+```
+
+为每个灰度分组设置环境变量覆盖服务名：
+
+| 分组 | 环境变量 | 值 |
+|------|---------|---|
+| 稳定分组（metric-admin） | 无（使用 application.yml 默认） | `metric-admin-online` |
+| 灰度分组（metric-admin-gray） | `spring:application:name` | `metric-admin-online-gray` |
+
+#### 7.7.2 灰度分组创建
+
+```
+云平台 → 新建 灰度 bucket（用于前端灰度发布）
+  ├─ 星火工作台
+  ├─ 星火驾驶舱
+  ├─ 星图
+  └─ 星火活动
+
+云平台 → 新建 灰度分组（用于后端灰度发布）
+  ├─ 指标系统工作台  → 灰度分组名: metric-admin-gray
+  ├─ 指标系统查询    → 灰度分组名: metric-query-gray
+  └─ 指标系统驾驶舱  → 灰度分组名: metric-report-gray
+```
+
+关键操作：灰度分组需要按照上面操作路径**增加灰度服务名修改**，设置 `spring:application:name` 环境变量为对应的灰度服务名。
+
+### 7.8 Spring Cloud Gateway 路由配置
+
+路由配置同样发布在 Nacos 中，动态刷新：
 
 ```yaml
-# application-gateway.yml
+# Data ID: metric-gateway-routes.yaml
 spring:
   cloud:
     gateway:
       routes:
-        # ── 稳定版路由 ──
-        - id: metric-stable
-          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
+        - id: metric-admin
+          uri: lb://metric-admin-online
           predicates:
-            - Header=X-Gray-Group, stable
+            - Path=/admin/**
           filters:
             - StripPrefix=1
 
-        # ── 灰度版路由 ──
-        - id: metric-canary
-          uri: http://metric-canary-svc.metric-prod.svc.cluster.local
+        - id: metric-query
+          uri: lb://metric-query-online
           predicates:
-            - Header=X-Gray-Group, canary
+            - Path=/api/v1/metrics/**
+          filters:
+            - StripPrefix=2
+
+        - id: metric-report
+          uri: lb://metric-report-online
+          predicates:
+            - Path=/report/**
           filters:
             - StripPrefix=1
 
-        # ── 兜底路由 ──
-        - id: metric-default
-          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
+        - id: metric-mcp
+          uri: lb://metric-mcp-online
           predicates:
-            - Path=/**
+            - Path=/mcp/v1/**
           filters:
             - StripPrefix=1
 ```
 
-### 7.7 Nginx 层配置
+路由配置中的 `lb://{serviceName}` 使用 Nacos 服务发现，灰度过滤器会在命中灰度时自动将 `serviceName` 替换为 `{serviceName}-gray`。
 
-Nginx 仅做 SSL 终结 + 转发到 Gateway Service，不做灰度路由决策：
-
-```nginx
-upstream gateway_backend {
-    server metric-gateway-svc.metric-prod.svc.cluster.local:80;
-}
-
-server {
-    listen 443 ssl;
-    server_name api.business.com;
-
-    location / {
-        proxy_pass http://gateway_backend;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Cookie $http_cookie;           # 透传 Cookie
-        proxy_set_header Authorization $http_authorization;  # 透传 Token
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_read_timeout 300s;
-    }
-}
-```
-
-### 7.8 灰度流程
-
-| 步骤 | 操作 | 说明 |
-|------|------|------|
-| 1. 部署 canary | 部署 `metric-gateway-canary` Deployment，镜像 v2.1.0，`GRAY=canary` | 新 Pod 启动，注册到 canary-svc |
-| 2. 配置灰度比例 | Gateway 中 `resolveByConsistentHash` 的 canaryPercent=10 | 10% 的 xxzlclientid 走 canary |
-| 3. QA 验证 | QA 通过 passport 后台设为 white_user → Token 带 `gray_level=canary` | 或直接带 `X-Force-Gray: canary` 头 |
-| 4. Token 灰度 | 在认证服务器配置：`client_id=data_platform` 的 10% 用户颁发 canary Token | Token 级灰度，无感切流 |
-| 5. 调大比例 | canaryPercent: 10 → 30 → 50 | 逐步放大 |
-| 6. 全量上线 | canary Pod 缩容，stable Pod 升级到 v2.1.0，`GRAY=stable` | 统一为 stable，删除 canary-svc |
-| 7. 回滚 | canaryPercent→0，或缩容 canary Pod，stable 不变 | 即时切回 |
-
-### 7.9 Nacos 灰度配置（简化版）
-
-灰度比例和策略集中在 Nacos 配置中心管理，Gateway 动态感知：
+### 7.9 Nacos 服务映射配置
 
 ```yaml
-# Data ID: metric-gray-config.yaml
-# Group: METRIC_GATEWAY
+# Data ID: com.58bj.dpd.xinghuo.service
 
-gray:
-  enabled: true
-
-  # ── 比例灰度 ──
-  percentage:
-    cookie_key: xxzlclientid    # 按 xxzlclientid 哈希
-    stable: 90                  # 90% 走 stable
-    canary: 10                  # 10% 走 canary
-    hash_total: 100
-
-  # ── Token 灰度 ──
-  token:
-    enabled: true
-    jwt_claim: gray_level       # JWT 中的灰度 claim 名
-    # 当 Token 中无 gray_level 时的兜底策略
-    fallback_hash_key: "${client_id}:${sub}"
-    fallback_canary_percent: 10
-
-  # ── 强制指定（QA 测试用） ──
-  override_header: X-Force-Gray
-
-  # ── 白名单（不按比例，直接走 canary） ──
-  whitelist:
-    cookie_values:
-      - xxzlclientid: "qa-client-001"
-      - xxzlclientid: "qa-client-002"
-    user_ids:
-      - "2018090410120014d6740d"   # PM 的 userid
-      - "2018090410120014d6741d"   # QA leader
+service-mapping:
+  metric-admin-online: metric-admin-online-gray
+  metric-query-online: metric-query-online-gray
+  metric-report-online: metric-report-online-gray
+  metric-mcp-online: metric-mcp-online-gray
 ```
 
-### 7.10 灰度策略变更生效
+### 7.10 灰度流程
 
-Nacos 配置变更 → Gateway 动态感知：
+#### 7.10.1 上线步骤
 
-```java
-@Component
-public class GrayConfigListener {
+| 阶段 | 操作 |
+|------|------|
+| 1. 稳定分组上线 | 后端接入 Nacos，部署稳定分组，验证注册成功 |
+| 2. 流量切换 | 联系运维将流量切换到网关层 |
+| 3. 灰度分组上线 | 部署灰度分组 Pod，`spring:application:name` 设置为灰度服务名 |
+| 4. 灰度策略配置 | 在 Nacos 中写入灰度配置 JSON，先根据 IP 或 特定用户灰度 QA 流量 |
+| 5. 逐步放开 | 逐渐调大 grayRatio，或增加更多的 predicate 条件 |
+| 6. 全量上线 | 灰度验证通过后，稳定分组滚动升级，下线灰度分组 |
 
-    private final NacosConfigManager nacosConfigManager;
-    private final GrayRoutingService routingService;
+#### 7.10.2 升级顺序
 
-    @PostConstruct
-    public void init() {
-        nacosConfigManager.getConfigService().addListener(
-            "metric-gray-config.yaml", "METRIC_GATEWAY",
-            new AbstractListener() {
-                @Override
-                public void receiveConfigInfo(String config) {
-                    GrayConfig cfg = YamlUtil.parse(config, GrayConfig.class);
-                    routingService.updateConfig(cfg);
-                    log.info("灰度配置已刷新，canary: {}%",
-                        cfg.getPercentage().getCanary());
-                }
-            }
-        );
-    }
+```
+第一阶段：星图 → 无外部用户，风险最低
+第二阶段：指标系统活动页 → 流量较小
+第三阶段：外部指标系统 → 外部用户先行验证
+第四阶段：内部指标系统 → 内部用户最后升级
+```
+
+#### 7.10.3 灰度策略示例
+
+```json
+// 第一阶段：仅 QA 人员
+{
+  "grayItems": [{
+    "config": [{
+      "grayRatio": 100,
+      "predicaterGroups": [{
+        "predicaters": [{
+          "includes": ["qa_zhangsan", "qa_lisi"],
+          "paramName": "xh_uname",
+          "type": "COOKIE"
+        }]
+      }]
+    }],
+    "service": "metric-admin-online"
+  }]
+}
+
+// 第二阶段：按 IP 白名单 + 10% 流量
+{
+  "grayItems": [{
+    "config": [{
+      "grayRatio": 10,
+      "predicaterGroups": [{
+        "predicaters": [{
+          "includes": ["10.162.37.*"],
+          "type": "IP"
+        }]
+      }]
+    }]
+  ],
+  "routeKeys": [{"type": "IP"}]
+}
+
+// 第三阶段：按比例灰度 30%
+{
+  "grayItems": [{
+    "config": [{
+      "grayRatio": 30,
+      "routeKeys": [{"type": "IP", "saltValue": 1}]
+    }],
+    "service": "metric-admin-online"
+  }]
 }
 ```
 
-### 7.11 版本管控与升级节奏
+### 7.11 其他收益
 
-```
-版本号         服务分组      Pod 数   状态
-──────         ────────    ──────   ────────────
-v1.0.0         stable-svc   3       stable(旧版)
-v2.1.0         canary-svc   1       canary
+灰度方案落地后，可进一步接入 Spring Cloud 全家桶基础能力：
 
-灰度验证通过后：
-  1. stable-svc 的 Pod 逐个滚动升级到 v2.1.0
-  2. canary-svc 缩容到 0
-  3. Nacos gray.canary:10 → gray.canary:0
-  4. 删除 canary-svc 和 canary Deployment
-  5. 等待下一轮（v2.2.0 → canary）
-```
+- **限流**：Spring Cloud Gateway 的 RequestRateLimiter
+- **熔断降级**：Spring Cloud CircuitBreaker
+- **全链路追踪**：Spring Cloud Sleuth / SkyWalking
+- **数据服务迁移**：数据服务和截图服务可从 SCF 迁移到 Nacos，对外独立部署
 
 ---
 
@@ -960,11 +1098,10 @@ public class GrayRoutingService {
 
 ### 9.1 Spring Cloud Gateway 完整配置
 
-灰度路由决策统一由 `GrayRoutingGlobalFilter` 实现（代码见 §7.5），Gateway 路由层仅按 `X-Gray-Group` 头分发到对应的 K8s Service：
+路由规则发布到 Nacos（动态生效），灰度过滤器自动将命中的服务名替换为 `-gray` 后缀：
 
 ```yaml
-# application-gateway.yml
-
+# 配置方式一：Nacos Data ID → metric-gateway-routes.yaml
 spring:
   cloud:
     gateway:
@@ -982,12 +1119,10 @@ spring:
             methods: GET, POST
 
       routes:
-        # ── 稳定版路由 ──
-        - id: metric-stable
-          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
+        - id: metric-admin
+          uri: lb://metric-admin-online
           predicates:
-            - Path=/api/**,/mcp/**
-            - Header=X-Gray-Group, stable
+            - Path=/admin/**
           filters:
             - StripPrefix=1
             - name: CircuitBreaker
@@ -995,31 +1130,38 @@ spring:
                 name: metricApiBreaker
                 fallbackUri: forward:/fallback/metrics
 
-        # ── 灰度版路由 ──
-        - id: metric-canary
-          uri: http://metric-canary-svc.metric-prod.svc.cluster.local
+        - id: metric-query
+          uri: lb://metric-query-online
           predicates:
-            - Path=/api/**,/mcp/**
-            - Header=X-Gray-Group, canary
+            - Path=/api/v1/metrics/**
+          filters:
+            - StripPrefix=2
+
+        - id: metric-report
+          uri: lb://metric-report-online
+          predicates:
+            - Path=/report/**
           filters:
             - StripPrefix=1
 
-        # ── 兜底路由（无 X-Gray-Group 头时） ──
-        - id: metric-default
-          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
+        - id: metric-mcp
+          uri: lb://metric-mcp-online
           predicates:
-            - Path=/**
+            - Path=/mcp/v1/**
           filters:
             - StripPrefix=1
 ```
 
+当灰度过滤器判定命中灰度时（参见 §7.5），自动将 `lb://metric-admin-online` 替换为 `lb://metric-admin-online-gray`，使得 LoadBalancer 从 Nacos 拉取灰度服务实例。
+
 ### 9.2 Nginx 层配置
 
-Nginx 仅做 SSL 终结 + 透传 Cookie/Token 到 Gateway，不做灰度路由决策：
+Nginx 仅做 SSL 终结 + 透传 Cookie 到 Gateway，不做灰度路由决策：
 
 ```nginx
 upstream gateway_backend {
-    server metric-gateway-svc.metric-prod.svc.cluster.local:80;
+    # 网关层部署为云平台分组，VIP 由云平台管理
+    server gateway-group-vip.internal:8081;
 }
 
 server {
