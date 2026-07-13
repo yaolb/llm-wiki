@@ -4,10 +4,12 @@ type: topic
 tags: [API网关, 架构设计, MCP, Spring AI, 灰度发布, Spring Cloud Gateway]
 created: 2026-07-09
 updated: 2026-07-13
+
+> **提示**：本文档灰度方案已基于 58 云集群服务分组重构。灰度路由决策在 Gateway 层完成（Cookie / Token），路由到不同的 K8s Service（stable-svc / canary-svc），不再依赖 Nginx split_clients 或 Nacos 权重分流。
 ---
 
 
-# ORACLE 统一指标系统 — API 网关方案设计
+# 58 集团统一指标系统 — API 网关方案设计
 
 ## 1. 项目定位
 
@@ -231,369 +233,481 @@ spring:
 
 ## 7. 灰度部署方案
 
-### 7.1 路由策略
+### 7.1 总体架构
 
-#### 7.1.1 分层路由模型
-
-云平台流量组负责节点自动注册/摘除，路由策略分为两层：
+基于**云集群服务分组（Service Group）** 实现灰度路由，不再依赖 Nacos 或 Nginx split_clients 做流量分发。
 
 ```
-                    请求
-                      │
-                  Nginx（路由策略层）
-                  ┌─ hash 路由
-                  ├─ header 覆盖
-                  └─ canary 分流
-                      │
-            ┌─────────┴─────────┐
-            │                   │
-      流量组 A（stable）    流量组 B（canary）
-       │  node1,node2       │  node3
-       │  自动注册/摘除      │  自动注册/摘除
+                          请求入口
+                             │
+                     ┌──────┴──────┐
+                     │  API 网关    │
+                     │  (Gateway)   │
+                     │  灰度决策     │
+                     └──────┬──────┘
+                             │
+              ┌──────────────┼──────────────┐
+              │              │              │
+       ┌──────▼──────┐  ┌───▼────────┐  ┌──▼───────────┐
+       │ stable-svc  │  │ canary-svc │  │ gray-3-svc   │
+       │ (K8s Service)│  │ (K8s Service)│  │ （预留）      │
+       │              │  │              │  │              │
+       │ Pod: v1.0.0  │  │ Pod: v2.1.0  │  │              │
+       │ GRAY=stable  │  │ GRAY=canary  │  │              │
+       └──────────────┘  └──────────────┘  └──────────────┘
+                             │
+                      ┌──────┴──────┐
+                      │  云集群 SLB  │
+                      │  (服务分组)   │
+                      └─────────────┘
 ```
 
-**Nginx 侧不再配置单个节点 IP**，只写死流量组 VIP/域名。节点上下线完全由云平台流量组管理。
+**关键原则**：
+- 每个 K8s Service 对应一个灰度分组（stable / canary）
+- 节点通过**环境变量**标识灰度分组：`GRAY=stable` 或 `GRAY=canary`
+- API 网关根据请求特征（Cookie / Token）决策路由到哪个 Service
+- 不做 API 粒度的分流，只做**用户级**和 **Token 级**灰度
 
-#### 7.1.2 默认分流（一致性哈希）
+### 7.2 用户标识体系
 
-```nginx
-# 流量组 A（稳定版本）
-upstream stable_group {
-    server stable-group-vip.internal:8081;
-}
+从 Cookie 中提取用户标识，作为灰度决策的依据：
 
-# 流量组 B（灰度版本）
-upstream canary_group {
-    server canary-group-vip.internal:8081;
-}
+| Cookie 字段 | 用途 | 说明 |
+|-------------|------|------|
+| `xxzlclientid` | **用户级灰度路由 key** | UUID 格式，标识用户设备/客户端。灰度比例基于此值哈希 |
+| `xxzlxxid` | 跨域用户标识 | 加密字符串，可用于跨服务用户关联 |
+| `loginuserid` | 登录用户 ID | 已登录用户的唯一 ID，白名单灰度用 |
 
-# 路由选择：默认按 hash，带 header 可覆盖
-map $http_x_route_version $backend {
-    default       $hash_backend;
-    canary        canary_group;
-    stable        stable_group;
-}
+> 对于 API 调用（无 Cookie），通过 OAuth2.0 Token 识别调用方（见 7.3）
 
-# 默认按 Token/UserID 一致性哈希
-split_clients $http_authorization $hash_backend {
-    90%    stable_group;
-    10%    canary_group;
-}
+### 7.3 Token 级灰度（OAuth2.0）
 
-server {
-    location /api/ {
-        proxy_pass http://$backend;
-    }
-    location /mcp/ {
-        # 这里按 user_id hash
-        set $hash_key $http_x_user_id;
-        proxy_pass http://$backend;
-    }
+#### 7.3.1 Token 灰度标记
+
+OAuth2.0 Token 中携带灰度信息，JWT 格式在 claims 中加入 `gray_level` 字段：
+
+```json
+{
+  "sub": "2018090410120014d6740d",
+  "aud": "metric-gateway",
+  "iss": "https://passport.58corp.com",
+  "exp": 1893456000,
+  "iat": 1700000000,
+  "gray_level": "canary",       // ← 灰度标记
+  "scope": "metrics:read",
+  "client_id": "data_platform"
 }
 ```
 
-**分流规则**：
+| `gray_level` 值 | 含义 |
+|------------------|------|
+| `stable`（默认） | 走稳定版 |
+| `canary` | 走灰度版 |
+| `gray_3` | 走灰度 3 组（预留多组灰度） |
+| 不携带 | 按比例哈希判定 |
 
-| 通道 | 默认路由 | 灰度验证 |
-|------|---------|---------|
-| Web/MCP | `hash $http_x_user_id` → 90% stable / 10% canary | `X-Route-Version: canary` → 流量组 B |
-| API | `hash $http_authorization` → 90% stable / 10% canary | `X-Route-Node: node3` → 指定节点 |
-
-Web 访问（MCP）按用户 ID 哈希，保证同一用户的长对话始终落到同一流量组。
-API 访问按 Token 哈希，保证同一调用方始终落到同一流量组。
-
-#### 7.1.3 指定路由（覆盖哈希，灰度验证用）
-
-支持通过请求头**显式指定路由**，绕开一致性哈希，方便针对性验证：
+#### 7.3.2 Token 灰度标记的授予方式
 
 ```
-X-Route-Node: node1 | node2 | node3      → 路由到指定节点（组合 X-Forwarded-Host 等）
-X-Route-Version: stable | canary          → 路由到对应版本组（不关心具体节点）
+┌──────────────┐     Token 颁发              ┌──────────────┐
+│  认证服务器   │ ────────────────────────→  │  客户端      │
+│  passport    │   JWT + gray_level claim    │  (app/ui)    │
+│  58corp.com  │                              │              │
+└──────┬───────┘                              └──────┬───────┘
+       │                                             │
+       │  Token 颁发策略：                             │ 携带 Token
+       │  a) 白名单用户 → gray_level=canary            │
+       │  b) 按 client_id 比例 → gray_level=canary     │
+       │  c) 默认 → gray_level=stable                  │
+       │                                             ▼
+       │                                      ┌──────────────┐
+       │                                      │  API 网关     │
+       │                                      │  解析 JWT     │
+       │                                      │  gray_level   │
+       │                                      │  → 路由决策    │
+       │                                      └──────────────┘
 ```
 
-适用场景举例：
-- QA 测试新版：`X-Route-Version: canary` 直接切到 canary 流量组
-- 定向验证某个用户：`X-Route-Node: node3` 锁定到指定 IP（直接节点 IP）
-- 灰度白名单：内部用户带 `X-Route-Version: canary`，外部用户走默认流量组
-
-#### 7.1.4 网关层 Gateway 覆盖
-
-请求到达 Spring Cloud Gateway 后，Gateway 层进一步按调用方标识覆盖路由：
+**三种授予策略**：
 
 ```yaml
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: metric-api-stable
-          uri: http://stable-group-vip.internal:8081
-          predicates:
-            - Path=/api/v1/**
-        - id: metric-api-canary
-          uri: http://canary-group-vip.internal:8081
-          predicates:
-            - Path=/api/v1/**
-            - Header=X-Route-Version, canary
+# 策略 a：白名单
+- 用户: ["user_qa_001", "user_qa_002", "pm_leader"]
+  → Token 中 gray_level=canary
+
+# 策略 b：按比例
+- client_id: "data_platform" 的 10% 用户
+  → Token 中 gray_level=canary
+  （由认证服务器根据 sub/xxzlclientid 哈希决定）
+
+# 策略 c：手动指定（测试用）
+- 请求头 X-Force-Gray: canary
+  → 网关覆盖 Token 的 gray_level
 ```
 
-Gateway Filter 逻辑：
-```
-收到请求
-  ├─ 有 X-Route-Node? → 直接路由到该 IP 地址
-  ├─ 有 X-Route-Version? → 路由到对应流量组
-  └─ 无覆盖头 → 落默认流量组（由 Nginx split_clients 决定）
-```
-
-### 7.2 权重控制
-
-权重由**云平台流量组**管理，不在 Nginx 侧维护。运维在流量组控制台操作：
-
-```
-云平台 → 流量组管理 → 指标网关
-├── 稳定版本（stable_group）
-│   ├── 节点 10.0.1.1:8081  ✓  权重: 45
-│   ├── 节点 10.0.1.2:8082  ✓  权重: 45
-│   └── 流量权重: 90%（相对总流量）
-│
-├── 灰度版本（canary_group）
-│   ├── 节点 10.0.1.3:8083  ✓  权重: 10
-│   └── 流量权重: 10%
-│
-└── 操作: [调整权重] [添加节点] [移除节点]
-```
-
-Nginx 侧仅配置 `split_clients` 的比例，与云平台流量组权重保持一致：
-
-```nginx
-split_clients $http_authorization $hash_backend {
-    90%    stable_group;     # 与流量组 90% 一致
-    10%    canary_group;     # 与流量组 10% 一致
-}
-```
-
-**调整权重时，两边同步修改**：云平台流量组控制台 + Nginx `split_clients` 百分比。
-
-### 7.3 分流决策树
+### 7.4 灰度决策树
 
 ```
                         收到请求
                             │
-                    ┌───────┴───────┐
-                    │               │
-              Web/MCP 通道       API 通道
-                    │               │
-                    │          ┌────┴────┐
-                    │          │         │
-                    │     有路由头?  无路由头?
-                    │          │         │
-              按 UserID      ┌┴┐       按 Token
-              一致性哈希   指定节点  一致性哈希
-                                │
-                            路由到
-                          目标节点
+              ┌─────────────┴─────────────┐
+              │                           │
+         有 Cookie                    无 Cookie
+              │                      （API Token 调用）
+     ┌────────┴────────┐                  │
+     │                  │           ┌──────┴──────┐
+     │           有 X-Force-Gray?   │              │
+     │                  │      Token 有 gray_level?
+     │                  ├── 是 → 用指定值    │       │
+     │                  │             是──┴── 否
+     │               ┌──┴──┐              │
+     │          xxzlclientid 哈希     hash(client_id +
+     │          按比例切分:           xxzlclientid)
+     │          90% stable / 10%      按比例切分
+     │               canary                │
+     │                  │                  │
+     └──────────────────┴──────────────────┘
+                        │
+                  ┌─────┴─────┐
+                  │           │
+              gray=stable  gray=canary
+                  │           │
+           ┌─────┘           └─────┐
+           │                       │
+      stable-svc              canary-svc
 ```
 
-### 7.4 灰度流程
+### 7.5 Gateway 灰度决策代码
 
-| 操作 | Nacos 操作 | 效果 |
-|------|-----------|------|
-| 灰度上线 | 设置 canary weight=10 | 10% 流量切新版 |
-| 指定验证 | QA 请求带 `X-Route-Version: canary` | 定向到灰度节点 |
-| 调大灰度 | 调 weight 10→30 | 30% 流量切新版 |
-| 全量上线 | 三节点 weight 均分 | 全量新版 |
-| 回滚 | canary weight→0 | 流量全回旧版 |
+```java
+@Component
+public class GrayRoutingGlobalFilter implements GlobalFilter, Ordered {
 
-### 7.5 Nacos 灰度配置
+    @Override
+    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        ServerHttpRequest request = exchange.getRequest();
+
+        // 优先级 1：手动强制指定（QA 验证用）
+        String forceGray = request.getHeaders().getFirst("X-Force-Gray");
+        if (forceGray != null && isValidGrayLevel(forceGray)) {
+            return routeToGroup(exchange, chain, forceGray);
+        }
+
+        // 优先级 2：Cookie 用户级灰度（Web / MCP 通道）
+        String clientId = extractCookie(request, "xxzlclientid");
+        if (clientId != null) {
+            String grayLevel = resolveByConsistentHash(clientId, 100, 10);
+            // 10% 的 xxzlclientid 走 canary
+            return routeToGroup(exchange, chain, grayLevel);
+        }
+
+        // 优先级 3：Token 级灰度（API 通道）
+        String token = extractBearerToken(request);
+        if (token != null) {
+            try {
+                Claims claims = jwtParser.parseClaims(token);
+                String grayLevel = claims.get("gray_level", String.class);
+                if (grayLevel != null && isValidGrayLevel(grayLevel)) {
+                    return routeToGroup(exchange, chain, grayLevel);
+                }
+                // Token 无 gray_level，按 client_id + sub 哈希
+                String hashKey = claims.get("client_id", String.class) + ":"
+                    + claims.get("sub", String.class);
+                String resolved = resolveByConsistentHash(hashKey, 100, 10);
+                return routeToGroup(exchange, chain, resolved);
+            } catch (Exception e) {
+                log.warn("Token 解析失败，走 stable: {}", e.getMessage());
+            }
+        }
+
+        // 兜底：stable
+        return routeToGroup(exchange, chain, "stable");
+    }
+
+    /**
+     * 改写请求的 X-Gray-Group 头，K8s Service 根据该头路由
+     */
+    private Mono<Void> routeToGroup(ServerWebExchange exchange,
+                                     GatewayFilterChain chain, String grayLevel) {
+        ServerHttpRequest mutated = exchange.getRequest().mutate()
+            .header("X-Gray-Group", grayLevel)
+            .build();
+        return chain.filter(exchange.mutate().request(mutated).build());
+    }
+
+    /**
+     * 一致性哈希：保证同一 key 始终指向同一灰度组
+     */
+    private String resolveByConsistentHash(String key, int total, int canaryPercent) {
+        int hash = Objects.hash(key) & 0x7FFFFFFF;
+        return (hash % total < canaryPercent) ? "canary" : "stable";
+    }
+
+    private String extractCookie(ServerHttpRequest request, String name) {
+        String cookie = request.getHeaders().getFirst(HttpHeaders.COOKIE);
+        if (cookie == null) return null;
+        return Arrays.stream(cookie.split(";"))
+            .map(String::trim)
+            .filter(c -> c.startsWith(name + "="))
+            .map(c -> c.substring(name.length() + 1))
+            .findFirst().orElse(null);
+    }
+
+    private String extractBearerToken(ServerHttpRequest request) {
+        String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        if (auth != null && auth.startsWith("Bearer ")) {
+            return auth.substring(7);
+        }
+        return null;
+    }
+
+    private boolean isValidGrayLevel(String level) {
+        return "stable".equals(level) || "canary".equals(level);
+    }
+
+    @Override
+    public int getOrder() {
+        return -1;  // 最高优先级过滤器
+    }
+}
+```
+
+### 7.6 云集群服务分组配置
+
+#### 7.6.1 环境变量标识
+
+每个 Pod 通过环境变量 `GRAY` 标识所属灰度分组：
+
+```yaml
+# stable 部署
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metric-gateway-stable
+  namespace: metric-prod
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: gateway
+          image: metric-gateway:v1.0.0
+          env:
+            - name: GRAY
+              value: "stable"          # ← 标识稳定版
+            - name: NACOS_NAMESPACE
+              value: "metric-prod"
+            - name: METRIC_VERSION
+              value: "v1.0.0"
+---
+# canary 部署
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metric-gateway-canary
+  namespace: metric-prod
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: gateway
+          image: metric-gateway:v2.1.0
+          env:
+            - name: GRAY
+              value: "canary"          # ← 标识灰度版
+            - name: NACOS_NAMESPACE
+              value: "metric-prod"
+            - name: METRIC_VERSION
+              value: "v2.1.0"
+```
+
+#### 7.6.2 K8s Service 分组
+
+```yaml
+# 稳定版 Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: metric-stable-svc
+  namespace: metric-prod
+spec:
+  selector:
+    app: metric-gateway
+    gray: stable            # 只选中 stable 的 Pod
+  ports:
+    - port: 80
+      targetPort: 8081
+
+---
+# 灰度版 Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: metric-canary-svc
+  namespace: metric-prod
+spec:
+  selector:
+    app: metric-gateway
+    gray: canary            # 只选中 canary 的 Pod
+  ports:
+    - port: 80
+      targetPort: 8081
+```
+
+#### 7.6.3 Gateway 路由配置
+
+```yaml
+# application-gateway.yml
+spring:
+  cloud:
+    gateway:
+      routes:
+        # ── 稳定版路由 ──
+        - id: metric-stable
+          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
+          predicates:
+            - Header=X-Gray-Group, stable
+          filters:
+            - StripPrefix=1
+
+        # ── 灰度版路由 ──
+        - id: metric-canary
+          uri: http://metric-canary-svc.metric-prod.svc.cluster.local
+          predicates:
+            - Header=X-Gray-Group, canary
+          filters:
+            - StripPrefix=1
+
+        # ── 兜底路由 ──
+        - id: metric-default
+          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
+          predicates:
+            - Path=/**
+          filters:
+            - StripPrefix=1
+```
+
+### 7.7 Nginx 层配置
+
+Nginx 仅做 SSL 终结 + 转发到 Gateway Service，不做灰度路由决策：
+
+```nginx
+upstream gateway_backend {
+    server metric-gateway-svc.metric-prod.svc.cluster.local:80;
+}
+
+server {
+    listen 443 ssl;
+    server_name api.business.com;
+
+    location / {
+        proxy_pass http://gateway_backend;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Cookie $http_cookie;           # 透传 Cookie
+        proxy_set_header Authorization $http_authorization;  # 透传 Token
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 300s;
+    }
+}
+```
+
+### 7.8 灰度流程
+
+| 步骤 | 操作 | 说明 |
+|------|------|------|
+| 1. 部署 canary | 部署 `metric-gateway-canary` Deployment，镜像 v2.1.0，`GRAY=canary` | 新 Pod 启动，注册到 canary-svc |
+| 2. 配置灰度比例 | Gateway 中 `resolveByConsistentHash` 的 canaryPercent=10 | 10% 的 xxzlclientid 走 canary |
+| 3. QA 验证 | QA 通过 passport 后台设为 white_user → Token 带 `gray_level=canary` | 或直接带 `X-Force-Gray: canary` 头 |
+| 4. Token 灰度 | 在认证服务器配置：`client_id=data_platform` 的 10% 用户颁发 canary Token | Token 级灰度，无感切流 |
+| 5. 调大比例 | canaryPercent: 10 → 30 → 50 | 逐步放大 |
+| 6. 全量上线 | canary Pod 缩容，stable Pod 升级到 v2.1.0，`GRAY=stable` | 统一为 stable，删除 canary-svc |
+| 7. 回滚 | canaryPercent→0，或缩容 canary Pod，stable 不变 | 即时切回 |
+
+### 7.9 Nacos 灰度配置（简化版）
+
+灰度比例和策略集中在 Nacos 配置中心管理，Gateway 动态感知：
 
 ```yaml
 # Data ID: metric-gray-config.yaml
 # Group: METRIC_GATEWAY
+
 gray:
   enabled: true
-  routing:
-    default:
-      api: token          # API 通道默认按 token 哈希
-      mcp: user_id        # Web/MCP 通道按用户 ID 哈希
-    override_headers:     # 覆盖哈希的请求头
-      node: X-Route-Node
-      version: X-Route-Version
-  api_nodes:
-    - ip: 10.0.1.1
-      weight: 45
-      version: stable
-    - ip: 10.0.1.2
-      weight: 45
-      version: stable
-    - ip: 10.0.1.3
-      weight: 10
-      version: canary-2.1.0
-  mcp_nodes:
-    - ip: 10.0.1.1
-      weight: 45
-      version: stable
-    - ip: 10.0.1.2
-      weight: 45
-      version: stable
-    - ip: 10.0.1.3
-      weight: 10
-      version: canary-2.1.0
 
-### 7.6 Nacos 灰度实现流程
+  # ── 比例灰度 ──
+  percentage:
+    cookie_key: xxzlclientid    # 按 xxzlclientid 哈希
+    stable: 90                  # 90% 走 stable
+    canary: 10                  # 10% 走 canary
+    hash_total: 100
 
-#### 7.6.1 三层控制模型
+  # ── Token 灰度 ──
+  token:
+    enabled: true
+    jwt_claim: gray_level       # JWT 中的灰度 claim 名
+    # 当 Token 中无 gray_level 时的兜底策略
+    fallback_hash_key: "${client_id}:${sub}"
+    fallback_canary_percent: 10
 
-Nacos 在灰度中承担三个角色，分别在灰度流程的不同层面发挥作用：
+  # ── 强制指定（QA 测试用） ──
+  override_header: X-Force-Gray
 
-1. **配置中心 → 权重策略控制**
-   - `metric-gray-config.yaml`：Data ID 下的灰度配置（权重、路由头定义）
-   - Nacos 推送到 Nginx Lua / Gateway 生效
-
-2. **注册中心 → 版本元数据 + 节点管理**
-   - 节点注册时通过 `metadata.version` 区分版本（`stable` / `canary-2.1.0`）
-   - 运维可通过 Nacos API 调节单个节点权重
-
-3. **配置中心 → 动态路由规则**
-   - Gateway 动态路由规则（灰度白名单、Header 路由）
-   - `X-Route-Version` 映射到 `version=canary` 的节点
-   - 支持 Nacos 动态刷新，无需重启节点
-
-#### 7.6.2 灰度上线完整流程
-
-| 时间 | 操作 | 生效机制 |
-|------|------|----------|
-| T-10min | 新版本部署到 node3 | 修改 `application.yml` → `metadata.version = canary-2.1.0`，启动 node3 |
-| T-5min | Nacos 注册完成 | 控制台显示 node3 ✓ `(version=canary-2.1.0)`，此时权重为默认值（尚未加入生产流量） |
-| **T0** | **Nacos 灰度配置 → 设置 weight=10** | 配置中心推送 `metric-gray-config.yaml` → `api_nodes[2].weight: 0 → 10` → Nginx Lua 轮询感知 → 10% Token 哈希落到 node3 |
-| T+10min | 观察监控 | 看 node3 错误率/延迟/查询正确性，对比 node1/node2 基线；QA 带 `X-Route-Version: canary` 手动验证 |
-| T+30min | 调大灰度权重 10→30 | Nacos 配置中心改 weight → 更多用户切到新版 |
-| T+1h | **全量上线** | 停止旧版节点重启为新版 → Nacos weight 均分 → 归档 canary 配置 |
-| T+X | **回滚**（如发现问题） | Nacos canary weight 改 0 → 流量全回旧版 → 下线问题节点修复后再灰度 |
-
-#### 7.6.3 Nacos 配置变更操作（运维界面）
-
-**Step 1：登录 Nacos 控制台 → 配置管理 → 配置列表**
-
-```
-Data ID:    metric-gray-config.yaml
-Group:      METRIC_GATEWAY
-命名空间:    prod
-格式:        YAML
-描述:        指标网关灰度权重配置
+  # ── 白名单（不按比例，直接走 canary） ──
+  whitelist:
+    cookie_values:
+      - xxzlclientid: "qa-client-001"
+      - xxzlclientid: "qa-client-002"
+    user_ids:
+      - "2018090410120014d6740d"   # PM 的 userid
+      - "2018090410120014d6741d"   # QA leader
 ```
 
-**Step 2：编辑配置内容**
+### 7.10 灰度策略变更生效
 
-灰度上线时，将 canary 节点权重从 0 改为 10：
+Nacos 配置变更 → Gateway 动态感知：
 
-```yaml
-  api_nodes:
-    - ip: 10.0.1.1
-      weight: 45        # ← 不改
-      version: stable
-    - ip: 10.0.1.2
-      weight: 45        # ← 不改
-      version: stable
-    - ip: 10.0.1.3
-      weight: 10        # ← 0 → 10（灰度上线）
-      version: canary-2.1.0
+```java
+@Component
+public class GrayConfigListener {
+
+    private final NacosConfigManager nacosConfigManager;
+    private final GrayRoutingService routingService;
+
+    @PostConstruct
+    public void init() {
+        nacosConfigManager.getConfigService().addListener(
+            "metric-gray-config.yaml", "METRIC_GATEWAY",
+            new AbstractListener() {
+                @Override
+                public void receiveConfigInfo(String config) {
+                    GrayConfig cfg = YamlUtil.parse(config, GrayConfig.class);
+                    routingService.updateConfig(cfg);
+                    log.info("灰度配置已刷新，canary: {}%",
+                        cfg.getPercentage().getCanary());
+                }
+            }
+        );
+    }
+}
 ```
 
-**Step 3：发布（携带变更说明）**
+### 7.11 版本管控与升级节奏
 
 ```
-发布说明: [灰度] 节点3 上线 2.1.0 版本，weight 0→10
-配置格式: YAML
-Md5:      a1b2c3d4...
-
-[发布]      [对比]      [回滚]
-```
-
-#### 7.6.4 版本分组与灰度策略
-
-```yaml
-# 版本分组定义
-version_groups:
-  stable:
-    match: version == "stable"
-    weight: 90               # 权重和
-    nodes:
-      - 10.0.1.1
-      - 10.0.1.2
-
-  canary:
-    match: version == "canary-*"
-    weight: 10
-    nodes:
-      - 10.0.1.3
-
-# 灰度策略
-strategies:
-  - name: "按比例灰度"          # 默认
-    type: weight
-    description: "按权重比例分发流量"
-
-  - name: "白名单灰度"          # QA/内部用户优先
-    type: whitelist
-    header: X-User-Id
-    values:
-      - user_qa_001
-      - user_qa_002
-      - user_internal_admin
-    target_version: canary
-
-  - name: "指定路由"            # 调用方主动指定
-    type: header
-    header: X-Route-Version
-    values:
-      - canary
-    target_version: canary
-```
-
-#### 7.6.5 Nacos 配置与云平台流量组联动
-
-由于使用了云平台流量组管理节点注册/摘除，Nacos ↔ Nginx 的实时 upstream 同步不再是必须的。改为三层联动模型：
-
-```
-运维操作                  Nacos                   云平台流量组          转发层
-───────                 ──────                  ────────────         ──────
-
-灰度上线                 配置中心更新              流量组权重调整        Nginx
-  └── Nacos 改 weight    metric-gray-config       └── 稳定组 90%        split_clients
-       └── 运维查看      的 canary 比例            └── 灰度组 10%       同步调整
-                              │                        │
-                         （状态展示）              （流量执行）         （hash 比例）
-```
-
-**各层职责**：
-
-| 层 | 职责 | 备注 |
-|----|------|------|
-| Nacos 配置 | 灰度权重的**声明层**，运维在此操作 | 仅做配置管理，不直接影响流量 |
-| 云平台流量组 | 节点注册/摘除 + 权重比率的**执行层** | 实际控制流量分发 |
-| Nginx split_clients | 一致性哈希的**比例层** | 与流量组权重保持同步即可 |
-
-**运维操作时**：
-1. 先在 Nacos 控制台改 `metric-gray-config.yaml` 中的 canary 权重
-2. 再到云平台流量组控制台调整 stable/canary 组的流量比例
-3. 如果改了 split 比例，同步更新 Nginx 配置
-
-Nacos 和流量组之间没有自动化联动——它们是**人为保持一致的**。这个设计的优点是：Nacos 挂了不影响线上流量，流量组挂了直接影响节点注册/摘除但 Nginx 的 split 路由配置仍然有效。
-
-#### 7.6.6 版本管控与升级节奏
-
-```
-版本号     节点      状态          权重
-──────     ────    ────────────    ──────
-v1.0.0     1,2     stable(旧版)    90%
-v2.1.0     3       canary         10%
+版本号         服务分组      Pod 数   状态
+──────         ────────    ──────   ────────────
+v1.0.0         stable-svc   3       stable(旧版)
+v2.1.0         canary-svc   1       canary
 
 灰度验证通过后：
-  1. 节点 1、2 升级到 v2.1.0
-  2. 三节点 version 统一为 stable
-  3. 权重均分 33%
-  4. 归档 metric-gray-config.yaml 的 canary 段落
-
-重复上述流程进入下一轮灰度（v2.2.0 → canary）
+  1. stable-svc 的 Pod 逐个滚动升级到 v2.1.0
+  2. canary-svc 缩容到 0
+  3. Nacos gray.canary:10 → gray.canary:0
+  4. 删除 canary-svc 和 canary Deployment
+  5. 等待下一轮（v2.2.0 → canary）
 ```
 
 ---
@@ -846,6 +960,8 @@ public class GrayRoutingService {
 
 ### 9.1 Spring Cloud Gateway 完整配置
 
+灰度路由决策统一由 `GrayRoutingGlobalFilter` 实现（代码见 §7.5），Gateway 路由层仅按 `X-Gray-Group` 头分发到对应的 K8s Service：
+
 ```yaml
 # application-gateway.yml
 
@@ -866,11 +982,12 @@ spring:
             methods: GET, POST
 
       routes:
-        - id: metric-api-stable
-          uri: lb://metric-gateway
+        # ── 稳定版路由 ──
+        - id: metric-stable
+          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
           predicates:
-            - Path=/api/v1/**
-            - Header=X-Route-Version, stable
+            - Path=/api/**,/mcp/**
+            - Header=X-Gray-Group, stable
           filters:
             - StripPrefix=1
             - name: CircuitBreaker
@@ -878,123 +995,50 @@ spring:
                 name: metricApiBreaker
                 fallbackUri: forward:/fallback/metrics
 
-        - id: metric-api-canary
-          uri: lb://metric-gateway
+        # ── 灰度版路由 ──
+        - id: metric-canary
+          uri: http://metric-canary-svc.metric-prod.svc.cluster.local
           predicates:
-            - Path=/api/v1/**
-            - Header=X-Route-Version, canary
+            - Path=/api/**,/mcp/**
+            - Header=X-Gray-Group, canary
           filters:
             - StripPrefix=1
 
-        - id: metric-api-default
-          uri: lb://metric-gateway
+        # ── 兜底路由（无 X-Gray-Group 头时） ──
+        - id: metric-default
+          uri: http://metric-stable-svc.metric-prod.svc.cluster.local
           predicates:
-            - Path=/api/v1/**
+            - Path=/**
           filters:
             - StripPrefix=1
-            - name: GrayRouting
-
-        - id: metric-mcp-stable
-          uri: lb://metric-gateway
-          predicates:
-            - Path=/mcp/v1/**
-            - Header=X-Route-Version, stable
-          filters:
-            - StripPrefix=1
-
-        - id: metric-mcp-canary
-          uri: lb://metric-gateway
-          predicates:
-            - Path=/mcp/v1/**
-            - Header=X-Route-Version, canary
-          filters:
-            - StripPrefix=1
-
-        - id: metric-mcp-default
-          uri: lb://metric-gateway
-          predicates:
-            - Path=/mcp/v1/**
-          filters:
-            - StripPrefix=1
-            - name: GrayRouting
 ```
 
-### 9.2 Gateway 自定义灰度 Filter
+### 9.2 Nginx 层配置
 
-```java
-@Component
-public class GrayRoutingGatewayFilterFactory
-        extends AbstractGatewayFilterFactory<GrayRoutingGatewayFilterFactory.Config> {
-
-    private final GrayRoutingService grayRoutingService;
-
-    @Override
-    public GatewayFilter apply(Config config) {
-        return (exchange, chain) -> {
-            ServerHttpRequest request = exchange.getRequest();
-
-            if (request.getHeaders().containsKey("X-Route-Version") ||
-                request.getHeaders().containsKey("X-Route-Node")) {
-                return chain.filter(exchange);
-            }
-
-            String version = grayRoutingService.resolveTargetVersion(
-                new ServletServerHttpRequest(request).getServletRequest());
-
-            ServerHttpRequest modified = request.mutate()
-                .header("X-Route-Version", version)
-                .build();
-
-            return chain.filter(exchange.mutate().request(modified).build());
-        };
-    }
-
-    @Data
-    public static class Config {
-        private String configDataId;
-    }
-}
-```
-
-### 9.3 Nginx 层配置
+Nginx 仅做 SSL 终结 + 透传 Cookie/Token 到 Gateway，不做灰度路由决策：
 
 ```nginx
-upstream metric_backend {
-    server traffic-group-vip.internal:8081 max_fails=3 fail_timeout=10s;
-}
-
-upstream metric_web {
-    hash $http_x_user_id consistent;
-    server traffic-group-vip.internal:8081;
-}
-
-upstream metric_api {
-    hash $http_authorization consistent;
-    server traffic-group-vip.internal:8081;
+upstream gateway_backend {
+    server metric-gateway-svc.metric-prod.svc.cluster.local:80;
 }
 
 server {
     listen 443 ssl;
     server_name api.business.com;
 
-    location /mcp/ {
-        proxy_pass http://metric_web;
+    location / {
+        proxy_pass http://gateway_backend;
         proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-User-Id $http_x_user_id;
+        proxy_set_header Cookie $http_cookie;
+        proxy_set_header Authorization $http_authorization;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 300s;
     }
 
-    location /api/ {
-        proxy_pass http://metric_api;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Authorization $http_authorization;
-    }
-
     location /actuator/ {
-        proxy_pass http://metric_backend;
+        proxy_pass http://gateway_backend;
         proxy_set_header X-Real-IP $remote_addr;
         allow 10.0.0.0/8;
         deny all;
