@@ -112,6 +112,7 @@
 - [BMAD vs OpenSpec：AI驱动开发的航母与特种兵](syntheses/bmad-vs-openspec.md)
 - [LLM 模型融合深度报告：原理、路线、实现与评测](syntheses/model-fusion-deep-report.md)
 - [Agent Memory 五篇关键论文综述](syntheses/agent-memory-five-papers.md)
+- [OpenClaw vs Hermes Agent — 执行派 vs 进化派全面对比](synthesis/openclaw-vs-hermes.md) — 龙虾 vs 爱马仕，2026 年两大顶流 AI Agent 框架对比 `#OpenClaw #Hermes #龙虾 #爱马仕`
 
 ### Reports
 - [Claim Health](reports/claim-health.md)

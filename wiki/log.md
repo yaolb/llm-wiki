@@ -177,6 +177,12 @@
 - 更新 unsloth 主题页引用（待创建→[[wikilink]]）
 - 更新 index.md 添加入口（Entities: 36→40）
 
+## [2026-07-18] update | OpenClaw vs Hermes Agent（龙虾 vs 爱马仕）深度对比
+- 新增综述页：[[OpenClaw vs Hermes Agent — 执行派 vs 进化派全面对比]]（五大核心维度对比 + 选型建议）
+- 更新 [[OpenClaw]] 实体页：添加 "🦞 龙虾" 昵称
+- 更新 [[Hermes Agent]] 实体页：添加 "🧠 爱马仕" 昵称
+- 更新 index.md
+
 ## [2026-07-18] ingest | 群体智能/蜂巢理论 — AI 深度分析
 - 新增概念页：[[群体智能（Swarm Intelligence / 蜂巢理论）]]
   - 核心原理：去中心化、自组织、涌现智能
