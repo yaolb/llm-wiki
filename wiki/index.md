@@ -94,6 +94,7 @@
 - [Unsloth — 消费级 GPU 高效微调大模型](concepts/unsloth-efficient-llm-finetuning.md)
 - [万象AI分析平台](concepts/wanxiang-ai-analysis.md)
 - [上下文工程 (Context Engineering)](concepts/context-engineering.md)
+- [群体智能（Swarm Intelligence / 蜂巢理论）](concepts/swarm-intelligence.md) — 去中心化自组织涌现智能，与多 Agent 系统、人工蜂群效应的深度联系 `#AI #群体智能 #多Agent #分布式系统`
 - [本体论 (Ontology)](concepts/ontology.md)
 - [模型微调（Fine-tuning）](concepts/model-finetuning.md)
 - [模型融合（Model Fusion / Model Merging）](concepts/model-fusion.md)
