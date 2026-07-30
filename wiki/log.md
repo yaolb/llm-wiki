@@ -4,6 +4,12 @@
 
 ---
 
+## [2026-07-30] ingest | IDMapping 专题总结
+- 爬取美事文档 IDMapping 空间（TEG-大数据部/03-数据应用部/IDMapping）
+- IDMapping 目录：idmapping1.0 / 2.X / 3.X / SmartIDMapping下线 / 实时IDMapping / 图腾项目
+- 创建 topics/idmapping.md — 覆盖背景、发展历程、实时 IDMapping 技术方案（V1.0，陈丽媛设计）
+- 原始素材保存到 meishi_docs/IDMapping/
+
 ## [2026-07-06] ingest | AI Agent 概念补充 + PYTHIA / UZI-Skill / AI 网关
 - 新增实体页：[[PYTHIA（本地 AI Agent 实时感知工具）]]（本地无密钥实时感知 Agent）、[[UZI-Skill（游资技能库）]]（股票深度分析插件）
 - 新增概念页：[[AI 网关与模型路由]]（聚合多模型免费额度，自动路由与 fallback）
