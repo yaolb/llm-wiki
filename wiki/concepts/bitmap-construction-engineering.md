@@ -1,6 +1,6 @@
 ---
 type: concept
-tags: [Bitmap, RoaringBitmap, Spark, Hive, ClickHouse, 万象, 标签, 工程实现]
+tags: [Bitmap, bitmap, RoaringBitmap, Spark, Hive, ClickHouse, 万象, 标签, 标签生成, 工程实现]
 created: 2026-08-03
 updated: 2026-08-03
 related_sources: 5

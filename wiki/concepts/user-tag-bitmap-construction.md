@@ -1,6 +1,6 @@
 ---
 type: concept
-tags: [Bitmap, RoaringBitmap, 用户编码, 标签, ClickHouse, 位图, 万象]
+tags: [Bitmap, bitmap, RoaringBitmap, 用户编码, 标签, 标签生成, ClickHouse, 位图, 万象]
 created: 2026-08-03
 updated: 2026-08-03
 related_sources: 3

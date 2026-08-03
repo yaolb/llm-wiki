@@ -1,6 +1,6 @@
 ---
 type: topic
-tags: [万象, 标签, ClickHouse, Bitmap, 数据接入, 画像]
+tags: [万象, 标签, ClickHouse, Bitmap, bitmap, 标签生成, 数据接入, 画像]
 created: 2026-08-03
 updated: 2026-08-03
 related_sources: 3
