@@ -4,6 +4,15 @@
 
 ---
 
+## [2026-08-03] ingest | 万象标签处理与 CK 入库流水线 + 用户-标签 Bitmap 构建
+
+- 使用美事文档爬虫抓取马建彪工作交接页面（space/2043955735540387841）及 3 个子文档
+- 创建 topics/wanxiang-tag-ck-pipeline.md — 标签→CK 的 6 步处理流水线（OneID→编码→格式化→Bitmap→合并→入库）
+- 创建 concepts/user-tag-bitmap-construction.md — 用户-标签 Bitmap 位图构建原理，含 uint32/uint64 编码、RoaringBitmap 映射、分桶策略、查询模式
+- 深入分析了 58 定制 RoaringBitmap 的编码稳定性和并发控制机制
+- 原始素材来源：美事文档（docs.58corp.com），3 份设计文档
+- 更新 index.md（+2 页面：1 Source + 1 Concept）
+
 ## [2026-07-30] ingest | IDMapping 专题总结
 - 爬取美事文档 IDMapping 空间（TEG-大数据部/03-数据应用部/IDMapping）
 - IDMapping 目录：idmapping1.0 / 2.X / 3.X / SmartIDMapping下线 / 实时IDMapping / 图腾项目

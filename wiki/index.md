@@ -3,15 +3,16 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 101
+- Total pages: 103
 - Claims: 0
-- Sources: 7
+- Sources: 8
 - Entities: 40
-- Concepts: 38
+- Concepts: 39
 - Syntheses: 5
 - Reports: 10
 
 ### Sources
+- [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md) — 基于美事文档爬取的标签→CK 6步处理流水线完整梳理，含格式化、位图构建、并发控制、查询模式 `#万象 #ClickHouse #数据接入`
 - [AI 网关与模型路由：聚合多模型免费额度](sources/ai-gateway-model-routing.md)
 - [LLM Wiki](sources/karpathy-llm-wiki-methodology.md)
 - [MCP 模型上下文协议 — 官方文档解读](sources/mcp-official-intro.md)
@@ -63,6 +64,7 @@
 - [Qwen](entities/qwen.md)
 
 ### Concepts
+- [用户-标签 Bitmap 位图构建](concepts/user-tag-bitmap-construction.md) — 用 RoaringBitmap 压缩位图表示"用户-标签值"集合关系，user_code 直接作为 bit 位置索引，支持 O(1) 级集合交并差运算 `#Bitmap #标签 #万象 #ClickHouse`
 - [2026年上半年绩效自评](concepts/h1-2026-performance-review.md)
 - [58 集团统一指标系统 — API 网关方案设计](topics/58-indicator-api-gateway-design.md)
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
