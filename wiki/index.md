@@ -3,11 +3,11 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 103
+- Total pages: 104
 - Claims: 0
 - Sources: 8
 - Entities: 40
-- Concepts: 39
+- Concepts: 40
 - Syntheses: 5
 - Reports: 10
 
@@ -64,6 +64,7 @@
 - [Qwen](entities/qwen.md)
 
 ### Concepts
+- [用户-标签 Bitmap 构建：工程实现详解](concepts/bitmap-construction-engineering.md) — 基于 wanxiang-data-jobs 源码的完整工程级分析，含 Spark UDAF、RoaringBitmap 序列化、Base64 编码、CK 写入、Bucket 分桶全流程 `#Bitmap #工程实现 #Spark #RoaringBitmap`
 - [用户-标签 Bitmap 位图构建](concepts/user-tag-bitmap-construction.md) — 用 RoaringBitmap 压缩位图表示"用户-标签值"集合关系，user_code 直接作为 bit 位置索引，支持 O(1) 级集合交并差运算 `#Bitmap #标签 #万象 #ClickHouse`
 - [2026年上半年绩效自评](concepts/h1-2026-performance-review.md)
 - [58 集团统一指标系统 — API 网关方案设计](topics/58-indicator-api-gateway-design.md)

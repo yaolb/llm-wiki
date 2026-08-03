@@ -232,6 +232,7 @@ CK → SR 迁移中，Bitmap 的兼容处理：
 
 ## 相关概念
 
+- [[bitmap-construction-engineering]] — 工程实现详解（基于源码的完整流程）
 - [[roaringbitmap]] — RoaringBitmap 数据结构
 - [[user-code-encoding]] — 用户编码机制（有待补充）
 

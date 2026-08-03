@@ -4,6 +4,21 @@
 
 ---
 
+## [2026-08-03] ingest | Bitmap 构建工程实现详解（基于源码分析）
+
+- 克隆 wanxiang-data-jobs、data-app-dp-utils、data_engine_script 等 3 个仓库
+- 逐文件阅读 10+ 核心 Java 源文件，追溯完整代码调用链
+- 创建 concepts/bitmap-construction-engineering.md — 6 阶段工程级文档：
+  - SmartTagKvFormat（标签值类型校验，5 种 valueType）
+  - UserCodeToRoaringBitmap + RoaringBitMapByteUDAF（uint32/uint64 双模式位图构建，4 shard 并行）
+  - RoaringBitmapToClickhouse + RoaringBitMapBase64UDF（紧凑/完整双格式 Base64 编码 + 50MB JDBC 批量写入）
+  - CkBitmapMergeMain（CK: groupBitmapMergeState / SR: bitmap_union 预估位图合并）
+  - CombineBitmapSpark + BucketRBMUserIds（user_code→user_id 反向查询 Bucket 位图，65536 分桶）
+  - BucketRBMUserIdsSr（SR 自研 BitmapValue 兼容版本）
+- 含完整数据结构映射、RoaringBitmap Container 内部结构、分桶索引算法、CK/SR 兼容方案
+- 更新 index.md（104 页）+ log.md
+- 建立 user-tag-bitmap-construction ↔ bitmap-construction-engineering 交叉引用
+
 ## [2026-08-03] ingest | 万象标签处理与 CK 入库流水线 + 用户-标签 Bitmap 构建
 
 - 使用美事文档爬虫抓取马建彪工作交接页面（space/2043955735540387841）及 3 个子文档
