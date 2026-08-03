@@ -82,6 +82,7 @@
 - [MCP 模型上下文协议（Model Context Protocol）](concepts/mcp-model-context-protocol.md)
 - [OKF 开放知识格式](concepts/okf-open-knowledge-format.md)
 - [OpenSquilla — AI 代码生成的自验证与自修复](concepts/opensquilla-ai-self-verification.md)
+- [OpenAI 内部数据代理（Data Agent）](concepts/openai-data-agent.md)
 - [Prompt Caching](concepts/prompt-caching.md)
 - [RAG 检索增强生成（Retrieval-Augmented Generation）](concepts/rag-retrieval-augmented-generation.md)
 - [RAG 评估体系与方法论](concepts/rag-evaluation.md)
