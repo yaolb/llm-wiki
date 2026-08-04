@@ -7,9 +7,58 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = process.env.PORT || 5174;
 const WIKI_DIR = path.resolve(__dirname, '../wiki');
+// 归档文档目录（与 llm-wiki 平级，位于 workspace/meishi_docs）
+const MEISHI_DIR = path.resolve(__dirname, '../../meishi_docs');
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.resolve(__dirname, 'dist')));
+
+// ─── 归档文档静态服务：/meishi_docs/... 直接可访问 ───
+app.use('/meishi_docs', express.static(MEISHI_DIR, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.md')) {
+      res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+    }
+  }
+}));
+
+// ─── API: 读取归档文档内容（前端渲染用）───
+app.get('/api/meishi-doc', async (req, res) => {
+  try {
+    const docPath = req.query.path;
+    if (!docPath) return res.status(400).json({ error: 'missing path' });
+    // 安全校验：禁止路径穿越
+    const fullPath = path.resolve(MEISHI_DIR, docPath);
+    if (!fullPath.startsWith(MEISHI_DIR)) {
+      return res.status(403).json({ error: 'invalid path' });
+    }
+    const raw = await fs.readFile(fullPath, 'utf-8');
+    res.json({ content: raw, path: docPath });
+  } catch (err) {
+    res.status(404).json({ error: err.message });
+  }
+});
+
+// ─── API: 列出归档文档目录树（可选）───
+app.get('/api/meishi-docs-tree', async (req, res) => {
+  try {
+    const base = req.query.dir || '';
+    const dir = path.resolve(MEISHI_DIR, base);
+    if (!dir.startsWith(MEISHI_DIR)) return res.status(403).json({ error: 'invalid path' });
+    const items = await fs.readdir(dir, { withFileTypes: true });
+    const tree = items
+      .filter(i => !i.name.startsWith('.'))
+      .map(i => ({
+        name: i.name,
+        type: i.isDirectory() ? 'dir' : 'file',
+        path: path.join(base, i.name).replace(/\\/g, '/'),
+      }))
+      .sort((a, b) => (a.type === b.type ? a.name.localeCompare(b.name) : a.type === 'dir' ? -1 : 1));
+    res.json({ dir: base, items: tree });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ─── Helper: parse frontmatter from raw markdown ───
 function parseFrontmatter(raw) {

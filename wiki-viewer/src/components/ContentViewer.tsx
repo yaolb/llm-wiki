@@ -18,13 +18,16 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
   const [editSaving, setEditSaving] = useState(false);
   const [editMsg, setEditMsg] = useState('');
   const [liveOverride, setLiveOverride] = useState<string | null>(null);
+  const [archiveDocPath, setArchiveDocPath] = useState<string | null>(null);
 
   // Reset live override when navigating to a different page
   useEffect(() => {
     setLiveOverride(null);
+    setArchiveDocPath(null);
   }, [page?.path]);
 
   // Event delegation: intercept clicks on wikilinks (rendered as #wiki: paths)
+  // and archive doc links (/meishi_docs/...) to render them inline
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -36,6 +39,31 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
         const target = href.replace('#wiki:', '');
         console.log('[ContentViewer] wikilink clicked, target:', target);
         onNavigate(target);
+        return;
+      }
+      // 拦截归档文档链接，通过 API 加载内容并渲染
+      const docAnchor = (e.target as HTMLElement).closest('a[href^="/meishi_docs/"]');
+      if (docAnchor) {
+        e.preventDefault();
+        const href = docAnchor.getAttribute('href')!;
+        const docPath = href.replace(/^\/meishi_docs\//, '');
+        fetch(`/api/meishi-doc?path=${encodeURIComponent(docPath)}`)
+          .then((r) => {
+            if (!r.ok) throw new Error('not found');
+            return r.json();
+          })
+          .then((data) => {
+            if (data.content) {
+              setLiveOverride(data.content);
+              setArchiveDocPath(docPath);
+              const scroller = containerRef.current;
+              if (scroller) scroller.scrollTop = 0;
+            }
+          })
+          .catch(() => {
+            // 兜底：新标签页打开
+            window.open(href, '_blank');
+          });
       }
     };
     el.addEventListener('click', handler);
@@ -258,6 +286,19 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
       )}
 
       <div className="content-inner">
+        {archiveDocPath && (
+          <div className="archive-doc-banner">
+            📂 归档文档: <code>meishi_docs/{archiveDocPath}</code>
+            <button
+              className="archive-doc-back"
+              onClick={() => { setLiveOverride(null); setArchiveDocPath(null); }}
+              title="返回当前 wiki 页面"
+            >
+              ✕ 返回
+            </button>
+          </div>
+        )}
+
         <div className="meta-row">
           {meta.type && <span className={`meta-type ${meta.type}`}>{meta.type}</span>}
           {meta.created && <span className="meta-date">创建: {meta.created}</span>}
