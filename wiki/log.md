@@ -4,6 +4,16 @@
 
 ---
 
+## [2026-08-04] ingest | 万象文档空间完整归档
+
+- 使用 meishi-docs-crawler 递归爬取万象美事文档空间（space/1552506105505054722）
+- 发现 catalogue API 特性：需递归搜索所有嵌套层级来匹配页面ID才能展开子节点
+- 爬取结果：826 个 Markdown 文件，6MB，1760 个去重外部链接
+- 覆盖10个一级目录：产品文档、技术文档、产品运营、业务合作、月会、调研、AI相关、品牌映射、触达渠道、埋点列表
+- 创建 topics/wanxiang-docs-archive.md — 文档归档导航页
+- 所有原始文档保存到 meishi_docs/万象/归档/（含目录树 + 页面导航 + 链接索引）
+- 更新 index.md（105 页）+ log.md
+
 ## [2026-08-03] ingest | Bitmap 构建工程实现详解（基于源码分析）
 
 - 克隆 wanxiang-data-jobs、data-app-dp-utils、data_engine_script 等 3 个仓库
