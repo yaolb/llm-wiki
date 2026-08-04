@@ -113,7 +113,12 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
   const processedContent = useMemo(() => {
     if (liveOverride) return convertWikilinks(liveOverride);
     if (!page) return '';
-    return convertWikilinks(page.content);
+    let content = page.content;
+    // 归档文档的相对图片路径（../_images/xxx.png）重写为绝对路径
+    if (page.path.startsWith('meishi_docs/')) {
+      content = content.replace(/(?:\.\.\/)*_images\//g, '/meishi_docs/万象/归档/_images/');
+    }
+    return convertWikilinks(content);
   }, [page, liveOverride]);
 
   // Scroll to top when page changes

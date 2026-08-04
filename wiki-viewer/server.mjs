@@ -38,7 +38,10 @@ app.get('/meishi_docs/*.md', async (req, res) => {
     const fullPath = path.resolve(MEISHI_DIR, decoded);
     if (!fullPath.startsWith(MEISHI_DIR)) return res.status(403).send('invalid path');
     const raw = await fs.readFile(fullPath, 'utf-8');
-    const md = raw.replace(/^---[\s\S]*?---\s*/, ''); // 去掉 frontmatter
+    const md = raw
+      .replace(/^---[\s\S]*?---\s*/, '') // 去掉 frontmatter
+      // 相对图片路径（../_images/xxx.png）重写为绝对路径
+      .replace(/(?:\.\.\/)*_images\//g, '/meishi_docs/万象/归档/_images/');
     const title = md.match(/^#\s+(.+)$/m)?.[1] || path.basename(fullPath, '.md');
     const body = renderToStaticMarkup(
       React.createElement(ReactMarkdown, { remarkPlugins: [remarkGfm] }, md)
