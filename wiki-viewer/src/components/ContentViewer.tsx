@@ -18,12 +18,10 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
   const [editSaving, setEditSaving] = useState(false);
   const [editMsg, setEditMsg] = useState('');
   const [liveOverride, setLiveOverride] = useState<string | null>(null);
-  const [archiveDocPath, setArchiveDocPath] = useState<string | null>(null);
 
   // Reset live override when navigating to a different page
   useEffect(() => {
     setLiveOverride(null);
-    setArchiveDocPath(null);
   }, [page?.path]);
 
   // Event delegation: intercept clicks on wikilinks (rendered as #wiki: paths)
@@ -41,34 +39,32 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
         onNavigate(target);
         return;
       }
-      // 拦截归档文档链接，通过 API 加载内容并渲染
+      // 拦截归档文档链接，作为一级页面导航（完整 markdown 渲染）
       const docAnchor = (e.target as HTMLElement).closest('a[href^="/meishi_docs/"]');
       if (docAnchor) {
         e.preventDefault();
         const href = docAnchor.getAttribute('href')!;
-        const docPath = href.replace(/^\/meishi_docs\//, '');
-        fetch(`/api/meishi-doc?path=${encodeURIComponent(docPath)}`)
-          .then((r) => {
-            if (!r.ok) throw new Error('not found');
-            return r.json();
-          })
-          .then((data) => {
-            if (data.content) {
-              setLiveOverride(data.content);
-              setArchiveDocPath(docPath);
-              const scroller = containerRef.current;
-              if (scroller) scroller.scrollTop = 0;
-            }
-          })
-          .catch(() => {
-            // 兜底：新标签页打开
-            window.open(href, '_blank');
-          });
+        const docPath = 'meishi_docs/' + href.replace(/^\/meishi_docs\//, '');
+        console.log('[ContentViewer] archive doc clicked:', docPath);
+        onNavigate(docPath);
+        return;
+      }
+      // 拦截归档文档内的相对链接（如 _页面导航.md 中的 0-产品文档/xxx.md）
+      const relAnchor = (e.target as HTMLElement).closest('a[href$=".md"]:not([href^="#"]):not([href^="http"]):not([href^="/"])');
+      if (relAnchor) {
+        const href = relAnchor.getAttribute('href')!;
+        // 仅当当前页面是归档文档时处理相对链接
+        if (page?.path.startsWith('meishi_docs/')) {
+          e.preventDefault();
+          const base = page.path.replace(/^meishi_docs\//, '').split('/').slice(0, -1).join('/');
+          const resolved = [base, href].filter(Boolean).join('/');
+          onNavigate('meishi_docs/' + resolved);
+        }
       }
     };
     el.addEventListener('click', handler);
     return () => el.removeEventListener('click', handler);
-  }, [onNavigate]);
+  }, [onNavigate, page?.path]);
 
   const [tocCollapsed, setTocCollapsed] = useState(false);
   const [activeHeading, setActiveHeading] = useState('');
@@ -286,19 +282,6 @@ export function ContentViewer({ page, onNavigate, onTagSelect, onSave }: Content
       )}
 
       <div className="content-inner">
-        {archiveDocPath && (
-          <div className="archive-doc-banner">
-            📂 归档文档: <code>meishi_docs/{archiveDocPath}</code>
-            <button
-              className="archive-doc-back"
-              onClick={() => { setLiveOverride(null); setArchiveDocPath(null); }}
-              title="返回当前 wiki 页面"
-            >
-              ✕ 返回
-            </button>
-          </div>
-        )}
-
         <div className="meta-row">
           {meta.type && <span className={`meta-type ${meta.type}`}>{meta.type}</span>}
           {meta.created && <span className="meta-date">创建: {meta.created}</span>}

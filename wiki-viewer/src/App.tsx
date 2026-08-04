@@ -67,7 +67,12 @@ export default function App() {
       return prev;
     });
     try {
-      const resp = await fetch(`/api/page?path=${encodeURIComponent(path)}`);
+      // 归档文档（meishi_docs/...）走 /api/meishi-doc
+      const isArchive = path.startsWith('meishi_docs/');
+      const apiPath = isArchive ? path.replace(/^meishi_docs\//, '') : path;
+      const resp = await fetch(
+        `/${isArchive ? 'api/meishi-doc' : 'api/page'}?path=${encodeURIComponent(apiPath)}`
+      );
       if (!resp.ok) throw new Error(`Failed to load: ${path}`);
       const { content: raw } = await resp.json();
       const relPath = path.startsWith('wiki/') ? `../../${path}` : path;
