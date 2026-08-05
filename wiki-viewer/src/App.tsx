@@ -20,7 +20,14 @@ const CATEGORY_ORDER = ['实体', '概念', '论文', '主题', '综述'];
 
 function readHash(): string | null {
   const h = window.location.hash.slice(1);
-  return h || null;
+  if (!h) return null;
+  // 浏览器会自动编码 hash 中的中文（%E4%B8%87...），需解码还原真实路径
+  // 否则 loadPageContent 再 encodeURIComponent 会造成双重编码 404
+  try {
+    return decodeURIComponent(h);
+  } catch {
+    return h;
+  }
 }
 
 export default function App() {
