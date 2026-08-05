@@ -4,6 +4,18 @@
 
 ---
 
+## [2026-08-05] update | DSL 文档补充到 Bitmap 工程方案
+
+- 爬取美事文档 DSL 页面（space/2084884717378842624）
+- 归档到 meishi_docs/万象/归档/_来源文档/DSL.md
+- bitmap-construction-engineering.md 新增"八·五、查询侧 DSL 与人群圈选 SQL"章节：
+  - 底层表结构（rpt_wanxiang_{brand}_view / user_code_view / user_package）
+  - 群体画像：bitmap_count(bitmap_and) + TOP100 截断 + 字典映射
+  - 页面圈选：多重 bitmap_and 嵌套 + 编码视图过滤 + 人群包落库
+  - 嵌套标签圈选：跨 sub_tag AND + uint64 解码（bitand/位移/xor 恢复 userId）+ sub_bitmap 截断
+  - 构建侧 ↔ 查询侧对应关系表
+- 更新 log.md
+
 ## [2026-08-05] ingest | RoaringBitmap 实体页
 
 - 创建 entities/roaringbitmap.md — 补充官方 GitHub 仓库链接 (github.com/roaringbitmap/roaringbitmap)

@@ -468,6 +468,170 @@ Time ─────────────────────────
 
 ---
 
+## 八·五、查询侧 DSL 与人群圈选 SQL
+
+来源：[DSL 文档](/meishi_docs/万象/归档/_来源文档/DSL.md)（美事文档 space/2084884717378842624）
+
+本文档是 bitmap 方案的实际**查询侧** SQL 全集，包含三大类场景：群体画像分析、页面标签圈选、嵌套标签复杂圈选。
+
+### 8.5.1 底层数据表结构
+
+所有圈选 SQL 都基于品牌分库的标签视图（`hdp_teu_dpd_clickhousedb`）：
+
+| 表/视图 | 用途 | 关键字段 |
+|---------|------|----------|
+| `rpt_wanxiang_{brandId}_string_view` | 基础字符串标签 | tag_name, tag_value, user_code |
+| `rpt_wanxiang_{brandId}_numeric_view` | 基础数值标签 | 同上 + 数值比较 |
+| `rpt_wanxiang_{brandId}_nested_string_view` | KV 字符串标签 | tag_name, **sub_tag_name**, **sub_tag_value**, user_code |
+| `rpt_wanxiang_{brandId}_nested_numeric_view` | KV 数值标签 | 同上 |
+| `rpt_wanxiang_{brandId}_{tagtype}_v2` | 新版基础表（如 `_23_string_v2`） | 支持多品牌 union |
+| `rpt_wanxiang_user_code_{brandId}_{idtype}_view` | 用户编码过滤视图 | wb_uid / wb_imei / brokerid 等 idtype |
+| `rpt_wanxiang_user_package_{brandId}` | 人群包结果表 | package_id, shard, user_code, dt, ver |
+| `app_wanxiang_tag_value_dic_d` | 标签值字典（code→name） | tag_en, code, dt |
+
+**人群包写入格式**：
+```sql
+INSERT INTO rpt_wanxiang_user_package_150 (package_id, shard, user_code, dt, ver)
+SELECT package_id, -1 AS shard, user_code, dt, {ver毫秒时间戳} AS ver FROM ...
+```
+- `shard=-1`：默认分片
+- `ver=毫秒时间戳`：版本号，用于更新覆盖
+
+### 8.5.2 场景一：群体画像（标签分布分析）
+
+对指定人群包（package_id），统计每个标签值下的用户数及与基准人群包的对比：
+
+```sql
+SELECT tag_name, COALESCE(d.name, t.tag_value) AS tag_value,
+       SUM(count0) AS count_analysis, SUM(count1) AS count_base
+FROM (
+  -- 每个标签值：与人群包A做 bitmap_and 计数 = count0，与人群包B = count1
+  SELECT tag_name, tag_value,
+         bitmap_count(bitmap_and(t1.user_code,
+           (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+            FROM rpt_wanxiang_user_package_150 WHERE dt='...' AND package_id='A'))) AS count0,
+         bitmap_count(bitmap_and(t1.user_code,
+           (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+            FROM rpt_wanxiang_user_package_150 WHERE dt='...' AND package_id='B'))) AS count1
+  FROM (SELECT tag_name, tag_value, user_code
+        FROM rpt_wanxiang_23_string_v2 WHERE tag_name IN (...)
+        UNION ALL
+        SELECT ... FROM rpt_wanxiang_10000_string_v2 WHERE tag_name IN (...)) t1
+) g
+-- TOP100 截断：每标签只保留 count0 最高的 100 个值
+)
+LEFT JOIN app_wanxiang_tag_value_dic_d d ON tag_name=tag_en AND tag_value=code
+GROUP BY tag_name, tag_value
+ORDER BY tag_name, count_analysis DESC;
+```
+
+**关键技巧**：
+- `bitmap_count(bitmap_and(tag_bitmap, package_bitmap))` — 一次调用完成交集计数
+- 多品牌标签 `UNION ALL` 合并（如 `_23_string_v2` + `_10000_string_v2`）
+- `array_agg(... ORDER BY count0 DESC)` + `array_slice(..., 1, 100)` 每标签截断 TOP100
+- `CROSS JOIN unnest(...)` 解包聚合数组
+- 字典表 `tag_value_dic_d` 把 code 映射为中文名
+
+### 8.5.3 场景二：页面标签圈选（基础标签 AND）
+
+万象页面上用户勾选多个标签值 → 生成多重 `bitmap_and` 圈选 SQL：
+
+```sql
+WITH conditions AS (
+  SELECT bitmap_and(bitmap_and(bitmap_and(bitmap_and(bitmap_and(
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10000_string_view WHERE tag_name='visit_active' AND tag_value IN ('30')),
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10000_string_view WHERE tag_name='t_dispcate_2_30d' AND tag_value IN ('70134','8'))),
+    -- ... 每个条件一层 bitmap_and 嵌套 ...
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_user_code_150_wb_imei_view))  -- 最后 AND 上用户编码过滤视图
+  ) AS usercode
+)
+SELECT package_id, -1 AS shard, user_code, dt, 1785906619367 AS ver
+FROM (SELECT usercode AS user_code, '2026-08-05' AS dt, 7930782 AS package_id FROM conditions);
+```
+
+**规则**：
+- 同一标签多值 = `tag_value IN (...)` → `bitmap_union` 合并（OR 语义）
+- 不同标签 = `bitmap_and` 嵌套（AND 语义）
+- 最后 AND 上 `user_code_{brandId}_{idtype}_view` — 编码空间过滤（确保只含该 idtype 的合法用户）
+- 结果直接 INSERT 人群包表（生成新 package_id + ver）
+
+### 8.5.4 场景三：嵌套标签复杂圈选（KV 标签）
+
+嵌套标签（KV）圈选是整个 bitmap 方案中最复杂的部分，跨多个 `sub_tag_name` 条件且需聚合子标签值：
+
+**Step 1 — 同标签跨 sub_tag AND**：
+```sql
+WITH nestagg_node1_tmp AS (
+  SELECT bitmap_and(
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10343_nested_string_view
+     WHERE tag_name='zp_consume_amount_sum' AND sub_tag_name='latest_days' AND sub_tag_value IN ('7')),
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10343_nested_string_view
+     WHERE tag_name='zp_consume_amount_sum' AND sub_tag_name='mer_id' AND sub_tag_value IN ('8'))) AS user_code
+)
+```
+
+**Step 2 — 子标签值聚合（内层 userCode 提取）**：
+```sql
+-- 关键：从嵌套 uint64 bitmap 中恢复 userId
+SELECT bitxor(bit_shift_right_logical(bitand(140737488355327, unnest_bitmap),
+       bit_shift_right_logical(unnest_bitmap, 48)), 4294967296) AS userId
+FROM (SELECT bm FROM nestagg_node1_tmp2), unnest_bitmap(bm)
+```
+
+**uint64 嵌套编码解码原理（据实际 SQL 推断，有待查证）**：
+```
+140737488355327 = 2^47 - 1        (低47位掩码)
+bitand(x, 2^47-1)                 → 取低 47 位
+bit_shift_right_logical(x, 48)    → 取高 16 位以上部分
+bitxor(低47位, 高部分, 2^32)      → 恢复为 userId
+
+推断: 嵌套 bitmap 的值 = f(userCode, subTagValue) 复合编码,
+      通过位移/掩码/异或运算还原 userCode
+```
+
+**Step 3 — 子标签值聚合过滤**（如"金额类目求和"）：
+```sql
+SELECT IFNULL(bitmap_union(user_code), bitmap_empty()) AS user_code
+FROM (SELECT bitmap_union(to_bitmap(userId)) AS user_code
+      FROM (SELECT userId FROM (
+        SELECT sub_tag_value,
+               bitxor(bit_shift_right_logical(bitand(140737488355327, unnest_bitmap),
+                 bit_shift_right_logical(unnest_bitmap, 48)), 4294967296) AS userId
+        FROM (SELECT bm, sub_tag_value FROM nestagg_node1_tmp2) t, unnest_bitmap(t.bm)
+      ) a1 GROUP BY userId HAVING SUM(sub_tag_value) IN ('0')) a) t2
+```
+
+**Step 4 — 数值范围 + 排除条件**：
+```sql
+-- 数值范围: tag_value <= 'x' AND tag_value >= 'y' AND tag_value <> -99999
+SELECT ... FROM rpt_wanxiang_10343_numeric_view
+WHERE tag_name='zp_total_blc' AND tag_value <= '100000000000'
+  AND tag_value >= '150000' AND tag_value <> -99999
+```
+
+**Step 5 — sub_bitmap 截断**（性能优化）：
+```sql
+SELECT sub_bitmap(bitmap_and(user_code, (SELECT user_code FROM nestagg_node1_tmp)), 0, 10000000) AS bm
+```
+- 先做条件 AND，再 `sub_bitmap` 截取前 1000 万用户，限制 unnest 规模
+
+### 8.5.5 与构建侧的对应关系
+
+| 构建侧（前八章） | 查询侧（DSL） |
+|------------------|---------------|
+| `rbm_wanxiang_{datasource}_string/numeric` | `rpt_wanxiang_{brand}_string_view / _v2` |
+| uint32 RoaringBitmap | `bitmap_union` / `bitmap_and` / `bitmap_count` |
+| uint64 Roaring64NavigableMap | nested 视图 + unnest_bitmap 解码 |
+| 用户编码表 | `rpt_wanxiang_user_code_{brand}_{idtype}_view` |
+| — | 人群包落库：`rpt_wanxiang_user_package_{brand}` + ver 版本 |
+
+---
+
 ## 九、关键技术决策总结
 
 | 决策 | 选择 | 原因 |
@@ -492,4 +656,5 @@ Time ─────────────────────────
 - `wanxiang-data-jobs/wanxiang-label-data-etl/wanxiang-label-data-etl-multi-components/` — 核心 ETL 流程
 - `wanxiang-data-jobs/wanxiang-data-common/` — Bitmap UDF/UDAF/UDTF 实现
 - `wanxiang-data-jobs/wanxiang-relation-user-code-bitmap/` — Bucket 位图构建
+- [DSL 文档](/meishi_docs/万象/归档/_来源文档/DSL.md) — 查询侧圈选 SQL 全集（群体画像/标签圈选/嵌套圈选）
 - `wanxiang-data-jobs/wanxiang-ice-mountain-data-etl/` — 预估位图合并与视图切换
