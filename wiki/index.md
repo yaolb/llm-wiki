@@ -3,10 +3,10 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 106
+- Total pages: 107
 - Claims: 0
 - Sources: 10
-- Entities: 40
+- Entities: 41
 - Concepts: 40
 - Syntheses: 5
 - Reports: 10
@@ -64,6 +64,7 @@
 - [Mistral](entities/mistral.md)
 - [DeepSeek](entities/deepseek.md)
 - [Qwen](entities/qwen.md)
+- [RoaringBitmap](entities/roaringbitmap.md) — 高效压缩位图数据结构，大数据人群圈选标准库，官方仓库 github.com/roaringbitmap/roaringbitmap `#Bitmap #数据结构 #万象`
 
 ### Concepts
 - [用户-标签 Bitmap 构建：工程实现详解](concepts/bitmap-construction-engineering.md) — 基于 wanxiang-data-jobs 源码的完整工程级分析，含 Spark UDAF、RoaringBitmap 序列化、Base64 编码、CK 写入、Bucket 分桶全流程 `#Bitmap #工程实现 #Spark #RoaringBitmap`

@@ -4,6 +4,13 @@
 
 ---
 
+## [2026-08-05] ingest | RoaringBitmap 实体页
+
+- 创建 entities/roaringbitmap.md — 补充官方 GitHub 仓库链接 (github.com/roaringbitmap/roaringbitmap)
+- 覆盖数据结构（三种 Container 自适应）、58 定制版特性、人群圈选应用
+- 消除 user-tag-bitmap-construction / wanxiang-tag-ck-pipeline 中的孤儿 wikilink [[roaringbitmap]]
+- 更新 index.md（107 页）+ log.md
+
 ## [2026-08-04] ingest | 万象文档空间完整归档
 
 - 使用 meishi-docs-crawler 递归爬取万象美事文档空间（space/1552506105505054722）
