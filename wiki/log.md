@@ -4,6 +4,13 @@
 
 ---
 
+## [2026-08-06] ingest | 万象实体页
+
+- 创建 entities/wanxiang.md — 万象增长服务平台实体页
+- 消除 [[wanxiang]] 孤儿 wikilink（3 处引用：user-tag-bitmap-construction / bitmap-construction-engineering / wanxiang-tag-ck-pipeline）
+- 实体页链接到万象文档目录树 [[wanxiang-docs-tree]] 与归档目录
+- 更新 index.md（108 页）+ log.md
+
 ## [2026-08-05] update | DSL 文档补充到 Bitmap 工程方案
 
 - 爬取美事文档 DSL 页面（space/2084884717378842624）
