@@ -48,6 +48,21 @@ RoaringBitmap 内部:
 - 支持 `add` / `or` / `and` / `andNot` / `contains` / `getCardinality` 等操作
 - 序列化/反序列化效率高，可与 Hive、ClickHouse、StarRocks 互操作
 
+### 通用应用领域（来源：[RoaringBitmap 应用科普](/meishi_docs/万象/归档/_来源文档/RoaringBitmap应用科普.md)）
+
+| 领域 | 典型场景 |
+|------|----------|
+| 数据库系统 | Apache Spark、Druid、ClickHouse 的位图列/聚合 |
+| 搜索引擎 | 倒排索引的 doc id 集合（Lucene/ES） |
+| 大数据分析 | 海量整数集合的交并差运算 |
+| 网络爬虫 | URL 去重 |
+| 用户画像与精准推荐 | 标签集合的圈选/组合查询（本 Wiki 万象场景） |
+
+**为什么高效**（科普视角）：
+- 相比 `HashSet<Integer>`：每个 Integer 对象约 20-30 字节，RoaringBitmap 极低内存
+- 相比传统 BitMap：稀疏数据（ID 1, 1000, 1000000）传统位图需开辟百万位空间，RoaringBitmap 分段存储避免浪费
+- 分桶策略：高 16 位为键（Key），低 16 位为值；同桶内元素 < 4096 用 Array Container（short 数组），≥ 4096 用 Bitmap Container（8192 位/8KB），自适应平衡空间与时间
+
 ### 58 定制版特性
 
 58 万象基于官方库二开（`roaringbitmap.git`），支持：
