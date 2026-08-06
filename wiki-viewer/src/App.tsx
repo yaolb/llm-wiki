@@ -18,15 +18,20 @@ interface PageInfo {
 
 const CATEGORY_ORDER = ['实体', '概念', '论文', '主题', '综述'];
 
+// 规范化路径：兼容历史遗留的相对路径 hash（如 #../../wiki/...）
+function normalizePath(p: string): string {
+  return p.replace(/^(?:\.\.\/)+wiki\//, 'wiki/');
+}
+
 function readHash(): string | null {
   const h = window.location.hash.slice(1);
   if (!h) return null;
   // 浏览器会自动编码 hash 中的中文（%E4%B8%87...），需解码还原真实路径
   // 否则 loadPageContent 再 encodeURIComponent 会造成双重编码 404
   try {
-    return decodeURIComponent(h);
+    return normalizePath(decodeURIComponent(h));
   } catch {
-    return h;
+    return normalizePath(h);
   }
 }
 
@@ -69,24 +74,26 @@ export default function App() {
 
   // ── Load page content from API ──
   const loadPageContent = useCallback(async (path: string) => {
+    // 规范化路径，避免相对路径（../../wiki/...）进入缓存和 titleMap
+    const normPath = normalizePath(path);
     setPageCache((prev) => {
       // already cached
       return prev;
     });
     try {
       // 归档文档（meishi_docs/...）走 /api/meishi-doc
-      const isArchive = path.startsWith('meishi_docs/');
-      const apiPath = isArchive ? path.replace(/^meishi_docs\//, '') : path;
+      const isArchive = normPath.startsWith('meishi_docs/');
+      const apiPath = isArchive ? normPath.replace(/^meishi_docs\//, '') : normPath;
       const resp = await fetch(
         `/${isArchive ? 'api/meishi-doc' : 'api/page'}?path=${encodeURIComponent(apiPath)}`
       );
-      if (!resp.ok) throw new Error(`Failed to load: ${path}`);
+      if (!resp.ok) throw new Error(`Failed to load: ${normPath}`);
       const { content: raw } = await resp.json();
-      const relPath = path.startsWith('wiki/') ? `../../${path}` : path;
-      const parsed = parseWikiPage(raw, relPath);
+      // 缓存 key 和页面 path 统一使用规范路径（wiki/... 或 meishi_docs/...）
+      const parsed = parseWikiPage(raw, normPath);
       setPageCache((prev) => {
         const next = new Map(prev);
-        next.set(path, parsed);
+        next.set(normPath, parsed);
         return next;
       });
     } catch (err) {
@@ -191,7 +198,7 @@ export default function App() {
 
   const handleNavigate = useCallback((path: string) => {
     const resolved = resolveWikilink(path);
-    const target = resolved || path;
+    const target = normalizePath(resolved || path);
     setActivePath(target);
     if (!pageCache.has(target)) {
       loadPageContent(target);
