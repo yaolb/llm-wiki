@@ -2,7 +2,7 @@
 type: concept
 tags: [Bitmap, bitmap, RoaringBitmap, 用户编码, 标签, 标签生成, ClickHouse, 位图, 万象]
 created: 2026-08-03
-updated: 2026-08-03
+updated: 2026-08-06
 related_sources: 3
 ---
 
@@ -25,7 +25,7 @@ related_sources: 3
 
 ### 数据结构映射
 
-```
+```text
 用户集合 ──编码──→ user_code (bigint / uint32)
                       │
                       ▼
@@ -42,7 +42,7 @@ related_sources: 3
 
 ### 阶段一：编码生成
 
-```
+```text
 原始用户标识                  OneID                     user_code (bigint)
 ─────────────    ────────→    ─────    ─────────────→   ──────────────────
 wuser_123        映射         oneid#abc    编码服务         1000001
@@ -59,7 +59,7 @@ oaid_yyy                       oneid#ghi      │             1000003
 
 对于每个 `(datasource_id, label_key, label_value)` 三元组：
 
-```
+```text
 输入: 格式化表（已关联 user_code 的标签数据）
       ds_wanxiang_ice_mountains_{type}_formatted
 
@@ -74,7 +74,7 @@ oaid_yyy                       oneid#ghi      │             1000003
 
 ### 阶段三：位图合并（按品牌/id类型维度）
 
-```
+```text
 单个数据源的位图 ──→ 预估位图合并 ──→ 最终位图入 CK
                         │
                         ▼
@@ -88,7 +88,7 @@ oaid_yyy                       oneid#ghi      │             1000003
 
 用于**单值标签**：每个标签只有一个值。
 
-```
+```text
 label_key = 'city', label_value = '北京'
   → bitmap 中第 1000001 位 = 1（用户在北京）
   → bitmap 中第 1000002 位 = 0（用户不在北京）
@@ -105,7 +105,7 @@ label_key = 'age', label_value = '25'
 
 编码方式（推断）：
 
-```
+```text
 uint64 bit_position = (hash(tag_sub_key) << 32) | hash(tag_sub_value)
                       ─────────────────────   ──────────────────────
                            高 32 位                  低 32 位
@@ -161,6 +161,7 @@ SETTINGS max_bytes_to_merge_at_max_space_in_pool = 134217728,
 实际查询面向 `rpt_wanxiang_{brandId}_{tagtype}_view`（Distributed 视图，包装 `_local` 副本表），聚合物化列 `user_code`：
 
 ### 单标签人群获取
+
 ```sql
 SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
 FROM hdp_teu_dpd_clickhousedb.hdp_teu_dpd_rpt_wanxiang_10000_string_view
@@ -168,6 +169,7 @@ WHERE tag_name = 'city' AND tag_value = '北京'
 ```
 
 ### 多标签交集（人群圈选）
+
 ```sql
 SELECT bitmap_and(
     (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
@@ -178,6 +180,7 @@ SELECT bitmap_and(
 ```
 
 ### 用户反查标签
+
 ```sql
 SELECT uid FROM idmapping_table
 WHERE bitmap_contains(
@@ -193,7 +196,7 @@ WHERE bitmap_contains(
 
 对于超大规模人群包（如全量用户），使用**分桶 Bitmap** 策略：
 
-```
+```text
 RowKey = bucket_id
 Value  = {
     bucketbitmap: RoaringBitmap 的 base64 加密字符串,
@@ -228,7 +231,7 @@ Value  = {
 
 ### 3. 并发控制
 
-```
+```text
 问题: 数据源 A（id类型 1,2,3,4）和数据源 B（id类型 1,2,3,4,5）
       A 先运行合并小文件，B 后运行但 B 先完成
       → B 执行位图合并时读取 A 的数据源 4 位图，但此时 A 的 4 还未生成
@@ -265,7 +268,7 @@ CK → SR 迁移中，Bitmap 的兼容处理：
 
 - [[bitmap-construction-engineering]] — 工程实现详解（基于源码的完整流程）
 - [[roaringbitmap]] — RoaringBitmap 数据结构
-- [[user-code-encoding]] — 用户编码机制（有待补充）
+- [[user-code-encoding]] — 用户编码机制
 
 ## 相关主题
 

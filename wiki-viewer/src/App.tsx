@@ -57,12 +57,11 @@ export default function App() {
         setPageInfos(pages);
 
         // If there's a hash, preload that page
+        // 注意: 归档文档（meishi_docs/...）不在 /api/pages 列表中，
+        // 必须无条件加载（loadPageContent 内部会区分 wiki/归档路径）
         const hash = readHash();
         if (hash) {
-          const matching = pages.find((p: PageInfo) => p.path === hash);
-          if (matching) {
-            loadPageContent(hash);
-          }
+          loadPageContent(hash);
         }
       } catch (err) {
         console.error('[App] Failed to load pages:', err);

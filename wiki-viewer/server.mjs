@@ -93,6 +93,12 @@ function escapeHtml(s) {
 }
 
 // ─── API: 读取归档文档内容（前端渲染用）───
+// ─── API 响应禁用浏览器缓存（文件随时可能更新，避免旧内容）───
+app.use('/api', (_req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
+
 app.get('/api/meishi-doc', async (req, res) => {
   try {
     const docPath = req.query.path;
