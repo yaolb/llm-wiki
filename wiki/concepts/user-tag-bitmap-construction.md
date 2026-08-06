@@ -38,6 +38,35 @@ related_sources: 3
 
 **核心映射**：`user_code` 的值直接作为 Bitmap 中的 **bit 位置索引**。
 
+## 完整数据流程总览
+
+来源：[数据应用部分分享（离线）](/meishi_docs/万象/归档/_来源文档/数据应用部分分享（离线）.md)
+
+```
+业务方配置标签(数据源-标签两级)
+        ↓
+ETL 感知标签上线/下线 → 数据落位 (宽表 或 JSON 大字段)
+        ↓
+编码生成 (OneID → user_code, Redis 顺序编码)
+        ↓
+Spark 离线生成 RoaringBitmap (user_ids = base64)
+        ↓
+CK 倒排表入库 (物化视图列识别, 无需 merge)
+        ↓
+圈选查询 (bitmap_and/union, 正交计算避免跨节点拉取)
+        ↓
+fetch 反解 (bitmap → 实际用户 id)
+```
+
+**引擎选型背景**：万象画像服务早期采用 **Spark-Parquet 宽表**（>5w 人群）+ **Elasticsearch**（<5w 人群）双引擎：
+
+| 引擎 | 问题 |
+|------|------|
+| Parquet 宽表 | 标签增减导致频繁 schema 更新；各业务方表完成时间不一致，局部故障影响整体画像 |
+| Elasticsearch | 数据量大时导入性能急速下降；大包查询易造成 IO/CPU 瓶颈 |
+
+最终选型 **ClickHouse**：标签名/标签值构建**倒排表 + 稀疏索引**，通过位图的与或非逻辑规避多表关联的 shuffle 开销；标签增删只需加行（倒排表模型），无需改 schema。
+
 ## Bitmap 构建流程
 
 ### 阶段一：编码生成
@@ -50,8 +79,10 @@ imei_xxx          表          oneid#def       │             1000002
 oaid_yyy                       oneid#ghi      │             1000003
                                               │
                               已有编码 → 复用（保证稳定性）
-                              新用户   → 新分配（递增 or hash）
+                              新用户   → 新分配（Redis 顺序递增）
 ```
+
+**顺序编码实现**（保证位图稠密性）：用户 id 范围在 int 内，借助 **Redis 16384 个分桶 + `INCR` 原子递增**分配编码——每次新增编码原子加一。顺序编码让相邻用户编码连续，位图高 16 位索引集中、低 16 位桶内稠密，避免高 16 位扩散导致计算量增加和存储膨胀。
 
 **编码稳定性**是关键设计决策：同一用户的 `user_code` 必须保持不变，否则跨表 Bitmap 交并差会错位。
 
@@ -81,6 +112,16 @@ oaid_yyy                       oneid#ghi      │             1000003
               等待所有数据源 ETL 完成后
               按 品牌_${brand}_${idtype} 聚合
 ```
+
+### 阶段四：CK 写入与存储优化
+
+**1) datapart 优化**——Spark 离线生成位图字段，CK 通过**物化视图列识别**（`MATERIALIZED base64Decode(user_ids)`），查询时直接使用唯一的位图，无需显式/手动位图聚合。效果：300 亿用户 id + 标签值粒度数据导入从 2-3 小时优化到 **10 分钟**。
+
+**2) datapart 过大问题**——CK 默认将分区内所有 datapart 合并为一个，合并后 datapart 过大，无法发挥多磁盘并行读取能力，查询性能波动甚至翻倍。解决：在 Spark 侧控制写入数据量，生成大小适中的 datapart，避免 merge 放大。
+
+**3) 稀疏索引优化（读放大）**——CK 默认 `index_granularity = 8192` 行/索引粒度；user_id 是 bitmap 列（压缩块常超 1MB），一条索引标记可能对应 .bin 文件几十个数据块，查询时几十个块全读但只有几条是目标数据 → **读放大**。解决：`index_granularity = 128`，减小索引粒度，降低读放大。
+
+**4) 位图格式差异**——CK 底层是 C++ RoaringBitmap 实现：低 16 位基数 < 32 时用 smallSet 存储，≥ 32 时与 Java RoaringBitmap 一致（ArrayContainer/BitmapContainer/RunContainer 三态）。Spark 生成的 Java 位图与 CK C++ 位图通过 base64 序列化兼容。
 
 ## 两种编码宽度
 
@@ -192,6 +233,33 @@ WHERE bitmap_contains(
 
 > 注：`IFNULL(..., bitmap_empty())` 兜底空标签；嵌套标签（KV）查询用 `rpt_wanxiang_{brand}_nested_{type}_view` 的 `sub_tag_name` / `sub_tag_value` 字段，完整示例见 [[bitmap-construction-engineering]] 八·五节。
 
+### 正交计算（shard 分配）——避免跨节点拉取位图
+
+CK 分布式查询默认：各本地节点计算完，把**中间结果位图拉取到协调节点**再计算。位图过大时，拉取过程消耗大量 IO 且形成单点计算瓶颈。
+
+**解决（正交计算）**：编码后的用户 id 在 int 范围内，若有 x 个节点，则 `id / x` 决定该 id 落在哪个 shard——**每个 shard 上包含了该用户的全部标签信息**。这样：
+
+```
+圈选条件 tag_name='city' AND tag_value='北京'
+  → 每个 shard 本地完成 bitmap_and（只算本 shard 的用户）
+  → 只把计算结果（而非中间位图）分发到协调节点汇总
+  → 避免中间结果位图的全量拉取 IO
+```
+
+实现前提：编码时保证**同一用户的全部标签落在同一 shard**（`id/x` 分桶与顺序编码天然配合）。
+
+### fetch 反解（bitmap → 实际用户 id）
+
+圈选/提取的两阶段模型：
+
+```text
+第一阶段 query : 规则交并差运算 → 计算出位图（如上）
+第二阶段 fetch: 位图反解 → 实际用户 id
+                 通过位图的交运算，避免 join 重操作
+```
+
+反解链路：位图 → `bucket bitmap`（BucketRBMUserIds）→ user_code → 编码反解表（Redis hashkey：`品牌ID + abs(hashCode(idtype_code)) % 3亿`）→ 实际 id。
+
 ## 大人群包的分桶 Bitmap
 
 对于超大规模人群包（如全量用户），使用**分桶 Bitmap** 策略：
@@ -277,6 +345,7 @@ CK → SR 迁移中，Bitmap 的兼容处理：
 
 ## 参考来源
 
+- [数据应用部分分享（离线）](/meishi_docs/万象/归档/_来源文档/数据应用部分分享（离线）.md) — 端到端数据流程与全部优化细节（引擎选型/顺序编码/正交计算/datapart/稀疏索引）
 - [画像&关系接入](/meishi_docs/万象/归档/_来源文档/画像&关系接入.md) — 编码与位图组织核心设计
 - [编码模块预估位图解决方案](/meishi_docs/万象/归档/_来源文档/编码模块预估位图解决方案.md) — 位图生成并发控制
 - [马建彪工作交接](/meishi_docs/万象/归档/_来源文档/马建彪工作交接.md) — 万象系统全貌
