@@ -115,37 +115,65 @@ uint64 bit_position = (hash(tag_sub_key) << 32) | hash(tag_sub_value)
 
 ## CK 中的存储结构
 
+**实际生产表结构**（`hdp_teu_dpd_rpt_wanxiang_{brandId}_{tagtype}_v2_local`，以品牌 23 的 string 标签为例）：
+
 ```sql
--- CK 表结构
-CREATE TABLE hdp_lbg_zhaopin_clickhousedb.hdp_lbg_zhaopin_zp_bn_crowd (
-    dt String,           -- 日期分区
-    label_key String,    -- 标签键
-    label_value String,  -- 标签值
-    bitmap_ids AggregateFunction(groupBitmap, UInt32)  -- RoaringBitmap 聚合状态
-) ENGINE = AggregatingMergeTree()
-PARTITION BY dt
-ORDER BY (label_key, label_value);
+CREATE TABLE hdp_teu_dpd_clickhousedb.hdp_teu_dpd_rpt_wanxiang_23_string_v2_local
+(
+    tag_value   String comment '标签值',
+    shard       Int32 comment '分片ID',
+    user_ids    String comment '用户标识ID的Bitmap并使用Base64加密成String',
+    dt          Date comment 'yyyyMMdd',
+    tag_name    String comment '标签名',
+    user_code   AggregateFunction(groupBitmap, UInt32)
+                MATERIALIZED base64Decode(user_ids) comment '用户标识ID的Bitmap',
+    _batch_num  String comment '批次时间'
+)
+ENGINE = ReplicatedMergeTree(
+    '/clickhouse/bingshan_cluster/hdp_teu_dpd_clickhousedb/'
+    'hdp_teu_dpd_rpt_wanxiang_23_string_v2/shard8', 'replic1')
+PARTITION BY (dt, tag_name)
+PRIMARY KEY (_batch_num, tag_name, tag_value)
+ORDER BY (_batch_num, tag_name, tag_value)
+TTL dt + toIntervalDay(7)
+SETTINGS max_bytes_to_merge_at_max_space_in_pool = 134217728,
+         storage_policy = 'hdd_in_order', index_granularity = 128;
 ```
 
 **关键设计**：
-- 使用 ClickHouse 的 `AggregateFunction(groupBitmap, UInt32)` 类型
-- `bitmap_union()` 聚合多个分区的位图
-- `bitmap_and()` / `bitmap_or()` 实现交并集
+
+| 设计点 | 说明 |
+|--------|------|
+| `user_ids` String | **Base64 编码的 RoaringBitmap 字符串**（`RoaringBitMapBase64UDF` 输出），替代了简单聚合列 |
+| `user_code` MATERIALIZED | `AggregateFunction(groupBitmap, UInt32) MATERIALIZED base64Decode(user_ids)` — 插入时**自动物化解码**为位图聚合状态，查询直接 `bitmap_union(user_code)` 无需手动解码 |
+| `shard` Int32 | 分片 ID（对应构建侧 4 分片并行：`USER_CODE_INTERVAL` 4 段 user_code 区间） |
+| `_batch_num` String | 批次时间，PRIMARY KEY 首字段（同一标签多批次共存，按批次精确命中） |
+| 引擎 | `ReplicatedMergeTree`（bingshan_cluster 集群副本表，`_local` 为本地副本表，配合 Distributed 表对外查询） |
+| 分区 | `(dt, tag_name)` 双字段分区（按天 + 按标签） |
+| 排序 | `(_batch_num, tag_name, tag_value)` — 批次、标签名、标签值三级索引 |
+| TTL | `dt + toIntervalDay(7)` — 数据 7 天自动过期清理 |
+| 存储策略 | `hdd_in_order`（HDD 顺序写入）+ 128 索引粒度 |
+
+**与旧版（v1 推测结构）的差异**：早期版本采用 `AggregatingMergeTree` + 直接聚合列，生产版改为 **String 列 + MATERIALIZED 物化解码列** 的 ReplicatedMergeTree 设计——写入时只需存 base64 字符串（无需在写入路径执行位图聚合），查询时物化列自动提供 `groupBitmap` 聚合状态，兼顾写入效率与查询性能。
 
 ## 查询模式
 
+实际查询面向 `rpt_wanxiang_{brandId}_{tagtype}_view`（Distributed 视图，包装 `_local` 副本表），聚合物化列 `user_code`：
+
 ### 单标签人群获取
 ```sql
-SELECT bitmap_union(bitmap_ids)
-FROM crowd_table
-WHERE label_key = 'city' AND label_value = '北京'
+SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+FROM hdp_teu_dpd_clickhousedb.hdp_teu_dpd_rpt_wanxiang_10000_string_view
+WHERE tag_name = 'city' AND tag_value = '北京'
 ```
 
 ### 多标签交集（人群圈选）
 ```sql
 SELECT bitmap_and(
-    (SELECT bitmap_union(bitmap_ids) FROM crowd_table WHERE label_key = 'city' AND label_value = '北京'),
-    (SELECT bitmap_union(bitmap_ids) FROM crowd_table WHERE label_key = 'is_vip' AND label_value = '1')
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10000_string_view WHERE tag_name='city' AND tag_value='北京'),
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10000_string_view WHERE tag_name='is_vip' AND tag_value='1')
 )
 ```
 
@@ -153,10 +181,13 @@ SELECT bitmap_and(
 ```sql
 SELECT uid FROM idmapping_table
 WHERE bitmap_contains(
-    (SELECT bitmap_union(bitmap_ids) FROM crowd_table WHERE ...),
+    (SELECT IFNULL(bitmap_union(user_code), bitmap_empty())
+     FROM rpt_wanxiang_10000_string_view WHERE tag_name='city' AND tag_value='北京'),
     CAST(code AS INT)  -- user_code → bit 位置
 )
 ```
+
+> 注：`IFNULL(..., bitmap_empty())` 兜底空标签；嵌套标签（KV）查询用 `rpt_wanxiang_{brand}_nested_{type}_view` 的 `sub_tag_name` / `sub_tag_value` 字段，完整示例见 [[bitmap-construction-engineering]] 八·五节。
 
 ## 大人群包的分桶 Bitmap
 

@@ -4,6 +4,16 @@
 
 ---
 
+## [2026-08-06] update | 用户-标签 Bitmap 概念页 CK 表结构更新为生产真实结构
+
+- 用户提供 hdp_teu_dpd_rpt_wanxiang_23_string_v2_local 实际建表语句
+- 替换推测的 AggregatingMergeTree 结构为 ReplicatedMergeTree 真实结构：
+  - user_ids String（Base64 编码 Bitmap）+ user_code 物化列 base64Decode 自动解码
+  - shard 分片 / _batch_num 批次（PRIMARY KEY 首字段）
+  - PARTITION BY (dt, tag_name)，TTL 7 天，hdd_in_order 存储策略
+- 查询模式更新为 rpt_wanxiang_{brand}_view + bitmap_union(user_code)
+- 更新 log.md
+
 ## [2026-08-06] ingest | 万象实体页
 
 - 创建 entities/wanxiang.md — 万象增长服务平台实体页
