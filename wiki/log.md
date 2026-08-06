@@ -4,6 +4,18 @@
 
 ---
 
+## [2026-08-06] ingest | WorkBuddy 数仓专家团（ishare 文章）
+
+- CDP 抓取 58 知享文章（ishare id=130675）：WorkBuddy 数仓专家团
+- 归档原文到 meishi_docs/ishare/workbuddy-data-warehouse-expert-team.md
+- 创建 topics/workbuddy-data-warehouse-expert-team.md：
+  - 五角色 AI 专家团（顾全局/高见远/徐维度/寇豆码/严把关）+ 职责边界矩阵
+  - 指标库 = 人工唯一职责（定规则 vs 写代码分离）
+  - 详细设计文档 = 协作中枢（ETL 开发与测试并行）
+  - 六维度测试、传统 vs 专家团全流程对比
+  - 关联 ai-agent / agent-tool-selection / spec-driven-development
+- 更新 index.md（110 页）+ log.md
+
 ## [2026-08-06] update | 用户-标签 Bitmap 数据流程完善
 
 - 爬取"数据应用部分分享（离线）"（space/1801880755144548352），20 张图归档到 _来源文档/

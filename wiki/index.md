@@ -3,15 +3,16 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 109
+- Total pages: 110
 - Claims: 0
-- Sources: 10
+- Sources: 11
 - Entities: 42
 - Concepts: 40
 - Syntheses: 6
 - Reports: 10
 
 ### Sources
+- [WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化](topics/workbuddy-data-warehouse-expert-team.md) — 58 五角色 AI 专家团（指标库定规则 + 详细设计文档中枢 + 全自动开发），人工只维护指标库 `#WorkBuddy #AI Agent #数仓 #自动化`
 - [万象文档归档索引](topics/wanxiang-docs-archive.md) — 万象美事文档空间完整归档概述与导航 `#万象 #文档归档 #导航`
 - [万象文档完整目录树](topics/wanxiang-docs-tree.md) — 823 个文档的完整目录树，点击可跳转到本地 Markdown 文件 `#万象 #目录树 #本地文档`
 - [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md) — 基于美事文档爬取的标签→CK 6步处理流水线完整梳理，含格式化、位图构建、并发控制、查询模式 `#万象 #ClickHouse #数据接入`
