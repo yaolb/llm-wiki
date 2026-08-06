@@ -25,7 +25,7 @@ related_sources: 4
 
 ### 1.1 数据模型：倒排索引 → 位图的三层映射
 
-```
+```text
 标签场景:  每个 tag_value = 一个 term
            term → postings list = 包含该标签值的 doc id 集合
 
@@ -121,7 +121,8 @@ ES 内部:   doc id 在 segment 内从 0 顺序分配（连续整数空间）
 **痛点**：万象 4.0 实时人群服务目前受限于 CK 天级 ETL，标签入库到可圈选有数小时延迟。
 
 **方案**：
-```
+
+```text
 实时标签流（Kafka）→ ES 索引（秒级可见）→ bool+filter 圈选 → 结果同步 CK 人群包表
                     ↓
             用户 doc 结构: {"user_code": 12345, "tags": ["age:25", "gender:男", "city:北京"]}
@@ -137,9 +138,14 @@ ES 内部:   doc id 在 segment 内从 0 顺序分配（连续整数空间）
 
 **痛点**：当前 DSL 的嵌套圈选 SQL 最重——跨 sub_tag AND + unnest_bitmap 解码 + 子标签值聚合（HAVING SUM），一条查询数百行。
 
-**方案 A（原生 ES，适合单层 KV）**：嵌套标签用 `flattened` 类型（`{"latest_days": 7, "mer_id": 8}`），圈选 = 多个 `term` 组合。缺点：flattened 不支持跨 sub_tag 的"聚合值"条件（如金额求和 > X）。
+**方案对比**：
 
-**方案 B（定制编码，适合聚合条件）**：把嵌套标签的聚合结果**预计算成普通标签**写入 ES（如 `zp_consume_amount_sum_7d` 直接是一个 range 可查的数值标签）——把复杂查询变成简单 term/range。这本质是把"查询期计算"前移为"写入期计算"，与万象当前 Spark ETL 的定位一致，改动最小。
+| | 方案 A：原生 flattened | 方案 B：预计算标签 |
+|---|---|---|
+| 适用 | 单层 KV 过滤 | 聚合型条件（金额求和 > X 等） |
+| 实现 | `flattened` 类型（`{"latest_days": 7, "mer_id": 8}`），多个 `term` 组合 | 聚合结果预计算成普通标签（如 `zp_consume_amount_sum_7d`）写入 ES，range 直接可查 |
+| 优点 | 无额外 ETL | 复杂查询 → 简单 term/range；查询期计算前移为写入期计算，与现 Spark ETL 定位一致，改动最小 |
+| 缺点 | 不支持跨 sub_tag 的"聚合值"条件 | 预计算标签量随组合数增长 |
 
 **推荐：A+B 结合**——简单 KV 过滤走 flattened，聚合型条件走预计算标签。复杂的 unnest_bitmap 解码逻辑留在 CK 侧做历史数据回溯。
 
