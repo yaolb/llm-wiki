@@ -4,6 +4,17 @@
 
 ---
 
+## [2026-08-06] ingest | ES 倒排索引 Bitmap 机制研究 + 万象借鉴方案
+
+- 经 grilling 确认需求：组合方案（机制研究+对比+借鉴设计）、源码级深度+评审级结论、三场景（实时圈选/复杂嵌套圈选/画像分布分析）、集团级 ES 已有+7.x/8.x 通用+定制分支
+- 抓取并归档万象 ES 调研报告（space/2043900981556649984 → _来源文档/ES调研报告.md）
+- 创建 synthesis/elasticsearch-bitmap-inverted-index-adoption.md：
+  - Lucene 存储层 FOR/PFOR/bit-packed/skip list/singleton（存时压）
+  - 查询执行层 IndexedDISI（65536 分块三态，与万象 bucket 同构）/FixedBitSet/SparseFixedBitSet/BooleanQuery/filter cache（查时位图）
+  - ES vs CK 对比表 + 三场景借鉴方案 + 定制分支（Lucene codec 插件/长尾 singleton/热门位图缓存）
+- 修复 _来源文档/马建彪工作交接.md 格式（表格链接粘连/空链接/裸SQL/表清单结构化）
+- 更新 index.md（109 页）+ log.md
+
 ## [2026-08-06] update | 用户-标签 Bitmap 概念页 CK 表结构更新为生产真实结构
 
 - 用户提供 hdp_teu_dpd_rpt_wanxiang_23_string_v2_local 实际建表语句

@@ -3,12 +3,12 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 108
+- Total pages: 109
 - Claims: 0
 - Sources: 10
 - Entities: 42
 - Concepts: 40
-- Syntheses: 5
+- Syntheses: 6
 - Reports: 10
 
 ### Sources
@@ -114,6 +114,7 @@
 - [已 Push 代码撤回：Git revert vs reset](concepts/git-revert-vs-reset.md) — 公共分支用 revert，私有分支用 reset，面试高频题 `#Git #版本控制 #工作流`
 
 ### Syntheses
+- [ES 倒排索引 Bitmap 机制研究与万象借鉴方案](syntheses/elasticsearch-bitmap-inverted-index-adoption.md) — Lucene 倒排索引位图机制源码级研究（FOR/PFOR/IndexedDISI/filter cache）+ ES vs CK 对比 + 实时圈选/嵌套圈选/画像分析三场景借鉴方案 `#Elasticsearch #倒排索引 #Bitmap #万象`
 - [2026上半年万象项目复盘](syntheses/2026-h1-wanxiang-review.md)
 - [AI增强开发三件套：把Vibe Coding拉回工程交付](syntheses/ai-dev-trifecta.md)
 - [AI编程Agent框架对比分析](syntheses/agent-framework-comparison.md)
