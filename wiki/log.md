@@ -309,3 +309,15 @@
 - 重点分析：云平台通过环境变量覆盖 spring.application.name 区分灰度/线上环境
 - 补充 Spring Cloud Gateway + Nacos 灰度路由完整实现
 - 增加与指标网关灰度方案的对比矩阵
+
+## [2026-08-09] ingest | 从 Arrow 到 Iceberg 到 Polaris 到 Ossie（微信公众号「本体与AI」）
+
+- 爬取微信公众号文章：https://mp.weixin.qq.com/s/4EpQTgZdD2wqg-5s-wtIog
+- 归档原文到 raw/data-stack-semantic-standardization-wechat.md
+- 新增 topics/data-stack-semantic-standardization.md：
+  - 大数据栈十年五层开放标准演进：Parquet(2013 文件层) → Arrow(2016 内存层) → Iceberg(2020 表格式) → Polaris(2025 目录层) → Ossie(2026 语义层)
+  - 核心洞察：每层稳定后行业把下一层交出去做标准；开放标准最难的是竞品签字（Snowflake×Databricks 共推 Polaris）
+  - Ossie 语义层 = 给数据表加"翻译说明书"（YAML 字段→业务概念、指标算法、同义词），AI Agent 倒逼语义标准化
+  - 标签：agent / 大数据 / 语义
+- 关联 ontology / ai-agent / rag-retrieval-augmented-generation
+- 更新 index.md（110→111 页）+ log.md
