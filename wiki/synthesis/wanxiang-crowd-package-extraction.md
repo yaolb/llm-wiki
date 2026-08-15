@@ -17,7 +17,7 @@ updated: 2026-07-30
 
 ## 概述
 
-人群包提取是万象平台（冰山项目）的核心模块，数据引擎组负责在 Clickhouse + Spark Thrift Server + Redis 三层架构上实现标签圈选、人群包导出、人群包限制/分包等能力。整个提取链路从传统 ES 引擎演进至 CK 原生位图架构。
+人群包提取是万象平台（冰山项目）的核心模块，数据引擎组负责在 Clickhouse + Spark Thrift Server + Redis 三层架构上实现标签圈选、人群包导出、人群包限制/分包等能力。整个提取链路从传统 ES 引擎演进至 CK 原生位图架构，底层依赖 [[roaringbitmap]] 压缩位图与 [[user-code-encoding]] 用户编码。
 
 ## 技术演进
 
@@ -52,6 +52,8 @@ Redis反解      Spark UDTF     RoaringBitmap limit
 
 ## 用户编码
 
+> 编码机制详解见 [[user-code-encoding]]。
+
 ### 编码策略
 - 全品牌用户在 **UINT32 (0~2³²-1)** 范围内顺序编码
 - 按高 16 位划分为 **16384 个分桶（bucket）**，桶内顺序递增
@@ -74,6 +76,8 @@ SubKey = idtype_编码code
 
 ## 存储层：Clickhouse RoaringBitmap
 
+> 位图构建的完整工程实现（Spark UDAF、序列化、CK 写入、分桶）见 [[bitmap-construction-engineering]]；数据结构本体见 [[roaringbitmap]]。
+
 ### 基础标签存储
 **字符串类型：** 字段包括 tag_value(string)、userids(string 位图base64加密)、user_code(bitmap 物化列)、tag_name(string)、dt(日期分区)。
 **数值类型：** 同上，tag_value 为 bigint。
@@ -95,6 +99,8 @@ SubKey = idtype_编码code
 5. 实测：数据录入从 3h 降至 40min
 
 ## 圈选 DSL 协议
+
+> 标签-用户位图构建与集合运算原理见 [[user-tag-bitmap-construction]]。
 
 ### 集合运算
 and（交集，多条件）、or（并集，多条件）、sub（差集，有序第一个被减数）、not（补集，仅一个条件）
@@ -188,5 +194,10 @@ and（交集，多条件）、or（并集，多条件）、sub（差集，有序
 
 ## Related
 <!-- openclaw:wiki:related:start -->
-- No related pages yet.
+- [[user-tag-bitmap-construction]] — 用户-标签 Bitmap 位图构建（集合交并差运算原理）
+- [[bitmap-construction-engineering]] — 用户-标签 Bitmap 构建的工程实现详解
+- [[roaringbitmap]] — 压缩位图数据结构本体
+- [[user-code-encoding]] — 用户编码机制（位图的 bit 索引基石）
+- [[wanxiang-tag-ck-pipeline]] — 万象标签处理与 CK 入库流水线
+- [[elasticsearch-bitmap-inverted-index-adoption]] — ES 倒排索引 Bitmap 机制研究与万象借鉴方案
 <!-- openclaw:wiki:related:end -->

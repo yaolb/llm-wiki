@@ -326,3 +326,8 @@
 - 检索 wanxiang-dev-docs 业务合作文档，盘点与万象合作的业务线与外部数据/资方
 - 内部合作 BG/BU：HBG（爱房/商业地产/家居）、HRG（招聘/魔方）、LBG（家服/到家）、ABG（新车/二手车）、用价多部门、UXD
 - 外部合作方：友盟（数据采买）、个推（外部标签）、中银/北银（数科项目资方）
+
+## [2026-08-15] query+fix | Bitmap 文档盘点与修复
+- 盘点：7 个核心 bitmap 页面（user-tag-bitmap-construction / bitmap-construction-engineering / roaringbitmap / user-code-encoding / elasticsearch-bitmap-inverted-index-adoption / wanxiang-crowd-package-extraction / wanxiang-tag-ck-pipeline）
+- 修复 index.md syntheses/→synthesis/ 断链（7 处），补充人群包提取页索引条目
+- 接入孤立页 wanxiang-crowd-package-extraction（补 4 处 wikilink + Related 区块），idmapping 接入位图网络

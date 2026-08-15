@@ -116,13 +116,14 @@
 - [已 Push 代码撤回：Git revert vs reset](concepts/git-revert-vs-reset.md) — 公共分支用 revert，私有分支用 reset，面试高频题 `#Git #版本控制 #工作流`
 
 ### Syntheses
-- [ES 倒排索引 Bitmap 机制研究与万象借鉴方案](syntheses/elasticsearch-bitmap-inverted-index-adoption.md) — Lucene 倒排索引位图机制源码级研究（FOR/PFOR/IndexedDISI/filter cache）+ ES vs CK 对比 + 实时圈选/嵌套圈选/画像分析三场景借鉴方案 `#Elasticsearch #倒排索引 #Bitmap #万象`
-- [2026上半年万象项目复盘](syntheses/2026-h1-wanxiang-review.md)
-- [AI增强开发三件套：把Vibe Coding拉回工程交付](syntheses/ai-dev-trifecta.md)
-- [AI编程Agent框架对比分析](syntheses/agent-framework-comparison.md)
-- [BMAD vs OpenSpec：AI驱动开发的航母与特种兵](syntheses/bmad-vs-openspec.md)
-- [LLM 模型融合深度报告：原理、路线、实现与评测](syntheses/model-fusion-deep-report.md)
-- [Agent Memory 五篇关键论文综述](syntheses/agent-memory-five-papers.md)
+- [ES 倒排索引 Bitmap 机制研究与万象借鉴方案](synthesis/elasticsearch-bitmap-inverted-index-adoption.md) — Lucene 倒排索引位图机制源码级研究（FOR/PFOR/IndexedDISI/filter cache）+ ES vs CK 对比 + 实时圈选/嵌套圈选/画像分析三场景借鉴方案 `#Elasticsearch #倒排索引 #Bitmap #万象`
+- [万象人群包提取方案](synthesis/wanxiang-crowd-package-extraction.md) — CK 原生位图存储替代宽表的人群包圈选/导出/限制/分包方案，ES→CK 位图架构演进 `#万象 #RoaringBitmap #ClickHouse #人群包`
+- [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
+- [AI增强开发三件套：把Vibe Coding拉回工程交付](synthesis/ai-dev-trifecta.md)
+- [AI编程Agent框架对比分析](synthesis/agent-framework-comparison.md)
+- [BMAD vs OpenSpec：AI驱动开发的航母与特种兵](synthesis/bmad-vs-openspec.md)
+- [LLM 模型融合深度报告：原理、路线、实现与评测](synthesis/model-fusion-deep-report.md)
+- [Agent Memory 五篇关键论文综述](synthesis/agent-memory-five-papers.md)
 - [OpenClaw vs Hermes Agent — 执行派 vs 进化派全面对比](synthesis/openclaw-vs-hermes.md) — 龙虾 vs 爱马仕，2026 年两大顶流 AI Agent 框架对比 `#OpenClaw #Hermes #龙虾 #爱马仕`
 
 ### Reports

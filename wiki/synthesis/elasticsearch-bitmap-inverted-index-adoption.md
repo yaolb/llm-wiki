@@ -12,7 +12,7 @@ related_sources: 4
 
 本文基于 [[user-tag-bitmap-construction]]（用户-标签 Bitmap 位图构建）展开，系统研究 Elasticsearch/Lucene 倒排索引中的位图机制，与万象现有 CK+RoaringBitmap 方案对比，并给出三个场景（实时圈选 / 复杂嵌套标签圈选 / 画像分布分析）的借鉴落地设计，含 ES 能力不足时的定制实现分支。
 
-**背景**：万象交接文档已存在「[ES 调研报告](/meishi_docs/万象/归档/_来源文档/ES调研报告.md)」（人群包提取场景的压测优化：`_source:false`、`_sort:_doc`、search_after/scroll/slice），说明团队正在评估 ES 用于标签/人群场景。
+**背景**：万象交接文档已存在「[ES 调研报告](/meishi_docs/万象/归档/_来源文档/ES调研报告.md)」（人群包提取场景的压测优化：`_source:false`、`_sort:_doc`、search_after/scroll/slice），说明团队正在评估 ES 用于标签/人群场景。人群包提取的完整架构见 [[wanxiang-crowd-package-extraction]]。
 
 **结论先行**：
 1. Lucene 存储层**刻意不用位图**存 postings（压缩整数序列更省空间），查询时才**物化为位图**加速交并差——"存时压、查时位图"是核心哲学
