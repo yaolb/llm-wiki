@@ -321,3 +321,8 @@
   - 标签：agent / 大数据 / 语义
 - 关联 ontology / ai-agent / rag-retrieval-augmented-generation
 - 更新 index.md（110→111 页）+ log.md
+
+## [2026-08-15] query | 万象合作方盘点
+- 检索 wanxiang-dev-docs 业务合作文档，盘点与万象合作的业务线与外部数据/资方
+- 内部合作 BG/BU：HBG（爱房/商业地产/家居）、HRG（招聘/魔方）、LBG（家服/到家）、ABG（新车/二手车）、用价多部门、UXD
+- 外部合作方：友盟（数据采买）、个推（外部标签）、中银/北银（数科项目资方）
