@@ -331,3 +331,20 @@
 - 盘点：7 个核心 bitmap 页面（user-tag-bitmap-construction / bitmap-construction-engineering / roaringbitmap / user-code-encoding / elasticsearch-bitmap-inverted-index-adoption / wanxiang-crowd-package-extraction / wanxiang-tag-ck-pipeline）
 - 修复 index.md syntheses/→synthesis/ 断链（7 处），补充人群包提取页索引条目
 - 接入孤立页 wanxiang-crowd-package-extraction（补 4 处 wikilink + Related 区块），idmapping 接入位图网络
+
+## [2026-08-19] ingest | J-Space 插件让 DeepSeek V4 Pro 0813 超越 Fable 5（头条「智猩猩AI」）
+
+- 抓取头条文章（智猩猩AI 公众号转载，原文 mp.weixin.qq.com）：
+  - 头条 URL：https://www.toutiao.com/article/7675317704001962496/
+  - 发布：2026-08-18，作者 Jun Song 转发社区测试结果，浏览量 25 万+
+- 归档原文到 raw/j-space-deepseek-v4-pro-wechat.md
+- 新增 topics/j-space-deepseek-v4-pro-0813.md：
+  - 核心论点：模型能力 ≠ Agent 最终表现，推理时控制是能力释放"最后一公里"
+  - 两大黑盒现象：接口过拟合（Minimal 依赖）、思维链二极管（路径承诺/推理链长度失当）
+  - J-Space 七大控制组件（工作空间加载/选择性路由/功能性第一人称/稠密轨/持久账本/checkpoint/经验验证恢复闭环）
+  - 实验条件：Harness Minimal + reasoning_effort=max + t=1.0 + top_p=0.95，多数基准超 Fable 5
+- 新增 entities/j-space-cognition-suite.md（推理时控制协议插件）
+- 更新 entities/deepseek.md：补充 V4 Pro 0813（1.6T/49B/1M 上下文、官方基准、定价）与 DeepSeek Harness v0.1（MIT、Cordis 插件化）
+- 标签：DeepSeek / AI Agent / 推理时控制 / 基准测试
+- 关联 ai-agent / context-engineering
+- 更新 index.md（111→113 页）+ log.md

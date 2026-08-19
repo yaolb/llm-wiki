@@ -3,7 +3,7 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 111
+- Total pages: 113
 - Claims: 0
 - Sources: 11
 - Entities: 42
@@ -12,6 +12,7 @@
 - Reports: 10
 
 ### Sources
+- [J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5](topics/j-space-deepseek-v4-pro-0813.md) — 推理时控制协议插件 J-Space Cognition Suite V3.6 缩小"能力实现损失"，让 V4 Pro 0813 在多数 Agent/Coding 基准上超越 Fable 5（2026-08）`#DeepSeek #AI Agent #推理时控制 #基准测试`
 - [从 Arrow 到 Iceberg 到 Polaris 到 Ossie：语义标准化的最后一块拼图](topics/data-stack-semantic-standardization.md) — 大数据栈十年五层开放标准演进：Parquet 文件层→Arrow 内存层→Iceberg 表格式→Polaris 目录层→Ossie 语义层（2026），AI Agent 倒逼语义标准化 `#agent #大数据 #语义`
 - [WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化](topics/workbuddy-data-warehouse-expert-team.md) — 58 五角色 AI 专家团（指标库定规则 + 详细设计文档中枢 + 全自动开发），人工只维护指标库 `#WorkBuddy #AI Agent #数仓 #自动化`
 - [万象文档归档索引](topics/wanxiang-docs-archive.md) — 万象美事文档空间完整归档概述与导航 `#万象 #文档归档 #导航`
@@ -65,6 +66,7 @@
 - [Llama-3](entities/llama-3.md)
 - [Mistral](entities/mistral.md)
 - [DeepSeek](entities/deepseek.md)
+- [J-Space Cognition Suite](entities/j-space-cognition-suite.md) — 推理时控制协议插件：不修改权重，通过工作空间/路由/持久账本/checkpoint 等闭环减少"能力实现损失"，V3.6 助 V4 Pro 0813 超越 Fable 5 `#AI Agent #推理时控制 #开源`
 - [Qwen](entities/qwen.md)
 - [RoaringBitmap](entities/roaringbitmap.md) — 高效压缩位图数据结构，大数据人群圈选标准库，官方仓库 github.com/roaringbitmap/roaringbitmap `#Bitmap #数据结构 #万象`
 - [万象](entities/wanxiang.md) — 58集团一站式增长服务平台，标签画像/人群圈选/用户编码，823文档归档入口 `#万象 #数据资产 #增长平台`
