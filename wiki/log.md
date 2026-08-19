@@ -382,3 +382,21 @@
   - 趋势：块级召回→句子级上下文、重排器+高亮头一体化、高亮即上下文工程
 - 更新 entities/milvus.md + topics/milvus-3-0-highlight.md 关联
 - 更新 index.md（115→116 页）+ log.md
+
+## [2026-08-19] ingest | Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析（AI寒武纪 转载）
+
+- 抓取公众号文章（AI寒武纪 转载 Anthropic 官方博客）：
+  - 原文：https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude
+  - 发布：2026-06-04（公众号转载）
+- 归档原文到 raw/anthropic-claude-data-analytics-wechat.md
+- 新增 topics/anthropic-data-analytics-agent.md：
+  - 核心结论：95% 分析查询自动化、约 95% 准确率；"数据分析不是写代码"
+  - 三类失败模式：映射模糊 / 数据过期 / 检索失败
+  - 分层技术栈：数据基础（权威数据集+三重执行标准+单一代码库+元数据一等公民）→ 可信数据源（语义层>血缘>查询语料库>业务上下文）→ Skill（路由器+Unbook）
+  - 验证三件套：离线评测 / 消融实验（负面结果价值）/ 在线验证（对抗性审查+6%、来源页脚、静默失败未解决）
+  - 关键数据：无 Skill 21%→有 Skill 95%+；Skill 不维护一个月 95%→65%
+  - 附 Skill File Skeleton 完整框架要点
+- 更新 entities/claude-code.md 关联
+- 标签：Anthropic / Claude / 数据分析 / Agent / 语义层
+- 关联 context-engineering / spec-driven-development / data-stack-semantic-standardization / workbuddy
+- 更新 index.md（116→117 页）+ log.md
