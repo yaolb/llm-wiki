@@ -400,3 +400,8 @@
 - 标签：Anthropic / Claude / 数据分析 / Agent / 语义层
 - 关联 context-engineering / spec-driven-development / data-stack-semantic-standardization / workbuddy
 - 更新 index.md（116→117 页）+ log.md
+
+## [2026-08-19] fix | wiki-viewer 端口冲突修复
+- 根因：server.mjs 未运行，端口 5174 被 datawork/frontend vite 与 deepseek-harness vitepress 两个无关 dev server 抢占，浏览器打开的是错误页面，点击左侧索引无法显示
+- 修复：默认端口 5174 → 6174，规避其他项目 5xxx 端口自增冲突
+- 验证：/api/pages（159 页）、/api/page、index.html 均正常，server 已运行于 localhost:6174
