@@ -9,7 +9,7 @@ import remarkGfm from 'remark-gfm';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT || 5174;
+const PORT = process.env.PORT || 6174;
 const WIKI_DIR = path.resolve(__dirname, '../wiki');
 // 归档文档目录（与 llm-wiki 平级，位于 workspace/meishi_docs）
 const MEISHI_DIR = path.resolve(__dirname, '../../meishi_docs');
