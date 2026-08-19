@@ -55,6 +55,9 @@ highlighter = SemanticHighlighter(
 - [[上下文工程 (Context Engineering)]] — Context Pruning 上下文剪枝相关
 - [[AI Agent（智能体）]] — Agent 检索噪音与上下文成本问题
 
+## 相关综述
+- [[语义高亮技术全景：从词法匹配到语义剪枝]]（synthesis/semantic-highlighting-techniques.md）
+
 ## 延展阅读
 - [原文（Zilliz 公众号）](https://mp.weixin.qq.com/s/LLOT7O4fbmGh2nmMA3s-Jg)
 - [Milvus 3.0 官宣开源](https://milvus.io/)（系列首篇）

@@ -365,3 +365,20 @@
 - 标签：Milvus / 向量数据库 / RAG / 上下文剪枝
 - 关联 rag-retrieval-augmented-generation / context-engineering / ai-agent
 - 更新 index.md（113→115 页）+ log.md
+
+## [2026-08-19] ingest | 语义高亮技术全景综述（多源调研）
+
+- 用户发起：分析当前语义高亮技术现状
+- 调研来源（4 个）：
+  - Zilliz 公众号：Milvus 3.0 Highlight 文章（已入库 topics/milvus-3-0-highlight.md）
+  - arXiv 2508.02872：Highlight & Summarize: RAG without the jailbreaks
+  - Zilliz 开源双语语义高亮模型公告（PR Newswire）+ HuggingFace semantic-highlight-bilingual-v1
+  - Naver Provence / XProvence（Cross-Encoder + 高亮头）
+- 新增 synthesis/semantic-highlighting-techniques.md：
+  - 原理：Encoder-only token 打分（0-1）→ 句子级聚合 → 阈值过滤
+  - 代表模型：Zilliz semantic-highlight-bilingual-v1（0.6B/BGE-M3 Reranker v2 底座/8192 token 窗口）、Naver Provence/XProvence（重排器加头，近零成本）
+  - 价值：token 成本降 70-80%、质量提升、可解释性、Agent 工作流
+  - H&S 设计模式：highlighter+summarizer 解耦，用户问题不暴露给生成 LLM，防 jailbreak
+  - 趋势：块级召回→句子级上下文、重排器+高亮头一体化、高亮即上下文工程
+- 更新 entities/milvus.md + topics/milvus-3-0-highlight.md 关联
+- 更新 index.md（115→116 页）+ log.md

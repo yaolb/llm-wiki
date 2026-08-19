@@ -44,6 +44,7 @@ Milvus 是 Zilliz 开源的分布式向量数据库，面向 AI 应用的大规�
 
 ## 相关摘要
 - [[Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音]]（topics/milvus-3-0-highlight.md）
+- [[语义高亮技术全景：从词法匹配到语义剪枝]]（synthesis/semantic-highlighting-techniques.md）
 
 ## 相关概念
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
