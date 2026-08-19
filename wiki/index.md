@@ -3,7 +3,7 @@
 ## Generated
 <!-- openclaw:wiki:index:start -->
 - Render mode: `native`
-- Total pages: 113
+- Total pages: 115
 - Claims: 0
 - Sources: 11
 - Entities: 42
@@ -12,6 +12,7 @@
 - Reports: 10
 
 ### Sources
+- [Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音](topics/milvus-3-0-highlight.md) — Milvus 3.0 高亮能力：BM25/TextMatch 词法高亮 + 自研语义高亮模型（与 Context Pruning 一体两面，可剪 80% 上下文），降低 RAG/Agent 检索噪音与 token 成本（2026-08）`#Milvus #向量数据库 #RAG #上下文剪枝`
 - [J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5](topics/j-space-deepseek-v4-pro-0813.md) — 推理时控制协议插件 J-Space Cognition Suite V3.6 缩小"能力实现损失"，让 V4 Pro 0813 在多数 Agent/Coding 基准上超越 Fable 5（2026-08）`#DeepSeek #AI Agent #推理时控制 #基准测试`
 - [从 Arrow 到 Iceberg 到 Polaris 到 Ossie：语义标准化的最后一块拼图](topics/data-stack-semantic-standardization.md) — 大数据栈十年五层开放标准演进：Parquet 文件层→Arrow 内存层→Iceberg 表格式→Polaris 目录层→Ossie 语义层（2026），AI Agent 倒逼语义标准化 `#agent #大数据 #语义`
 - [WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化](topics/workbuddy-data-warehouse-expert-team.md) — 58 五角色 AI 专家团（指标库定规则 + 详细设计文档中枢 + 全自动开发），人工只维护指标库 `#WorkBuddy #AI Agent #数仓 #自动化`
@@ -49,6 +50,7 @@
 - [khazix-skills](entities/khazix-skills.md)
 - [LightRAG](entities/lightrag.md)
 - [MemPalace](entities/mempalace.md)
+- [Milvus](entities/milvus.md) — Zilliz 开源向量数据库，3.0 新增 Highlight 词法/语义高亮 + Context Pruning 上下文剪枝（可剪 80%），面向 RAG/Agent 检索降噪 `#向量数据库 #RAG #上下文剪枝`
 - [mergekit](entities/mergekit.md)
 - [MUX0](entities/mux0.md)
 - [OpenClaw](entities/openclaw.md)

@@ -348,3 +348,20 @@
 - 标签：DeepSeek / AI Agent / 推理时控制 / 基准测试
 - 关联 ai-agent / context-engineering
 - 更新 index.md（111→113 页）+ log.md
+
+## [2026-08-19] ingest | Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音（Zilliz 公众号）
+
+- 抓取公众号文章（Zilliz，作者岳志澄）：
+  - URL：https://mp.weixin.qq.com/s/LLOT7O4fbmGh2nmMA3s-Jg
+  - Milvus 3.0 开源解读系列
+- 归档原文到 raw/milvus-3-0-highlight-wechat.md
+- 新增 topics/milvus-3-0-highlight.md：
+  - 问题：饱和检索噪音浪费 token、分散 LLM 注意力
+  - 词法高亮 LexicalHighlighter：BM25/TextMatch token 匹配、fragment 机制（fragment_size=100 / num_of_fragments=5 / fragment_offset）
+  - 语义高亮 SemanticHighlighter：独立语义模型二次解读，解决查询与文档词汇不重叠问题
+  - 自研开源语义高亮模型：中英双语/大窗口/协议友好，与 Context Pruning 一体两面，可剪 80% 上下文
+  - 边界：高亮为后处理，不参与召回排序；语义高亮依赖外部模型部署
+- 新增 entities/milvus.md（Zilliz 开源向量数据库，3.0 能力全景）
+- 标签：Milvus / 向量数据库 / RAG / 上下文剪枝
+- 关联 rag-retrieval-augmented-generation / context-engineering / ai-agent
+- 更新 index.md（113→115 页）+ log.md
