@@ -76,6 +76,7 @@ RoaringBitmap 内部:
 - [[user-tag-bitmap-construction]] — 用户-标签 Bitmap 位图构建原理
 - [[bitmap-construction-engineering]] — Bitmap 构建工程实现详解（Spark UDAF/序列化/Bucket 分桶）
 - [[wanxiang-tag-ck-pipeline]] — 万象标签处理与 CK 入库流水线
+- [[用户画像系列：从标签体系到 AI 检索]] — 标签存储章节：宽表 vs 位图两种模型对比，位图适合“按标签找人群”
 
 ## 延展阅读
 

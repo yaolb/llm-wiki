@@ -405,3 +405,10 @@
 - 根因：server.mjs 未运行，端口 5174 被 datawork/frontend vite 与 deepseek-harness vitepress 两个无关 dev server 抢占，浏览器打开的是错误页面，点击左侧索引无法显示
 - 修复：默认端口 5174 → 6174，规避其他项目 5xxx 端口自增冲突
 - 验证：/api/pages（159 页）、/api/page、index.html 均正常，server 已运行于 localhost:6174
+
+## [2026-08-21] ingest | 用户画像系列参考资料汇编
+- 归档素材到 raw/user-profile-series-reference.md（9 主题：标签体系/应用场景/标签挖掘/标签存储/人群圈选/ID-Mapping/AI检索/标签营销/在线推荐）
+- 新增 topics/user-profile-series.md：三篇九主题框架 + 核心知识点提炼（标签三分法、宽表 vs 位图、OneID 图计算、RAG 两种标签场景、DMP vs CDP、推荐漏斗）+ 合规提醒 + 写作技巧
+- 更新关联：idmapping.md（画像链路第一环）、rag-retrieval-augmented-generation.md（标签过滤 vs 标签值注入）、roaringbitmap.md（宽表 vs 位图）、user-tag-bitmap-construction.md（画像九主题全景）
+- 标签：用户画像 / 标签 / Bitmap / 人群圈选 / ID-Mapping / RAG / 营销 / 推荐
+- 更新 index.md + log.md

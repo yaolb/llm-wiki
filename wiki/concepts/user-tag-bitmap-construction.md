@@ -342,6 +342,7 @@ CK → SR 迁移中，Bitmap 的兼容处理：
 
 - [[wanxiang-tag-ck-pipeline]] — 万象标签处理与 CK 入库流水线
 - [[wanxiang]] — 万象数据资产管理平台
+- [[用户画像系列：从标签体系到 AI 检索]] — 画像九主题框架：标签存储（宽表/位图）、人群圈选、ID-Mapping、AI 检索全景
 
 ## 参考来源
 

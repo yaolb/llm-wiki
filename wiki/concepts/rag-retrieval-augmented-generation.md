@@ -58,3 +58,4 @@ RAG 系统需要从检索质量、生成质量、端到端系统三个维度进�
 - [[AI Agent（智能体）]]
 - [向量数据库（Vector Database）](https://www.pinecone.io/learn/vector-database/)
 - [[模型微调（Fine-tuning）]]
+- [[用户画像系列：从标签体系到 AI 检索]] — 画像在 RAG/Agent 中的两种用法：标签作检索过滤器 vs 标签值作查询条件/个性化上下文
