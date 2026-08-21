@@ -99,8 +99,10 @@ RAG 解决"知道什么"，Ontology 解决"怎么运转"。
 - [Executable Ontology Handbook](https://github.com/awch-D/Executable-Ontology-Handbook) — 零依赖中文可执行本体工程手册
 - [2026 企业 AI Agent 本地化部署新范式：Ontology+FDE](https://www.saturn.pub/insights/article-270.html) — 环曜
 - [元枢 — Enterprise ontology intelligence platform](https://github.com/854875058/ontology-driven-platform)
+- [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md) — 企业架构EA之家：业务梳理→本体建模→数智化融合→智能体构建→智能体运行，设计变更评审实战案例
 
 ## 相关概念
 - [[AI Agent（智能体）]]
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
 - [[MCP 模型上下文协议（Model Context Protocol）]]
+- [[本体建模五步法：本体论+AI如何进入复杂工业场景]] — 五步工程落地路径（实体五类/属性四类/关系六类/跨域影响网络/规则+生成式双驱动）

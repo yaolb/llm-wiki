@@ -428,3 +428,16 @@
 - 更新关联：opensquilla-ai-self-verification.md（AI 自验证另一路线）、deepseek.md（v4-flash 验证器后端）
 - 标签：LLM-as-a-Verifier / 推理时验证 / Best-of-N / DeepSeek / Terminal-Bench
 - 更新 index.md + log.md
+
+## [2026-08-21] ingest | 本体建模五步法（企业架构EA之家）
+- 抓取公众号图片消息（企业架构EA之家 eahome.com.cn），OCR 提取 36 张图文内容
+- 归档素材到 raw/ontology-modeling-five-steps-wechat.md
+- 新增 topics/ontology-modeling-five-steps.md：五步法（业务梳理→本体建模→数智化融合→智能体构建→智能体运行）
+  - 业务梳理五类成果（流程/角色/对象/任务/规则）
+  - 本体建模：实体五类（设计/工艺/生产/供应/结果）、属性四类、关系六类（组成/使用/依赖/替代/影响/处置）、跨域影响网络
+  - 数智化融合底座：统一封装/标准化/可治理/可演进
+  - 智能体四要素 + 多智能体专业分工 + 规则与生成式 AI 双驱动可信决策
+  - 运行六环节：问题输入→意图识别→任务规划→多智能体执行→结果校验→决策输出
+- 更新 concepts/ontology.md 交叉引用（与四步建模法互补）
+- 标签：本体论 / Ontology / 多智能体 / 企业AI / 复杂工业场景
+- 更新 index.md + log.md
