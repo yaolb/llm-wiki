@@ -412,3 +412,11 @@
 - 更新关联：idmapping.md（画像链路第一环）、rag-retrieval-augmented-generation.md（标签过滤 vs 标签值注入）、roaringbitmap.md（宽表 vs 位图）、user-tag-bitmap-construction.md（画像九主题全景）
 - 标签：用户画像 / 标签 / Bitmap / 人群圈选 / ID-Mapping / RAG / 营销 / 推荐
 - 更新 index.md + log.md
+
+## [2026-08-21] ingest | 各大模型厂商 KV-Cache 处理方式全景对比
+- 归档素材到 raw/kv-cache-providers-comparison.md（原 workspace 根目录 6月23日分析文档，本次补摄入）
+- 新增 topics/kv-cache-providers-comparison.md：六厂商对比总览（Claude 显式断点/GPT-5 自动/Gemini 混合/DeepSeek 磁盘缓存+MLA/Qwen3 混合/Grok 自动）、按场景选型、Prompt 优化最佳实践、注意力头压缩演进（MHA→MQA→GQA→MLA）
+- 核心结论：DeepSeek 唯一磁盘 KV Cache（MLA 压缩 4×，64 token 最细粒度，命中价 10%）；Claude 最优控制（4 断点）；Gemini 显式 24h TTL 最长
+- 更新关联：prompt-caching.md（KV Cache 上层应用）、deepseek.md（MLA 架构）
+- 标签：KV Cache / Prompt Caching / 推理优化 / DeepSeek / MLA
+- 更新 index.md + log.md

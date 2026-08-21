@@ -29,6 +29,8 @@ AI Agent 每次调用都需携带完整的系统提示词（可达数万 Token�
 ## 相关概念
 - [[AI 编程（AI Programming / AI Coding）]]
 - [[AI Agent（智能体）]]
+- [[各大模型厂商 KV-Cache 处理方式全景对比]] — 六厂商 KV Cache 机制/定价全景：DeepSeek 磁盘缓存+MLA 64 token 细粒度、Claude 显式断点、GPT-5 自动、Gemini/Qwen 混合
 
 ## 相关实体
 - [[Claude Code]]
+- [[DeepSeek]] — MLA 压缩 + 磁盘 KV Cache，命中价 10%、粒度 64 tokens 业界最细

@@ -12,6 +12,7 @@
 - Reports: 10
 
 ### Sources
+- [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md) — 六厂商 KV Cache 机制/定价对比：DeepSeek 磁盘缓存+MLA 压缩 64 token 最细粒度、Claude 显式断点、GPT-5 自动、Gemini/Qwen 混合，含按场景选型与 Prompt 优化实践（2026-06）`#KV Cache #Prompt Caching #推理优化 #DeepSeek #MLA`
 - [用户画像系列：从标签体系到 AI 检索](topics/user-profile-series.md) — 用户画像九主题资料汇编（标签体系/应用场景/挖掘/存储/人群圈选/ID-Mapping/AI检索/营销/推荐），含写作大纲与合规提醒（2026-08）`#用户画像 #标签 #Bitmap #ID-Mapping #RAG`
 - [Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析](topics/anthropic-data-analytics-agent.md) — Anthropic 官方实践：分层数据技术栈（数据基础/可信数据源/Skill）+ 三级验证体系，无 Skill 准确率 21%→有 Skill 95%+（2026-06）`#Anthropic #Claude #数据分析 #Agent #语义层`
 - [Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音](topics/milvus-3-0-highlight.md) — Milvus 3.0 高亮能力：BM25/TextMatch 词法高亮 + 自研语义高亮模型（与 Context Pruning 一体两面，可剪 80% 上下文），降低 RAG/Agent 检索噪音与 token 成本（2026-08）`#Milvus #向量数据库 #RAG #上下文剪枝`
