@@ -12,6 +12,7 @@
 - Reports: 10
 
 ### Sources
+- [LLM-as-a-Verifier：验证作为新的 Scaling 轴](topics/llm-as-a-verifier.md) — 推理时把 LLM 当验证器（Best-of-N 选优）：logprob 期望连续评分+多标准分解+pivot 排序，deepseek-v4-flash 自验证 Terminal-Bench 2.1 达 88% Pass@1，超 Claude Fable 5 且成本 11 倍便宜（2026-07）`#LLM-as-a-Verifier #推理时验证 #Best-of-N #DeepSeek #自验证`
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md) — 六厂商 KV Cache 机制/定价对比：DeepSeek 磁盘缓存+MLA 压缩 64 token 最细粒度、Claude 显式断点、GPT-5 自动、Gemini/Qwen 混合，含按场景选型与 Prompt 优化实践（2026-06）`#KV Cache #Prompt Caching #推理优化 #DeepSeek #MLA`
 - [用户画像系列：从标签体系到 AI 检索](topics/user-profile-series.md) — 用户画像九主题资料汇编（标签体系/应用场景/挖掘/存储/人群圈选/ID-Mapping/AI检索/营销/推荐），含写作大纲与合规提醒（2026-08）`#用户画像 #标签 #Bitmap #ID-Mapping #RAG`
 - [Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析](topics/anthropic-data-analytics-agent.md) — Anthropic 官方实践：分层数据技术栈（数据基础/可信数据源/Skill）+ 三级验证体系，无 Skill 准确率 21%→有 Skill 95%+（2026-06）`#Anthropic #Claude #数据分析 #Agent #语义层`

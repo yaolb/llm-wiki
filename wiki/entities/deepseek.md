@@ -54,6 +54,7 @@ DeepSeek（深度求索）是中国 AI 公司深度求索（DeepSeek）开发的
 ## 相关摘要
 - [[J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5]]（topics/j-space-deepseek-v4-pro-0813.md）
 - [[各大模型厂商 KV-Cache 处理方式全景对比]]（topics/kv-cache-providers-comparison.md）— DeepSeek MLA 压缩 KV Cache ~4×，唯一磁盘缓存厂商，64 token 细粒度命中
+- [[LLM-as-a-Verifier：验证作为新的 Scaling 轴]]（topics/llm-as-a-verifier.md）— deepseek-v4-flash 作验证器，Best-of-5 自验证 88% Pass@1 超 Claude Fable 5，成本 11 倍便宜
 
 ## 相关概念
 - [[混合专家模型（Mixture of Experts, MoE）]]

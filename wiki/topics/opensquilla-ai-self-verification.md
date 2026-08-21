@@ -38,5 +38,6 @@ OpenSquilla 代表了 AI 编程从"辅助生成"向"自主验证"的关键跨越
 ## 相关概念
 - [[红绿回归测试（Red-Green-Regression Pipeline）]]
 - [AI 自验证（Self-Verification）](https://arxiv.org/search/?query=self-verification+AI[AI 自验证（Self-Verification in AI）](https://arxiv.org/search/?query=self-verification+AI[[AI 自验证]]searchtype=all)searchtype=all)
+- [[LLM-as-a-Verifier：验证作为新的 Scaling 轴]] — 验证作为新 scaling 轴：推理时 Best-of-N + 验证器选优，deepseek-v4-flash 自验证 88% Pass@1
 - [[测试驱动开发（Test-Driven Development, TDD）]]
 - [[AI 编程（AI Programming / AI Coding）]]

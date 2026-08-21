@@ -420,3 +420,11 @@
 - 更新关联：prompt-caching.md（KV Cache 上层应用）、deepseek.md（MLA 架构）
 - 标签：KV Cache / Prompt Caching / 推理优化 / DeepSeek / MLA
 - 更新 index.md + log.md
+
+## [2026-08-21] ingest | LLM-as-a-Verifier 论文与官方实现
+- 归档素材到 raw/llm-as-a-verifier-wechat.md（arXiv 2607.05391 + GitHub 官方实现资料）
+- 新增 topics/llm-as-a-verifier.md：验证作为新 scaling 轴，三招核心方法（logprob 期望连续评分 / 重复评估+标准分解 / pivot 排序算法）
+- 关键数据：deepseek-v4-flash 自验证 Best-of-3 86.5%、Best-of-5 88.0%（Oracle 96.6%），超 Claude Fable 5，成本 11 倍便宜
+- 更新关联：opensquilla-ai-self-verification.md（AI 自验证另一路线）、deepseek.md（v4-flash 验证器后端）
+- 标签：LLM-as-a-Verifier / 推理时验证 / Best-of-N / DeepSeek / Terminal-Bench
+- 更新 index.md + log.md
