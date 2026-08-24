@@ -462,3 +462,9 @@
 - 修复：新增 wiki/sources/user-profile-series-reference.md（raw 内容编译版 + frontmatter，type: source），主题页改用 wikilink [[用户画像系列文章 · 参考资料汇编]] 导航
 - 顺带发现：index.md 中 6 个 sources/*.md 链接（ai-gateway-model-routing 等）指向的 wiki/sources/ 目录不存在，文件实际在 raw/——同类坏链，待修复
 - 更新 index.md + log.md
+
+## [2026-08-24] fix | 修复 index.md 历史坏链：7 个 sources/*.md 指向不存在目录
+- 根因：commit 4bf9e82（ingest: AI Agent 分类体系 + PYTHIA + UZI-Skill + AI 网关）起，index.md 的 Sources 条目写成 sources/xxx.md，但文件实际归档在 raw/，wiki/sources/ 从未存在 → viewer 全部 404
+- 修复：7 个 raw 素材（ai-gateway-model-routing / karpathy-llm-wiki-methodology / mcp-official-intro / pythia-local-ai-agent / rag-as-agent-component / rag-evaluation-deepeval / uzi-skill-stock-analysis）复制到 wiki/sources/ 并补 frontmatter（type: source + 原始素材归档链接）
+- 验证：8 个 sources 页面 /api/page 全部 200
+- 更新 log.md
