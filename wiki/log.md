@@ -456,3 +456,9 @@
 - 相关概念模块按四组重构并补齐链接：画像基础、存储与圈选（Bitmap/CK/StarRocks/人群包）、身份与检索（ID-Mapping/RAG/Agentic RAG/Agent记忆）、业务落地（万象/万象AI分析平台）
 - 校验所有 wikilink 与目标页 H1 精确匹配（wiki-viewer 按 H1 标题解析）
 - 更新 log.md
+
+## [2026-08-24] fix | 修复参考清单链接 404（Cannot GET /raw/...）
+- 根因：wiki-viewer 的 /api/page 仅允许 wiki/ 目录（path 校验 startsWith WIKI_DIR），raw/ 素材无法渲染；直接改回 markdown 相对链接仍会 404
+- 修复：新增 wiki/sources/user-profile-series-reference.md（raw 内容编译版 + frontmatter，type: source），主题页改用 wikilink [[用户画像系列文章 · 参考资料汇编]] 导航
+- 顺带发现：index.md 中 6 个 sources/*.md 链接（ai-gateway-model-routing 等）指向的 wiki/sources/ 目录不存在，文件实际在 raw/——同类坏链，待修复
+- 更新 index.md + log.md

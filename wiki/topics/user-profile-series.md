@@ -114,7 +114,7 @@ related_sources: 1
 - 社区媒体：人人都是产品经理（woshipm.com）、InfoQ（infoq.cn）、掘金（juejin.cn）、CSDN（blog.csdn.net）、腾讯云开发者社区（cloud.tencent.com/developer）——各主题精选文章见下方 raw 完整清单。
 
 ### 完整参考资料清单
-- 按 9 主题分类的完整参考资料（每节含核心知识点 / 写作大纲 / 参考资料链接）：[raw 素材：用户画像系列文章 · 参考资料汇编](../../raw/user-profile-series-reference.md)
+- 按 9 主题分类的完整参考资料（每节含核心知识点 / 写作大纲 / 参考资料链接）：[[用户画像系列文章 · 参考资料汇编]]（原始素材归档于 raw/user-profile-series-reference.md）
 
 ## 相关概念
 
