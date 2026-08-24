@@ -100,6 +100,7 @@ related_sources: 1
 - 完整参考资料清单见 raw 素材：[[../raw/user-profile-series-reference.md]]
 
 ## 相关概念
+- [[用户画像：概念与方法论（两篇资料综合）]] — 2026-08-24 新摄入：Persona vs Profile 辨析、标签分类、标签体系结构与建模、权重公式、构建流程
 - [[用户-标签 Bitmap 位图构建]]
 - [[用户-标签 Bitmap 构建：工程实现详解]]
 - [[IDMapping — 58 用户 ID 关系映射体系]]

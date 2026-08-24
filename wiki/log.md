@@ -441,3 +441,11 @@
 - 更新 concepts/ontology.md 交叉引用（与四步建模法互补）
 - 标签：本体论 / Ontology / 多智能体 / 企业AI / 复杂工业场景
 - 更新 index.md + log.md
+
+## [2026-08-24] ingest | 用户画像概念与方法论（两篇文章）
+- 抓取两篇文章并归档 raw/：
+  - raw/user-profile-yonghong-tag-system.md（永洪社区《用户画像标签体系建设指南》tid=71561，2024-05）— 画像五要素、标签五维分类、标签体系结构（结构化/半结构化/非结构化）、四层建模方法、标签权重公式（牛顿冷却+TF-IDF）、五层体系架构
+  - raw/user-profile-datahunter-method-practice.md（数猎天下《数据分析之用户画像方法与实践》20181212158）— Persona vs Profile、四类应用、行业画像差异、构建三步法、标签权重=衰减因子×行为权重×网址子权重、三大误区
+- 新增 synthesis/user-profile-concept-methodology.md：概念辨析（Persona 虚构典型 vs Profile 真实标签化模型）+ 统一方法论（数据采集→清洗→标准化→目标分析→建模→标签挖掘→可视化）+ 应用场景 + 交叉引用 user-profile-series.md
+- 标签：用户画像 / Persona / User Profile / 标签体系 / 方法论 / 精准营销
+- 更新 index.md + log.md
