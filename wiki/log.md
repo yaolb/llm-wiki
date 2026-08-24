@@ -449,3 +449,10 @@
 - 新增 synthesis/user-profile-concept-methodology.md：概念辨析（Persona 虚构典型 vs Profile 真实标签化模型）+ 统一方法论（数据采集→清洗→标准化→目标分析→建模→标签挖掘→可视化）+ 应用场景 + 交叉引用 user-profile-series.md
 - 标签：用户画像 / Persona / User Profile / 标签体系 / 方法论 / 精准营销
 - 更新 index.md + log.md
+
+## [2026-08-24] update | user-profile-series.md 参考资源与相关概念完善
+- 主要参考资源模块重构为四小节：核心参考书（赵宏田两本+项亮+王喆，补豆瓣/微信读书链接）、开源项目（Await-d/one-id、Datawhale Fun-Rec、fengchi66/bigdata 附 URL）、平台案例（神策/个推/极光/火山引擎/GrowingIO + 社区媒体）、完整清单
+- 修复 raw 引用路径：[[../raw/...]] → ../../raw/user-profile-series-reference.md（原路径从 topics/ 解析会指向 wiki/raw/）
+- 相关概念模块按四组重构并补齐链接：画像基础、存储与圈选（Bitmap/CK/StarRocks/人群包）、身份与检索（ID-Mapping/RAG/Agentic RAG/Agent记忆）、业务落地（万象/万象AI分析平台）
+- 校验所有 wikilink 与目标页 H1 精确匹配（wiki-viewer 按 H1 标题解析）
+- 更新 log.md

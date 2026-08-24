@@ -94,18 +94,49 @@ related_sources: 1
 
 ## 主要参考资源
 
-- 核心参考书：《用户画像：方法论与工程化解决方案》（赵宏田）、《用户画像：全渠道画像方法与实践》（赵宏田）、《推荐系统实践》（项亮）、《深度学习推荐系统》（王喆）
-- 开源项目：OneID 实现 github.com/Await-d/one-id、Datawhale Fun-Rec、fengchi66/bigdata 画像学习笔记
-- 平台案例：神策、GrowingIO、火山引擎、个推、极光官方博客 + 人人都是产品经理/InfoQ/掘金/CSDN/腾讯云社区
-- 完整参考资料清单见 raw 素材：[[../raw/user-profile-series-reference.md]]
+### 核心参考书
+- **《用户画像：方法论与工程化解决方案》**（赵宏田）——从数仓架构、标签体系、存储（Hive/MySQL/HBase）、标签开发（统计/规则/挖掘/流式）、Airflow 调度到应用场景全覆盖，与本文系列结构高度吻合，是主要参考书。豆瓣：https://book.douban.com/subject/34961590/
+- **《用户画像：全渠道画像方法与实践》**（赵宏田）——App/企微/公众号/小程序/抖音等多渠道画像 + 营销自动化。微信读书：https://weread.qq.com/web/bookDetail/4b2325a0813ab8884g018df4
+- **《推荐系统实践》**（项亮）——推荐系统入门经典，用户画像在推荐链路（召回/排序/冷启动）中的角色。
+- **《深度学习推荐系统》**（王喆）——深度学习推荐经典，特征平台与训练/在线一致性（Train-Serve Skew）背景知识。
+
+### 开源项目
+- **OneID 实现**：https://github.com/Await-d/one-id —— 全渠道用户 ID 统一的开源参考实现（对应 ID-Mapping 章节）。
+- **Datawhale Fun-Rec**：https://github.com/datawhalechina/fun-rec （文档：https://datawhalechina.github.io/fun-rec/）—— 推荐系统学习与实践项目，含召回/排序/重排全流程。
+- **fengchi66/bigdata 画像学习笔记**：https://github.com/fengchi66/bigdata —— 用户画像（标签体系/数据仓库/算法）学习笔记合集。
+
+### 平台案例与官方博客
+- 神策数据（用户标签产品）：https://www.sensorsdata.cn/product/userTag.html
+- 个推（用户画像标签体系）：https://www.getui.com/college/2019040922
+- 极光（用户画像标签体系）：https://www.jiguang.cn/tips/1227
+- 火山引擎开发者社区（画像/推荐相关）：https://developer.volcengine.com/articles/7317467355334836274
+- GrowingIO 官网：https://www.growingio.com
+- 社区媒体：人人都是产品经理（woshipm.com）、InfoQ（infoq.cn）、掘金（juejin.cn）、CSDN（blog.csdn.net）、腾讯云开发者社区（cloud.tencent.com/developer）——各主题精选文章见下方 raw 完整清单。
+
+### 完整参考资料清单
+- 按 9 主题分类的完整参考资料（每节含核心知识点 / 写作大纲 / 参考资料链接）：[raw 素材：用户画像系列文章 · 参考资料汇编](../../raw/user-profile-series-reference.md)
 
 ## 相关概念
-- [[用户画像：概念与方法论（两篇资料综合）]] — 2026-08-24 新摄入：Persona vs Profile 辨析、标签分类、标签体系结构与建模、权重公式、构建流程
-- [[用户-标签 Bitmap 位图构建]]
-- [[用户-标签 Bitmap 构建：工程实现详解]]
-- [[IDMapping — 58 用户 ID 关系映射体系]]
-- [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
-- [[RoaringBitmap]]
-- [[万象]]
-- [[Agentic RAG：RAG 从独立系统到 Agent 组件]]
-- [[ES 倒排索引 Bitmap 机制研究与万象借鉴方案]]
+
+### 画像基础
+- [[用户画像：概念与方法论（两篇资料综合）]] — 2026-08-24 摄入：Persona vs Profile 辨析、标签五维分类、标签体系结构与建模、权重公式、构建流程
+
+### 存储与圈选
+- [[用户-标签 Bitmap 位图构建]] — RoaringBitmap 表示用户-标签值集合，O(1) 交并差
+- [[用户-标签 Bitmap 构建：工程实现详解]] — 基于 wanxiang-data-jobs 源码：Spark UDAF/序列化/Base64/CK 写入全流程
+- [[RoaringBitmap]] — 高效压缩位图数据结构，人群圈选标准库
+- [[Elasticsearch 倒排索引的 Bitmap 机制研究与万象借鉴方案]] — ES 位图机制 + 三场景借鉴方案
+- [[万象人群包提取方案]] — CK 原生位图存储替代宽表的人群包圈选/导出/分包
+- [[万象标签处理与 CK 入库流水线]] — 标签→CK 六步处理（格式化/位图构建/并发控制/查询模式）
+- [[StarRocks 物化视图深度解析：原理、使用与场景]] — OLAP 宽表路径（画像宽表查询加速）
+- [[StarRocks 跨数据源查询方案（深度调研）]] — 多维分析/透视查询（圈选+透视验证）
+
+### 身份与检索
+- [[IDMapping — 58 用户 ID 关系映射体系]] — 画像链路第一环：全渠道 ID 统一
+- [[RAG 检索增强生成（Retrieval-Augmented Generation）]] — 标签过滤 + 向量检索组合场景
+- [[Agentic RAG：RAG 从独立系统到 Agent 组件]] — RAG 作为 Agent 组件，画像/记忆反哺
+- [[Agent记忆系统]] — 动态画像：短期对话记忆 + 长期用户画像
+
+### 业务落地
+- [[万象]] — 58 集团增长服务平台：标签画像/人群圈选/用户编码
+- [[万象AI分析平台]] — 画像数据的 AI 分析应用
