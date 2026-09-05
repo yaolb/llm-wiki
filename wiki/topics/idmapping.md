@@ -2,7 +2,7 @@
 type: topic
 tags: [IDMapping, 用户ID, 实时计算, 数据平台, 58同城]
 created: 2026-07-30
-updated: 2026-07-30
+updated: 2026-09-05
 related_sources: 0
 ---
 
@@ -62,5 +62,6 @@ IDMapping 是 58 同城大数据部的用户身份映射服务，位于 **03-数
 - [[用户画像系列：从标签体系到 AI 检索]] — ID-Mapping/OneID 是画像链路（数据→标签→存储→检索→应用）的第一环
 
 ## 相关文档
+- [[万象 ID 映射 — 实现方案与实现流程]] — 代码级实现设计文档：生产侧 Flink 转换 / 消费侧圈选查询，键结构与三级查询协议
 - https://docs.58corp.com/#/space/1518924675080564737 — 美事 IDMapping 空间
 - https://docs.qq.com/doc/DUENsbHBOd25KRlFM — SmartIDMapping 下线方案（腾讯文档）

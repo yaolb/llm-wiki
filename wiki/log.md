@@ -468,3 +468,10 @@
 - 修复：7 个 raw 素材（ai-gateway-model-routing / karpathy-llm-wiki-methodology / mcp-official-intro / pythia-local-ai-agent / rag-as-agent-component / rag-evaluation-deepeval / uzi-skill-stock-analysis）复制到 wiki/sources/ 并补 frontmatter（type: source + 原始素材归档链接）
 - 验证：8 个 sources 页面 /api/page 全部 200
 - 更新 log.md
+
+## [2026-09-05] ingest | 万象 ID 映射实现方案设计文档（代码级）
+- 新增 topics/wanxiang-idmapping-design.md：基于 dataengine 仓库两个项目（wanxiang-automated-market-idmaping 生产侧 / wanxiang-real-label-execute-select 消费侧）的代码走读，编译为纯 Markdown（GFM 表格 + ASCII 图 F0/F3/F4/F5/F7/F9），覆盖系统全景、键结构（键A 昨-今双日期 Hash / 键B 品牌哈希桶 String / Wtable rowKey）、三级查询协议（flag 1-4）、slot 分组 pipeline、演进决策、死代码地图与复刻指南
+- 原始 HTML 可视化版归档 raw/wanxiang-idmapping-design.html（viewer 不渲染 raw/，仅存档）
+- 交叉链接：topics/idmapping.md（业务层）相关文档区新增 wikilink 指向本页，updated 改 2026-09-05
+- index.md 补两条目：idmapping.md（此前遗漏未收录）+ 本页
+- 更新 log.md

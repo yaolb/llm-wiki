@@ -83,6 +83,8 @@
 - [用户-标签 Bitmap 构建：工程实现详解](concepts/bitmap-construction-engineering.md) — 基于 wanxiang-data-jobs 源码的完整工程级分析，含 Spark UDAF、RoaringBitmap 序列化、Base64 编码、CK 写入、Bucket 分桶全流程 `#Bitmap #工程实现 #Spark #RoaringBitmap`
 - [用户-标签 Bitmap 位图构建](concepts/user-tag-bitmap-construction.md) — 用 RoaringBitmap 压缩位图表示"用户-标签值"集合关系，user_code 直接作为 bit 位置索引，支持 O(1) 级集合交并差运算 `#Bitmap #标签 #万象 #ClickHouse`
 - [2026年上半年绩效自评](concepts/h1-2026-performance-review.md)
+- [IDMapping — 58 用户 ID 关系映射体系](topics/idmapping.md) — 58 同城多业务线用户 ID 体系（imei/wimei/wuser/58-id）间建立映射的服务，实时 IDMapping V1.0 面向万象实时营销与圈选场景 `#IDMapping #用户ID #58同城`
+- [万象 ID 映射 — 实现方案与实现流程](topics/wanxiang-idmapping-design.md) — 代码级实现设计文档：生产侧 Flink（IdMappingTransferV1，24 并行/5s 窗口/batch=100）转设备 ID 为手机号写延迟 WMB；消费侧圈选（ExpressionSelectProcessFunction）双链路 ID 转化与离线补全；共享 Redis 键 A/键 B + Wtable 结构与三级查询协议，外部 idmapping 服务唯一写者 `#IDMapping #万象 #Flink #Redis`
 - [58 集团统一指标系统 — API 网关方案设计](topics/58-indicator-api-gateway-design.md)
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](concepts/agentic-rag.md)
