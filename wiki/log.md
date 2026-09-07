@@ -475,3 +475,10 @@
 - 交叉链接：topics/idmapping.md（业务层）相关文档区新增 wikilink 指向本页，updated 改 2026-09-05
 - index.md 补两条目：idmapping.md（此前遗漏未收录）+ 本页
 - 更新 log.md
+
+## [2026-09-07] update | 万象 ID 映射补全服务端章节与全链路闭环（§10）
+- 读通 norman-oneservice-idmapping（外部 idmapping 查询服务，SCF RPC + Guice + StorageServiceCenter，git 末端已下线资源）：唯一活接口 queryIDMapping 三模式 OFFLINE(Wtable)/REALTIME(键A·仅品牌150/151)/ALL(离线→实时)，键结构与 dataengine 消费端逐字节一致、协议双向实锤
+- 新增 §10：服务接口层（@OperationAsyn 异步回包 + 校验链）、OneID 设计意图（StrategyEnum MRU/MFU/ONEID 三策略已废弃、IDType 29 种全集）、优化方案对比（服务端逐条 exist+hget vs 消费端 batch=100 slot pipeline）、全链路闭环图（采集→处理入库→服务→消费→回流修复，证据等级标注）
+- 下游定位：norman-dataservice-inner 人群包链路（CrowdPackageProcess）注入 IOneServiceIDMap 调 queryIDMapping
+- 概述补服务端导览；index.md 条目摘要同步
+- 更新 log.md

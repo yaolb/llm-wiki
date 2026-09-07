@@ -16,6 +16,8 @@ related_sources: 1
 
 **关键数字**：主链路并行度 24 · 滚动处理窗口 5s · checkpoint 间隔 5min · pipeline 批查 batch=100。
 
+**服务端补全**（第 10 章）：外部 idmapping 查询服务即 `norman-oneservice-idmapping`（SCF RPC，queryIDMapping 三模式 OFFLINE/REALTIME/ALL，已下线）；其下游消费方含 `norman-dataservice-inner` 人群包链路。全链路「采集 → 处理入库 → 服务 → 消费 → 回流修复」闭环见 §10.5。
+
 **阅读路径**：
 - 接手 / 排障：第 4 章（生产跑法）→ 第 6 章（为什么这样设计）→ 第 7 章（哪些别碰）
 - 复刻新任务：第 1–6 章通读 + 第 8 章 checklist，重点是键结构和三级查询协议
@@ -447,7 +449,104 @@ JedisCluster 封装不暴露单节点原生 `Pipeline`。通过 `getJedisPoolFro
 
 ---
 
-本文档基于代码走读整理，覆盖 `wanxiang-data-jobs/wanxiang-real-data/wanxiang-automated-market-idmaping` 与 `wanxiang-data-jobs/wanxiang-real-label/wanxiang-real-label-execute-select`。键结构示例：键 A `20221013-20221014-150-wb_imei-abc001`；键 B `10001_00012345678`；Wtable rowKey `150_wb_imei_abc001`。原始 HTML 可视化版归档于仓库根 `raw/` 目录（viewer 不可渲染，仅存档）。
+本文档基于代码走读整理，覆盖 `wanxiang-data-jobs/wanxiang-real-data/wanxiang-automated-market-idmaping`、`wanxiang-data-jobs/wanxiang-real-label/wanxiang-real-label-execute-select` 与 `norman-oneservice-idmapping`。键结构示例：键 A `20221013-20221014-150-wb_imei-abc001`；键 B `10001_00012345678`；Wtable rowKey `150_wb_imei_abc001`。原始 HTML 可视化版归档于仓库根 `raw/` 目录（viewer 不可渲染，仅存档）。
+
+## 10. 服务端与链路闭环（norman-oneservice-idmapping）
+
+> 2026-09-07 补全：读通外部 idmapping 查询服务仓库 `norman-oneservice-idmapping`（norman-oneservice 微服务框架：Guice 注入 + StorageServiceCenter 统一存储 + SCF RPC），并顺藤定位下游消费方 `norman-dataservice-inner` 人群包链路。git 末端 commit「下线wtable、redis、hbase资源」——该服务已下线。
+
+### 10.1 服务接口层（SCF RPC）
+
+```
+contract 包：IOneServiceIDMap（@ServiceContract, tcp://OneServiceIDMap/OneServiceIDMap）
+  ├─ getIDMapIds(IDMapRequest)          @Deprecated → facade 直接返回空（死代码）
+  ├─ getRelationIds(request)            @Deprecated → facade 直接返回空
+  ├─ getSecretKey(request)              活接口 · 下发人群包 AES 密钥
+  └─ queryIDMapping(IDMappingRequest)   ★ 唯一核心活接口
+```
+
+- **异步回包模式**：所有接口 `@OperationAsyn` + `AsynBack.send(SCFContext.getThreadLocalID(), response)`，配合 Guava Stopwatch 手工埋点耗时。
+- **校验链**：Guice 注入 `Verification` → `AbstratVerificationHandler` 责任链。
+- **请求模型**：`{originIdType, originIdValue, targetIdType, brandId, idMappingType}`——单 ID 进、单 ID 出，与 Flink 批量消费是两种客户端形态。
+
+### 10.2 映射方法（与消费侧双向实锤）
+
+`IDMapServiceImpl.queryIDMapping` 按 `IDMappingType` 三分支，键结构与 dataengine 消费端**逐字节一致**，两个独立仓库互为印证，协议实锤：
+
+```
+IDMappingType = OFFLINE(1) / REALTIME(2) / ALL(0)
+
+OFFLINE：Wtable mgetpb({brandId}_{idType}_{id} · tableId=1 · colKey=col1)
+         → WtableStroe protobuf map<idType,idValue> → 取 targetIdType 列
+
+REALTIME（只支持品牌 150/151）：
+  键 A = {昨yyyyMMdd}-{今yyyyMMdd}-{brandId}-{idType}-{id}
+  ├─ origin 是设备号（150→wb_imei / 151→ajk_imei）
+  │    → exist(key) + hget(key, targetIdType)          【flag 1 等价】
+  ├─ target 是设备号
+  │    → exist + getStr(key)                            【直取】
+  └─ 否则两跳：getStr 换设备号 → 再拼键 hget            【flag 2 等价】
+
+ALL：先离线，未命中再实时
+```
+
+**方向差异**：dataengine 三级查询是 Redis 优先、Wtable 兜底（新鲜数据优先）；服务端 `ALL` 是**离线优先、实时补**——单点任意查询场景下离线全量命中率更高。
+
+### 10.3 OneID 的设计意图
+
+- **`StrategyEnum` 三策略**：`MRU 最近登录` / `MFU 常用关系` / `ONEID 闭合关系`——OneID 归一在接口层的语义设计。`queryRelationIdDTOs4OneId` 注释显示一期设计为"闭合关系查离线 Wtable，key = idType+idValue，value = List<RelationIdDTO>"，**但实现全部被注释，方法返回空列表**——OneID 闭合关系最终没走这个服务。
+- **`IDType` 29 种枚举**是归一的全集：ffaid（58统一ID）、wimei/wb_imei/ajk_imei、telep、wuser/wb_uid/ajk_uid、idfa、wbdid（Cookie）、idmdid（中台统一设备）、openid/unionid（微信生态，最后两个功能 commit 加入）等。ffaid/idmdid 是真正的"统一 ID"候选，但在此服务里只是普通可查类型。
+
+### 10.4 优化方案对比
+
+| 维度 | norman-oneservice-idmapping（服务端） | dataengine Flink（消费端） |
+|------|------|------|
+| 查询方式 | **逐条** `exist` + `hget/getStr`，非设备号两跳 = 最多 4 次 RTT | batch=100 攒批 + slot 分组 pipeline，一轮 RPC |
+| 优化重心 | 校验链 + 异步回包 + metric 埋点 | 批查、限流、防倾斜 |
+
+服务端本身**没有做任何查询聚合优化**——单点查询场景靠 exist 短路；真正的查询优化全部在 Flink 消费端。其他工程细节：
+
+- **手机号全程密文**：AES/ECB/PKCS5Padding，密钥硬编码于 `AESEncryptUtil`；入参是 telep 先加密再查（库内统一存密文），`getSecretKey` 下发同一密钥给人群包调用方。
+- **Kafka 采集化石**：配置里有 8 个 producer（`hdp_lbg_ectech_norman_oneservice_id_type_{imei,wimei,idfa,wuser,telep,ffaid,muid,wuid}`），代码零使用——早期设计是本服务把各 idType 数据发 Kafka 供下游计算映射，后采集职责移走只剩查询。
+- **存储演进**：`RowKeyUtil`（md5 前 10 位 + `_` + idType+id 的 HBase rowKey）+ `IDTypeColumnNameMap`（f:1~f:9 列族）→ 现役 Wtable，**HBase → Wtable 迁移实锤**。
+
+### 10.5 完整链路闭环（证据等级标注）
+
+```
+┌─ 采集 ────────────────────────────────────────────┐
+│ 埋点/业务日志 → Kafka (hdp_lbg_ectech_norman_      │ ⚠ 化石证据（配置残留，
+│ oneservice_id_type_*）                            │   写端任务不在本地仓库)
+└──────────────┬────────────────────────────────────┘
+               ▼
+┌─ 处理 + 入库（外部，反推）──────────────────────────┐
+│ 离线链路：按天写键A(昨-今双日期/TTL 2天)·写Wtable   │ ◐ 结构反推（键协议两侧实锤，
+│         ·写键B(哈希桶+冷热flag)                     │   计算任务代码未见）
+│ 实时链路：事件流实时补写                            │
+└──────────────┬────────────────────────────────────┘
+               ▼
+┌─ 服务层（代码证实）─────────────────────────────────┐
+│ norman-oneservice-idmapping · SCF RPC              │
+│ queryIDMapping：OFFLINE(Wtable) / REALTIME(键A)    │
+│               / ALL(离线→实时)                     │
+│ getSecretKey：AES 密钥下发                         │
+│ （getRelationIds 的 MRU/MFU/ONEID 三策略已废弃）   │
+└──────────────┬────────────────────────────────────┘
+               ▼
+┌─ 第三方消费（代码证实）─────────────────────────────┐
+│ norman-dataservice-inner 人群包链路：              │
+│   CrowdPackageProcess / ByClickHouseProcess        │
+│   → 调 queryIDMapping 做 ID 转化 → 人群包          │
+│ dataengine 两个 Flink 作业（直连存储消费端，       │
+│   不走 RPC，自己实现三级查询）                     │
+└──────────────┬────────────────────────────────────┘
+               ▼
+┌─ 回流修复 ─────────────────────────────────────────┐
+│ 消费侧统计 → Kafka 统计 topic → idmapping 服务     │
+│ 修复映射 → 回到"处理+入库"层                       │
+└───────────────────────────────────────────────────┘
+```
+
+闭环上唯一没有代码的是**写端计算任务**（真正计算映射关系的 Spark/Hive/实时任务），但其输出结构（三种键）已被两个独立仓库的读端逐字节验证。
 
 ## 相关概念
 
