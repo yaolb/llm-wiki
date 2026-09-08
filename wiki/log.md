@@ -482,3 +482,16 @@
 - 下游定位：norman-dataservice-inner 人群包链路（CrowdPackageProcess）注入 IOneServiceIDMap 调 queryIDMapping
 - 概述补服务端导览；index.md 条目摘要同步
 - 更新 log.md
+
+## [2026-09-08] ingest | LoopArena：阿里 DreamX 开源 Loop 调度能力评测（智猩猩AI 公众号）
+- 用户提供微信公众号文章（智猩猩AI），正文动态渲染无法直接抓取 → 经搜狐同文转载获取全文
+- 归档素材到 raw/looparena-wechat.md（含微信原链 + 搜狐镜像链接）
+- 新增 topics/looparena-benchmark.md：固定 Worker（Qwen3.7-Plus）只考 Controller 的解耦评测设计
+  - 机制：Evidence Packet（只读 Reporter 打包进展）→ Controller 输出 Loop Contract（下一轮目标/保留行为/完成条件），Controller 无代码工具、决策经 Worker 落地并受执行验收
+  - 三类评测：Type I 单步指令选择（90 题，最低约 0.31 美元，5 分钟上手）；Type II 任务切片（27，成本较全任务降 64.4%，排序 ρ=0.9747）；Type III 完整任务（27，11 SCBench + 16 BeyondSWE，最强 GPT-5.5 也仅 24.69% SSR）
+  - 榜单：GPT-5.5 全面第一（87.78/51.85/24.69）；Qwen3.7-Plus 完整任务第二；DeepSeek-V4-Flash Type I 第二（77.78）但 Type III 第四——单步决策 ≠ 长程带队
+  - 参考策略警示：fixed vs no-control 在 Type II 差 7.4pt、Type III 持平 18.52% → 切片结论需回全任务核对
+  - 工程：Apache-2.0，CLI looparena-type1/2/3，arXiv:2608.28281
+- 更新 concepts/loop-engineering.md：新增「谁来做 Loop 里的调度——Controller 评测」章节与交叉引用
+- 标签：LoopArena / Loop Engineering / Agent 评测 / Controller
+- 更新 index.md + log.md

@@ -2,7 +2,7 @@
 type: concept
 tags: [Loop Engineering, Prompt, Agent, 自动化, AI编程]
 created: 2026-07-04
-updated: 2026-07-04
+updated: 2026-09-08
 ---
 
 # Loop Engineering
@@ -29,3 +29,9 @@ Loop Engineering：用户输入 → Agent Loop（思考→行动→观察→思�
 ## 相关概念
 - [[AI Agent（智能体）]]
 - [[AI 编程（AI Programming / AI Coding）]]
+
+## 谁来做 Loop 里的调度？—— Controller 评测
+
+Loop 中持续"看进展、派活、决定下一步"的模型角色被称为 **Controller**（执行者为 Worker）。2026-08 阿里 DreamX 团队开源的 [[LoopArena：把模型的 Loop 调度能力单独拎出来考]] 首次把该能力单独做成 Benchmark：固定 Worker 只换 Controller，分三档评测——Type I 单步指令选择（低成本，全套约 0.31 美元）、Type II 任务切片闭环（成本较全任务降约 64%）、Type III 完整任务带队（最强模型成功率仅约 25%，长程控制仍有大空间）。
+
+- 相关：[[LLM-as-a-Verifier：验证作为新的 Scaling 轴]]（另一条给 Agent 结果把关的评测/验证路线）
