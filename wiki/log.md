@@ -501,3 +501,7 @@
 - 原始 PDF 归档 raw/arxiv-2608.25512-spatiotemporal-composability.pdf
 - index.md Sources 区头部新增条目；wikilink 目标 H1 已校验（LoopArena/J-Space/AI Agent/Agent记忆系统/Loop Engineering/DeepSeek）
 - 更新 log.md
+## [2026-09-09] ingest | 知乎 Cordis 解读整合进论文分析页
+- 提取知乎文章（苏迟但到，2026-08-13，AI 生成解读，229 赞）全文，归档 raw/zhihu-cordis-design-philosophy.md
+- topics/spatiotemporal-composability.md 新增 §6 社区解读对照：granularity mismatch 框架、undo log 类比、UNLOADING/episode 嵌套、Confluence 反 state drift、Cordis vs Sandbox 边界、transactional HMR、四条工程约束（witness/independence/循环依赖/interface versioning）
+- 对照结论：事实层面零冲突；该文独特贡献为框架表达与工程约束具体化，已标注 AI 生成可信度注意事项

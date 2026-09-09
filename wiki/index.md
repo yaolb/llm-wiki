@@ -12,7 +12,7 @@
 - Reports: 10
 
 ### Sources
-- [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md) — 北大+DeepSeek-AI 论文分析（arXiv 2608.25512，92 页）：把 effect/coeffect 从编译期下沉为运行时机制（revertible effects 逆变换 LIFO 回滚 + reactive coeffects 规格驱动激活/停用 + 统一 context 范式），Cordis 元框架经 Koishi 4000+ 插件生产验证，直指自演化 Agent Harness 的热可组合性（2026-08）`#编程语言理论 #Effect-Systems #动态组合 #Agent-Harness #Cordis #DeepSeek`
+- [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md) — 北大+DeepSeek-AI 论文分析（arXiv 2608.25512，92 页）：把 effect/coeffect 从编译期下沉为运行时机制（revertible effects 逆变换 LIFO 回滚 + reactive coeffects 规格驱动激活/停用 + 统一 context 范式），Cordis 元框架经 Koishi 4000+ 插件生产验证，直指自演化 Agent Harness 的热可组合性；附知乎社区解读对照（granularity mismatch / episode 嵌套 / Confluence 反 state drift）（2026-08）`#编程语言理论 #Effect-Systems #动态组合 #Agent-Harness #Cordis #DeepSeek`
 - [LoopArena：把模型的 Loop 调度能力单独拎出来考](topics/looparena-benchmark.md) — 阿里 DreamX 开源评测：固定 Worker（Qwen3.7-Plus）只考 Controller，GPT-5.5 全面第一（Type III 也仅 24.69%），Type II 成本降 64% 且排序一致（ρ=0.97），Type I 全套最低 0.31 美元（2026-08）`#LoopArena #Loop Engineering #Agent评测 #Controller #基准测试`
 - [用户画像系列文章 · 参考资料汇编](sources/user-profile-series-reference.md) — 九主题完整参考资料清单（基础/提高/应用篇），每节含核心知识点/写作大纲/参考资料链接 `#用户画像 #标签体系 #参考资料`
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md) — 企业架构EA之家：业务梳理→本体建模→数智化融合→智能体构建→智能体运行，实体五类/属性四类/关系六类/跨域影响网络，规则+生成式双驱动可信决策（2026-08）`#本体论 #Ontology #多智能体 #企业AI #语义层`
