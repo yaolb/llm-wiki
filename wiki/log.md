@@ -495,3 +495,9 @@
 - 更新 concepts/loop-engineering.md：新增「谁来做 Loop 里的调度——Controller 评测」章节与交叉引用
 - 标签：LoopArena / Loop Engineering / Agent 评测 / Controller
 - 更新 index.md + log.md
+
+## [2026-09-09] ingest | 时空可组合性编程范式论文分析（arXiv 2608.25512）
+- 新增 topics/spatiotemporal-composability.md：北大+DeepSeek-AI 论文分析，revertible effects / reactive coeffects / context paradigm 三机制 + 动态组合演算五元定理 + Cordis/Koishi 生产案例与局限评价，定位为 Agent Harness 热可组合性拼图（与 LoopArena 调度评测、J-Space 推理时控制并列）
+- 原始 PDF 归档 raw/arxiv-2608.25512-spatiotemporal-composability.pdf
+- index.md Sources 区头部新增条目；wikilink 目标 H1 已校验（LoopArena/J-Space/AI Agent/Agent记忆系统/Loop Engineering/DeepSeek）
+- 更新 log.md
