@@ -118,6 +118,7 @@ effect : Γ → Γ × (Γ → Γ)
 
 ## 相关概念
 
+- [[Cordis 与既有组合方案逐项对比]] — React useEffect / Spring DI / Erlang 热升级 / DSU 逐项对比
 - [[AI Agent（智能体）]] — 自演化 harness 的宿主语境
 - [[Agent记忆系统]] — 可被热替换的 harness 组件之一
 - [[Loop Engineering]] — 同属 agent harness 工程化的相邻方向

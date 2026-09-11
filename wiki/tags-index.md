@@ -531,9 +531,17 @@
 
 - [CC-Connect](entities/cc-connect.md)
 
+## deepseek
+
+- [Cordis 与既有组合方案逐项对比](synthesis/cordis-vs-existing-composability-approaches.md)
+
 ## gstack
 
 - [AI增强开发三件套：把Vibe Coding拉回工程交付](synthesis/ai-dev-trifecta.md)
+
+## harness
+
+- [Cordis 与既有组合方案逐项对比](synthesis/cordis-vs-existing-composability-approaches.md)
 
 ## html-to-video
 

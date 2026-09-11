@@ -505,3 +505,10 @@
 - 提取知乎文章（苏迟但到，2026-08-13，AI 生成解读，229 赞）全文，归档 raw/zhihu-cordis-design-philosophy.md
 - topics/spatiotemporal-composability.md 新增 §6 社区解读对照：granularity mismatch 框架、undo log 类比、UNLOADING/episode 嵌套、Confluence 反 state drift、Cordis vs Sandbox 边界、transactional HMR、四条工程约束（witness/independence/循环依赖/interface versioning）
 - 对照结论：事实层面零冲突；该文独特贡献为框架表达与工程约束具体化，已标注 AI 生成可信度注意事项
+
+## [2026-09-11] update | Cordis 时空可组合性 vs 既有方案逐项对比
+- 新增 synthesis/cordis-vs-existing-composability-approaches.md：Cordis 与 React useEffect / Spring DI / Erlang 热升级 / DSU 逐项对比（14 维：粒度/时间可组合性/逆操作责任/撤销顺序/空间可组合性/依赖解析/依赖变化响应/生命周期次序/热替换/状态保持/失败回滚/逆校验/系统边界/代价）+ 横向汇总表 + 5 条结论
+- 结论：仅 Cordis 同时覆盖时间+空间两轴；手写逆是所有方案的共同成本、差异在粒度；撤销顺序与 provider 响应式重连是分水岭；Cordis 运行时不校验逆 + 跨系统边界只能补偿
+- topics/spatiotemporal-composability.md 相关概念区补充 wikilink
+- 标签：deepseek / harness
+- 更新 index.md + tags-index.md + log.md

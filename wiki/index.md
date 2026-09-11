@@ -130,6 +130,7 @@
 - [已 Push 代码撤回：Git revert vs reset](concepts/git-revert-vs-reset.md) — 公共分支用 revert，私有分支用 reset，面试高频题 `#Git #版本控制 #工作流`
 
 ### Syntheses
+- [Cordis 与既有组合方案逐项对比](synthesis/cordis-vs-existing-composability-approaches.md) — 把 Cordis 的时空可组合性与 React useEffect / Spring DI / Erlang 热升级 / DSU 逐项对比（粒度/逆操作责任/撤销顺序/依赖响应式/生命周期次序/热替换/失败回滚），结论：仅 Cordis 同时覆盖时间+空间两轴 `#deepseek #harness`
 - [用户画像：概念与方法论（两篇资料综合）](synthesis/user-profile-concept-methodology.md) — Persona vs User Profile 辨析、标签五维分类、结构化/半结构化/非结构化标签体系、四层建模（TF-IDF/分类聚类/回归SVM/预测）、标签权重公式（衰减×行为×TF-IDF）、构建七步流程与三大误区（2026-08）`#用户画像 #Persona #UserProfile #标签体系 #方法论`
 - [语义高亮技术全景：从词法匹配到语义剪枝](synthesis/semantic-highlighting-techniques.md) — 2026 语义高亮技术综述：Encoder-only token 打分→句子级聚合流程、Zilliz/Provence 代表模型、H&S 防注入模式，token 成本降 70-80% `#语义高亮 #RAG #上下文剪枝 #综述`
 - [ES 倒排索引 Bitmap 机制研究与万象借鉴方案](synthesis/elasticsearch-bitmap-inverted-index-adoption.md) — Lucene 倒排索引位图机制源码级研究（FOR/PFOR/IndexedDISI/filter cache）+ ES vs CK 对比 + 实时圈选/嵌套圈选/画像分析三场景借鉴方案 `#Elasticsearch #倒排索引 #Bitmap #万象`
