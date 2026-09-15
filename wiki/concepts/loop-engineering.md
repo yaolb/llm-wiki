@@ -29,6 +29,7 @@ Loop Engineering：用户输入 → Agent Loop（思考→行动→观察→思�
 ## 相关概念
 - [[AI Agent（智能体）]]
 - [[AI 编程（AI Programming / AI Coding）]]
+- [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — RSI²/MetaRSI² 的"下一步改哪里"就是 Loop 的调度决策
 
 ## 谁来做 Loop 里的调度？—— Controller 评测
 

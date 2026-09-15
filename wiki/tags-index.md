@@ -205,6 +205,7 @@
 
 ## Agent-Harness
 
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md)
 
@@ -368,6 +369,10 @@
 
 - [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
 
+## Data-RSI
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+
 ## DeepEval
 
 - [RAG 评估体系与方法论](topics/rag-evaluation.md)
@@ -445,6 +450,11 @@
 ## GraphRAG
 
 - [LightRAG](entities/lightrag.md)
+
+## Harness
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+- [自改进AI Agent](concepts/self-improving-agent.md)
 
 ## Hermes
 
@@ -546,6 +556,10 @@
 
 - [Agent Memory 五篇关键论文综述](synthesis/agent-memory-five-papers.md)
 
+## LoRA
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+
 ## Loop Engineering
 
 - [Loop Engineering](concepts/loop-engineering.md)
@@ -585,6 +599,10 @@
 
 - [Llama-3](entities/llama-3.md)
 
+## MetaRSI
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+
 ## Milvus
 
 - [Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音](topics/milvus-3-0-highlight.md)
@@ -596,6 +614,10 @@
 ## Model Context Protocol
 
 - [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
+
+## Model-RSI
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 
 ## NAS
 
@@ -709,6 +731,11 @@
 ## RAGAS
 
 - [RAG 评估体系与方法论](topics/rag-evaluation.md)
+
+## RSI
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+- [自改进AI Agent](concepts/self-improving-agent.md)
 
 ## Reallm-Labs
 
@@ -1198,6 +1225,7 @@
 - [Llama-3](entities/llama-3.md)
 - [MUX0](entities/mux0.md)
 - [MemPalace](entities/mempalace.md)
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 - [Milvus](entities/milvus.md)
 - [Mistral](entities/mistral.md)
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
@@ -1732,6 +1760,10 @@
 - [OpenSquilla — AI 代码生成的自验证与自修复](topics/opensquilla-ai-self-verification.md)
 - [自改进AI Agent](concepts/self-improving-agent.md)
 
+## 自改进Agent
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+
 ## 自然语言转SQL
 
 - [ChatSQL](topics/chatsql/index.md)
@@ -1844,6 +1876,11 @@
 ## 软件工程
 
 - [测试驱动开发（Test-Driven Development, TDD）](concepts/test-driven-development.md)
+
+## 递归自我改进
+
+- [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+- [自改进AI Agent](concepts/self-improving-agent.md)
 
 ## 金融
 

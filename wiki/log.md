@@ -525,3 +525,17 @@
 - 定位：与 LoopArena（调度能力）、J-Space（推理时控制）、Cordis 时空可组合性（harness 组件热替换）并列的 Agent 编排侧拼图
 - 标签：多Agent / Agent编排 / 任务DAG / Prove2Me / Anthropic / Lean4 / Agent-Harness / 状态管理 / 验证
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-09-16] ingest | MetaRSI-v1：把 RSI 拆成 Data/Model/Harness 三算子（智猩猩AI）
+- 素材：今日头条转载「智猩猩AI」《清华北大斯坦福等联手做了个RSI系统！核心组件Harness-RSI已开源》（2026-09-14），正文藏在内联 URL 编码 JSON 的 articleInfo.content，经解码 + HTML 清洗提取全文；归档 raw/metarsi-v1-recursive-self-improvement-toutiao.md
+- 新增 topics/metarsi-v1-recursive-self-improvement.md：CosmosMind + 清华/北大/斯坦福，S=(D,θ,H) 三改进面 + Data-RSI/Harness-RSI/Model-RSI 三算子
+  - RSI Kernel 七步（仅 Diagnose/Propose 由模型做，其余确定性代码）+ 不可改动权限边界（禁止改评估器 Q*、测试集、发布规则、资源账本）
+  - Data-RSI：四维学习签名 + 生成者-验证者隔离校验（Anchor 独立重解）+ schema/语义双闸门；Harness-RSI：五槽位脚手架 + HarnessPatch（修复假设/操作/预期/风险）+ 失败分片重放 + 复杂度预算 + 严格超越才替换；Model-RSI：受约束 Recipe 搜索空间 + 固定 θ₀ 累积数据
+  - H→M 禁止（旧学习信号过期），五种合法转换；三级递归：算子 → RSI²（提案策略 + 算子排序）→ MetaRSI²（调度策略）
+  - 实测（Qwen3.5-35B-A3B 无教师）：TB2.1 23.6→31.9、SWE-bench Pro 10.3→19.5、GPQA-D 71.2→83.8、AIME 55.0→68.3，平均 +10.9（固定组合仅 +7.3，多出的 3.6 pt 来自动态调度）
+  - API 路线：仅 Data-RSI + Harness-RSI，六大前沿模型 TB2.1 全部自我提升（+5.6~9.2，均值 +7.3）
+  - 开源：Harness-RSI 运行时 + Genome 格式 → RSI-Harness（原文未给仓库链接，标注待补充）
+- 更新 concepts/self-improving-agent.md：新增「学术化版本：MetaRSI-v1 的三算子框架」小节（轻量自改进 vs 论文级上位框架对照）+ 相关概念扩链
+- 交叉引用：concepts/loop-engineering.md、concepts/context-engineering.md、topics/agent-task-dag-orchestration.md 相关概念区各补互链
+- 标签：RSI / 递归自我改进 / MetaRSI / Harness / Data-RSI / Model-RSI / 自改进Agent / LoRA / Agent-Harness / 开源
+- 更新 index.md + tags-index.md + log.md

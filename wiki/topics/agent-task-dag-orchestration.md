@@ -99,3 +99,4 @@ Worker 循环：读目标 → 查已有结果 → 领取任务 → 提交产物�
 - [[群体智能（Swarm Intelligence / 蜂巢理论）]] — 去中心化涌现 vs 本文的显式依赖图编排，是两条对照路线
 - [[上下文工程 (Context Engineering)]] — 交接失败本质是上下文无法随任务流转
 - [[红绿回归测试（Red-Green-Regression Pipeline）]] — "验收条件独立管理"的工程落点之一
+- [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — 「模型只提案、确定性代码定采纳」同源原则在**单系统自我改进**尺度上的版本（RSI Kernel 权限边界）

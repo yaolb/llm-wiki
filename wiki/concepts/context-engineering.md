@@ -33,3 +33,4 @@ updated: 2026-07-04
 ## 相关概念
 - [[AI 编程（AI Programming / AI Coding）]]
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
+- [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — Harness-RSI 把能力放进上下文：成本在该侧，本页策略在需求侧

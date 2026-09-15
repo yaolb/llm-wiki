@@ -1,8 +1,8 @@
 ---
 type: concept
-tags: [AI Agent, 自我修复, 自动化, 经验学习]
+tags: [AI Agent, 自我修复, 自动化, 经验学习, RSI, 递归自我改进, Harness]
 created: 2026-07-04
-updated: 2026-07-04
+updated: 2026-09-16
 ---
 
 # 自改进AI Agent
@@ -31,7 +31,21 @@ updated: 2026-07-04
 3. 执行修复 → 验证通过
 4. 评估经验重要性 → 决定是否提升为项目记忆
 
+## 学术化版本：MetaRSI-v1 的三算子框架（2026-09）
+
+本页描述的是**工程化/轻量**的自改进（学习记录 → 自动修复 → 经验提升）；2026-09 CosmosMind 联合清华、北大、斯坦福提出的 **[[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]]** 是同一问题的**论文级系统化**版本，可视为本页的上位框架：
+
+- **改进面从 1 个变成 3 个**：本页只改代码/配置（≈ Harness 的一种），MetaRSI-v1 拆成 **Data-RSI**（数据状态 D）、**Harness-RSI**（系统提示词/持久化记忆/内置工具/技能库/MCP 资源五槽位）、**Model-RSI**（LoRA 写回权重 θ）
+- **统一执行内核**：`Observe → Diagnose → Propose → Validate → Execute → Select → Export`，其中**只有 Diagnose/Propose 交给模型**，其余由确定性代码执行
+- **权限边界**：禁止算子修改封闭评估器、测试集、发布规则、资源账本——对应本页"验证通过"环节的强化版（防止改评判标准刷分）
+- **经验提升的量化**：本页的"是否提升为项目记忆"在 MetaRSI-v1 里变成硬判据——**新方案严格超过历史最好才替换**，且补丁必须写明修复假设与风险声明
+- **成本互换**：能力放上下文（每次推理付费）vs 写进权重（一次训练内化）
+- **实测**：Qwen3.5-35B-A3B 四项平均 +10.9 pt，其中 3.6 pt 来自**动态调度**而非算子数量
+
 ## 相关概念
+- [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — 学术化的三算子 RSI 框架（D/θ/H）
 - [[统一开发范式 (OpenSpec × Superpowers)]]
 - [[AI Agent（智能体）]]
 - [[红绿回归测试（Red-Green-Regression Pipeline）]]
+- [[上下文工程 (Context Engineering)]] — Harness 路线把能力放进上下文的代价
+- [[任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示]] — "模型只提案、验证器独立把关"的同源原则
