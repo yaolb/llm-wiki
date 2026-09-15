@@ -122,4 +122,5 @@ effect : Γ → Γ × (Γ → Γ)
 - [[AI Agent（智能体）]] — 自演化 harness 的宿主语境
 - [[Agent记忆系统]] — 可被热替换的 harness 组件之一
 - [[Loop Engineering]] — 同属 agent harness 工程化的相邻方向
+- [[任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示]] — 编排层的"任务状态外置"（DAG + proof-sketch），与本页的 harness 组件热可组合性互补：一个管状态一致性，一个管组件生命周期
 - [[DeepSeek]] — 本文作者机构之一，infra 纵深布局

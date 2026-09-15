@@ -512,3 +512,16 @@
 - topics/spatiotemporal-composability.md 相关概念区补充 wikilink
 - 标签：deepseek / harness
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-09-16] ingest | Anthropic 多 Agent 编排方式（任务 DAG + proof-sketch）
+- 素材：微信公众号「司徒驴三」《Anthropic 提出一种新的多 Agent 编排方式》（微信正文动态渲染，改用 curl + 本地 HTML 解析提取全文），归档 raw/anthropic-multi-agent-dag-orchestration-wechat.md
+- 新增 topics/agent-task-dag-orchestration.md：从 Anthropic Lean 4 费马大定理项目（几十个 Claude Agent / 11 天 / 约 1300 万行 Lean / 30,300 中间定理）提炼五节方法论
+  - 任务契约：DAG 节点存"要交付的结果"（形式化声明）而非角色；声明与证明分离；边必须有依据（A 在 B 前 ≠ B 依赖 A）
+  - proof-sketch：引用未证子定理的有条件推导，SKETCH_ACCEPTED → "方案成立"与"工作完成"是两个状态；多候选路线依赖归属各方案
+  - 调度：里程碑定方向 → 未解决叶子节点 → 先读已有分解/失败/讨论；反模式=只挑容易节点导致主目标停滞；复用进流程（自然语言找候选、正式条件定适用）
+  - 状态与验证：声明不可改、需求变更发新条目；Agent 说"完成"只是报告，需验证器；软件无等价物 → 验收条件与检查程序独立管理
+  - 落地：从可复现问题开始、跨会话任务字段表、Worker 循环、原子领取+租约、验证绑定输入版本/哈希、最小扩展性实验（2 Worker 中途换人）
+- 交叉引用：topics/spatiotemporal-composability.md 相关概念区、concepts/ai-agent.md「多 Agent 协作」新增「依赖图模式」条目
+- 定位：与 LoopArena（调度能力）、J-Space（推理时控制）、Cordis 时空可组合性（harness 组件热替换）并列的 Agent 编排侧拼图
+- 标签：多Agent / Agent编排 / 任务DAG / Prove2Me / Anthropic / Lean4 / Agent-Harness / 状态管理 / 验证
+- 更新 index.md + tags-index.md + log.md
