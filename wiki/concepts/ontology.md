@@ -106,3 +106,4 @@ RAG 解决"知道什么"，Ontology 解决"怎么运转"。
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
 - [[MCP 模型上下文协议（Model Context Protocol）]]
 - [[本体建模五步法：本体论+AI如何进入复杂工业场景]] — 五步工程落地路径（实体五类/属性四类/关系六类/跨域影响网络/规则+生成式双驱动）
+- [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — 把本体定位为 Agent 上下文三重支柱的**第三层**：统一元数据（Gravitino）→ 开放语义层 → Ontology，本体负责把业务意图映射到**操作边界内**

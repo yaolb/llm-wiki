@@ -2,7 +2,7 @@
 type: topic
 tags: [agent, 大数据, 语义]
 created: 2026-08-09
-updated: 2026-09-16
+updated: 2026-09-17
 related_sources: 1
 source_url: https://mp.weixin.qq.com/s/4EpQTgZdD2wqg-5s-wtIog
 ---
@@ -68,6 +68,7 @@ source_url: https://mp.weixin.qq.com/s/4EpQTgZdD2wqg-5s-wtIog
 
 ## 相关概念
 - [[Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基]] — 本文续篇（2026-08-22）：从"为什么需要开放语义标准"到"怎么用"——三层语义知识库（Ossie + Wiki + 图/向量）、八步取数链路、四类验证
+- [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — **另一条路线（2026-09-16）**：Ossie 走开放标准、把语义层当"最后一块拼图"；Datastrato 走产品化三层，把**统一元数据（Gravitino）放在第一层**，语义层居中，Ontology 收口到操作边界——比 Ossie 多一个显式的本体终点
 - [[ontology]] — 本体论：Ossie 语义层的理论基础
 - [[ai-agent]] — AI Agent 倒逼数据语义标准化
 - [[rag-retrieval-augmented-generation]] — Agent 读取数据的相关检索体系

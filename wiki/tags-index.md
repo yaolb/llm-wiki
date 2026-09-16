@@ -102,6 +102,10 @@
 - [PYTHIA（本地 AI Agent 实时感知工具）](entities/pythia.md)
 - [UZI-Skill（游资技能库）](entities/uzi-skill.md)
 
+## AI-Context-Platform
+
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
+
 ## AI分析
 
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
@@ -220,6 +224,10 @@
 ## AgenticEngineering
 
 - [Karpathy AI编码方法论](topics/karpathy-ai-coding-methodology.md)
+
+## Agent上下文
+
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 
 ## Agent基础设施
 
@@ -377,6 +385,10 @@
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 
+## Datastrato
+
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
+
 ## DeepEval
 
 - [RAG 评估体系与方法论](topics/rag-evaluation.md)
@@ -458,6 +470,10 @@
 ## GraphRAG
 
 - [LightRAG](entities/lightrag.md)
+
+## Gravitino
+
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 
 ## Harness
 
@@ -650,6 +666,7 @@
 
 ## Ontology
 
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 
@@ -989,6 +1006,7 @@
 
 ## 上下文工程
 
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [GSD (Get Shit Done)](entities/gsd.md)
 - [上下文工程 (Context Engineering)](concepts/context-engineering.md)
 
@@ -1066,6 +1084,10 @@
 ## 倒排索引
 
 - [Elasticsearch 倒排索引的 Bitmap 机制研究与万象借鉴方案](synthesis/elasticsearch-bitmap-inverted-index-adoption.md)
+
+## 元数据
+
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 
 ## 公司
 
@@ -1449,6 +1471,10 @@
 ## 数据湖
 
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
+
+## 数据目录
+
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 
 ## 数据结构
 
@@ -1907,6 +1933,7 @@
 
 - [Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析](topics/anthropic-data-analytics-agent.md)
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+- [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 

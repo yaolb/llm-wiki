@@ -2,7 +2,7 @@
 type: topic
 tags: [Ossie, 语义层, AI取数, Text-to-SQL, 数据治理, 知识库, 图数据库, 向量检索, 指标治理]
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-09-17
 related_sources: 1
 source_url: https://mp.weixin.qq.com/s/FaTukbFZcS7pxJWtO9Yq7Q
 ---
@@ -164,6 +164,7 @@ AI 取数中很多问题**本质是关系推理问题，不是文本检索问题
 - [[Agent记忆系统]] — "历史问句沉淀业务知识"与记忆分层的同构之处
 - [[任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示]] — 同样强调"验证器独立于生成者"：生成 SQL 只是开始，验证决定能否上线
 - [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — "测试集 + 持续更新闭环"是其 Data-RSI 思路的工程镜像
+- [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — 同主题簇的**产品化路线**：把"统一元数据"放在语义层之下作为地基，并以 Ontology 收口；与本文"语义不是一次性建成、必须靠反馈保鲜"的判断完全一致
 
 ## 外部链接
 

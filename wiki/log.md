@@ -568,3 +568,18 @@
 - 更新 topics/data-stack-semantic-standardization.md：相关概念区补续篇互链 + updated 改 2026-09-16
 - 标签：Ossie / 语义层 / AI取数 / Text-to-SQL / 数据治理 / 知识库 / 图数据库 / 向量检索 / 指标治理
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-09-17] ingest | Datastrato 2.0：Agent Context 的三重支柱（DataFun）
+- 素材：微信公众号「DataFun」《全球首发！Datastrato 2.0：统一元数据、开放语义层与 Ontology》（2026-09-16）；微信正文经 curl + js_content 解析提取全文；归档 raw/datastrato-2-0-agent-context-three-pillars-wechat.md
+- ⚠️ 来源性质：DACon 2026 北京站演讲预告 + Datastrato 2.0（Gravitino 2.0 企业版）发布稿，含大量票务活动信息；厂商主张为自述，未见第三方验证
+- 新增 topics/datastrato-agent-context-three-pillars.md：
+  - 问题起点：业务部门问"这个月到底卖了多少钱"，数仓里三张表、两套口径，抛给 Agent 后 Agent 更懵——算得对不对、背后规则是什么、能不能照此下指令都不知道
+  - 核心判断：Agent 从"回答问题"走向"推理/决策/执行"后，瓶颈不再是模型会不会答，而是**没有可依赖的企业上下文**；需要三件事——数据意味着什么 / 业务实体如何关联 / 行动受哪些规则约束
+  - 三重支柱（逐层递进）：① 统一元数据（Apache Gravitino，跨云跨引擎多模态描述数据资产）→ ② 开放语义层（指标/维度/业务定义跨工具共享，钉死"一个指标多个口径"）→ ③ Ontology（业务实体、关系与规则显式建模，把自然语言意图映射到真实数据与操作边界内）
+  - 路径纠偏（全文最有价值处）：自上而下从应用任务出发建语义出价值快但易生**上下文孤岛**；自下而上从元数据治理出发底座扎实但**推不出业务含义**；推荐**混合路径**——业务场景牵引建模 + 统一元数据连接 + 业务校验/Agent 反馈持续迭代
+  - 保鲜论：上下文会"过期"（数据漂移 / 业务规则变化 / 模型升级），**不保鲜的上下文反而会把 Agent 带偏**
+  - 产品化：数据目录（Data Catalog）→ AI Context Platform；堵俊平（Apache Gravitino 发起人、原 LF AI & Data 董事主席）主讲，同场李明皇讲"每个回答都有据可查"
+- 三条路线对照（本页新增对照表）：Ossie 原篇＝开放标准（语义层是五层数据栈最后一块拼图）／Ossie 实战＝工程落地（三层语义知识库+八步链路+四类验证）／Datastrato＝产品化三层（元数据为地基、语义居中、Ontology 收口）；分歧点＝元数据层归属与是否设显式本体终点；共识＝上下文必须靠反馈迭代保鲜
+- 交叉引用：topics/data-stack-semantic-standardization.md、topics/apache-ossie-ai-data-retrieval.md、concepts/ontology.md（均补互链并更新 updated）
+- 标签：Agent上下文 / 元数据 / 语义层 / Ontology / Gravitino / Datastrato / 数据目录 / AI-Context-Platform / 上下文工程
+- 更新 index.md + tags-index.md（416 标签）+ log.md
