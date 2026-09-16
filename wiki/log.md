@@ -553,3 +553,18 @@
 - 可信度标注：全文标注"厂商官方自述，无第三方复现"，开源仓库地址标为待补
 - 标签：紫东太初 / ZDTaichu / 多模态大模型 / 空间具身 / 具身智能 / 开源 / GRPO / 循环推理 / 中科院自动化所
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-09-16] ingest | Apache Ossie 实战：AI 取数系统的业务语义地基（胡二说八道）
+- 素材：微信公众号「胡二说八道」《Apache Ossie 实战：我如何给 AI 取数系统搭一层业务语义地基》（2026-08-22，ct 1787374527）；微信正文经 curl + js_content 解析提取全文；归档 raw/apache-ossie-in-practice-ai-data-retrieval-wechat.md
+- 定位：与 topics/data-stack-semantic-standardization.md（本体与AI，2026-08-09）为同一 Ossie 主题的「Why → How」前后篇，双方已互链
+- 新增 topics/apache-ossie-ai-data-retrieval.md：
+  - 核心判断：难的不是让大模型写 SQL，而是让它知道公司数据是什么意思；最危险的是"看起来合理、跑得出结果、但口径错误"的 SQL
+  - 三层业务语义知识库：Ossie（结构化/可执行/可交换）+ Wiki（解释/背景/例外/决策过程）+ 图&向量库（关系推理与反向映射）
+  - Ossie 对象模型对应：Dataset / Field / Relationship / Metric / AI Context / Custom Extensions；指标层级（事实表原始字段 → 原子指标 → 派生指标 → 衍生指标）；跨 Hive/StarRocks/PG 统一语义
+  - 八步链路：理解问题 → 召回结构化语义 → 召回业务知识 → 关系扩展 → 生成 SQL → 执行 → 代码二次处理 → 可视化与可追溯解释
+  - 四类验证：SQL 逻辑 / 强业务规则（内部账号、测试门店、退款不进收入）/ 数据量级（异常提示）/ 历史问句对比（差异必须可解释）
+  - 持续更新闭环：元数据同步 Ossie（版本管理+校验）、历史问句沉淀为业务知识、测试集回归
+  - 结论：Ossie 不替代 Wiki / 图向量 / 指标治理 / 数据建模，而是链路的中间语义地基；参考 Apache Ossie GitHub
+- 更新 topics/data-stack-semantic-standardization.md：相关概念区补续篇互链 + updated 改 2026-09-16
+- 标签：Ossie / 语义层 / AI取数 / Text-to-SQL / 数据治理 / 知识库 / 图数据库 / 向量检索 / 指标治理
+- 更新 index.md + tags-index.md + log.md

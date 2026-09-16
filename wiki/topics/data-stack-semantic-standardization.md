@@ -2,7 +2,7 @@
 type: topic
 tags: [agent, 大数据, 语义]
 created: 2026-08-09
-updated: 2026-08-09
+updated: 2026-09-16
 related_sources: 1
 source_url: https://mp.weixin.qq.com/s/4EpQTgZdD2wqg-5s-wtIog
 ---
@@ -67,6 +67,7 @@ source_url: https://mp.weixin.qq.com/s/4EpQTgZdD2wqg-5s-wtIog
 - **Ossie = 门牌号**：决定每个房间放什么、叫什么；目前没人敢上生产，可先把本体模型转成 Ossie 格式随表结构维护（先写"语义源码"，等工具链成熟再"编译"）
 
 ## 相关概念
+- [[Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基]] — 本文续篇（2026-08-22）：从"为什么需要开放语义标准"到"怎么用"——三层语义知识库（Ossie + Wiki + 图/向量）、八步取数链路、四类验证
 - [[ontology]] — 本体论：Ossie 语义层的理论基础
 - [[ai-agent]] — AI Agent 倒逼数据语义标准化
 - [[rag-retrieval-augmented-generation]] — Agent 读取数据的相关检索体系

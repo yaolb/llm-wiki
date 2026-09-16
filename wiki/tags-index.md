@@ -110,6 +110,10 @@
 
 - [cc-switch](entities/cc-switch.md)
 
+## AI取数
+
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+
 ## AI增强开发
 
 - [AI增强开发三件套：把Vibe Coding拉回工程交付](synthesis/ai-dev-trifecta.md)
@@ -682,6 +686,10 @@
 
 - [Oracle 指标平台 Agent A2A + A2UI 集成设计方案](synthesis/oracle-agent-a2a-integration.md)
 
+## Ossie
+
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+
 ## PL
 
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md)
@@ -855,6 +863,7 @@
 
 ## Text-to-SQL
 
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [AutoLink](entities/autolink.md)
 
 ## Tool选择
@@ -1106,9 +1115,17 @@
 - [Milvus](entities/milvus.md)
 - [Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音](topics/milvus-3-0-highlight.md)
 
+## 向量检索
+
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+
 ## 国家队
 
 - [紫东太初](entities/zdt-taichu.md)
+
+## 图数据库
+
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 
 ## 基准测试
 
@@ -1339,6 +1356,10 @@
 
 - [WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化](topics/workbuddy-data-warehouse-expert-team.md)
 
+## 指标治理
+
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+
 ## 推理优化
 
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
@@ -1420,6 +1441,10 @@
 ## 数据查询
 
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
+
+## 数据治理
+
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 
 ## 数据湖
 
@@ -1662,6 +1687,7 @@
 
 ## 知识库
 
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
 - [RAG 检索增强生成（Retrieval-Augmented Generation）](concepts/rag-retrieval-augmented-generation.md)
 
@@ -1880,6 +1906,7 @@
 ## 语义层
 
 - [Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析](topics/anthropic-data-analytics-agent.md)
+- [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 
