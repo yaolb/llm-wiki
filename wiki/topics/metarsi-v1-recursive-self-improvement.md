@@ -9,7 +9,7 @@ source_url: https://m.toutiao.com/article/7685367903704662578/
 
 # MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子
 
-> 素材分析：微信公众号「智猩猩AI」《清华北大斯坦福等联手做了个RSI系统！核心组件Harness-RSI已开源》（编辑：没方，2026-09-14），原文归档于 `raw/metarsi-v1-recursive-self-improvement-toutiao.md`。论文实体页面见 [[MetaRSI-v1]]。
+> 素材分析：微信公众号「智猩猩AI」《清华北大斯坦福等联手做了个RSI系统！核心组件Harness-RSI已开源》（编辑：没方，2026-09-14），原文归档于 `raw/metarsi-v1-recursive-self-improvement-toutiao.md`。
 
 ## 概述
 
