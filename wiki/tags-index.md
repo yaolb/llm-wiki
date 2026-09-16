@@ -416,6 +416,10 @@
 
 - [SeedER](entities/seeder.md)
 
+## GRPO
+
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
+
 ## GSD
 
 - [GSD (Get Shit Done)](entities/gsd.md)
@@ -893,6 +897,10 @@
 
 - [gstack](entities/gstack.md)
 
+## ZDTaichu
+
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
+
 ## Zilliz
 
 - [Milvus](entities/milvus.md)
@@ -992,6 +1000,11 @@
 
 - [FuseAI](entities/fuseai.md)
 
+## 中科院自动化所
+
+- [紫东太初](entities/zdt-taichu.md)
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
+
 ## 云平台
 
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
@@ -1045,9 +1058,15 @@
 
 - [Elasticsearch 倒排索引的 Bitmap 机制研究与万象借鉴方案](synthesis/elasticsearch-bitmap-inverted-index-adoption.md)
 
+## 公司
+
+- [紫东太初](entities/zdt-taichu.md)
+
 ## 具身智能
 
 - [FlashRT](entities/flashrt.md)
+- [紫东太初](entities/zdt-taichu.md)
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
 ## 冰山项目
 
@@ -1087,6 +1106,10 @@
 - [Milvus](entities/milvus.md)
 - [Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音](topics/milvus-3-0-highlight.md)
 
+## 国家队
+
+- [紫东太初](entities/zdt-taichu.md)
+
 ## 基准测试
 
 - [J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5](topics/j-space-deepseek-v4-pro-0813.md)
@@ -1121,6 +1144,11 @@
 ## 多模态
 
 - [RAG-Anything](entities/rag-anything.md)
+
+## 多模态大模型
+
+- [紫东太初](entities/zdt-taichu.md)
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
 ## 多跳推理
 
@@ -1236,6 +1264,8 @@
 - [Unsloth — 消费级 GPU 高效微调大模型](topics/unsloth-efficient-llm-finetuning.md)
 - [khazix-skills](entities/khazix-skills.md)
 - [mergekit](entities/mergekit.md)
+- [紫东太初](entities/zdt-taichu.md)
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
 ## 开源工具
 
@@ -1257,6 +1287,10 @@
 ## 强化学习
 
 - [SeedER](entities/seeder.md)
+
+## 循环推理
+
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
 ## 微信
 
@@ -1659,6 +1693,10 @@
 
 - [混合专家模型（Mixture of Experts, MoE）](concepts/moe-mixture-of-experts.md)
 
+## 空间具身
+
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
+
 ## 精准营销
 
 - [用户画像系列文章 · 参考资料汇编](sources/user-profile-series-reference.md)
@@ -1668,6 +1706,11 @@
 ## 索引
 
 - [万象文档归档索引](topics/wanxiang-docs-archive.md)
+
+## 紫东太初
+
+- [紫东太初](entities/zdt-taichu.md)
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
 ## 组织级
 

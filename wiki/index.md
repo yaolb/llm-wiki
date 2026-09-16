@@ -12,6 +12,7 @@
 - Reports: 10
 
 ### Sources
+- [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md) — 中科紫东太初 2026-09-15 开源约 9B 参数通用多模态模型：支持单/多图、长视频、任意分辨率；九大空间理解基准自称 8 项组别第一，四层能力链（空间感知→三维推理→具身条件推理→物理交互决策）；自适应循环推理（熵门控 + 前向传播内部循环 + 阻尼/双停判据/状态回滚）；稀缺点是**除权重外开放整套空间多模态数据生产管线**（预训/SFT/退火/GRPO 全环节）；⚠️ 全部成绩为厂商自述（2026-09）`#紫东太初 #多模态大模型 #空间具身 #具身智能 #开源`
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md) — CosmosMind + 清华/北大/斯坦福：把递归自我改进（RSI）拆成 Data-RSI / Harness-RSI / Model-RSI 三算子，共享同一 RSI Kernel（Observe→Diagnose→Propose→Validate→Execute→Select→Export，仅 Diagnose/Propose 由模型做）+ 禁止改评估器的权限边界；H→M 非法（旧数据过期）；三级递归（算子→RSI²→MetaRSI²）；Qwen3.5-35B-A3B 四项平均 +10.9 pt（其中 3.6 pt 来自动态调度）；Harness-RSI 已开源为 RSI-Harness（2026-09）`#RSI #递归自我改进 #Harness #Agent-Harness #自改进Agent`
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md) — Anthropic 用几十个 Claude Agent 在 Lean 4 中协作（11 天 / 约 1300 万行 Lean / 30,300 中间定理）完成费马大定理端到端机器验证；核心不是"如何启动多 Agent"，而是把任务状态从对话记忆外置到定理依赖图（DAG）——节点存"要交付的结果"而非角色、proof-sketch 让"方案成立 ≠ 工作完成"、按里程碑调度、验证器独立于 Agent 报告（2026-09）`#多Agent #Agent编排 #任务DAG #Anthropic #Lean4`
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md) — 北大+DeepSeek-AI 论文分析（arXiv 2608.25512，92 页）：把 effect/coeffect 从编译期下沉为运行时机制（revertible effects 逆变换 LIFO 回滚 + reactive coeffects 规格驱动激活/停用 + 统一 context 范式），Cordis 元框架经 Koishi 4000+ 插件生产验证，直指自演化 Agent Harness 的热可组合性；附知乎社区解读对照（granularity mismatch / episode 嵌套 / Confluence 反 state drift）（2026-08）`#编程语言理论 #Effect-Systems #动态组合 #Agent-Harness #Cordis #DeepSeek`
@@ -38,6 +39,7 @@
 - [UZI-Skill：AI 股票深度分析插件](sources/uzi-skill-stock-analysis.md)
 
 ### Entities
+- [紫东太初](entities/zdt-taichu.md) — 中科院自动化所孵化的跨模态"国家队"，全球首个中文千亿参数级多模态大模型，SAIL 奖 + 网信办备案 + 信通院可信认证"双认证"；2026-09 开源 ZDTaichu5.0‑9B `#公司 #多模态大模型 #中科院自动化所 #具身智能`
 - [Apache Burr](entities/apache-burr.md)
 - [AutoLink](entities/autolink.md)
 - [BMAD](entities/bmad.md)

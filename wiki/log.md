@@ -539,3 +539,17 @@
 - 交叉引用：concepts/loop-engineering.md、concepts/context-engineering.md、topics/agent-task-dag-orchestration.md 相关概念区各补互链
 - 标签：RSI / 递归自我改进 / MetaRSI / Harness / Data-RSI / Model-RSI / 自改进Agent / LoRA / Agent-Harness / 开源
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-09-16] ingest | 紫东太初 ZDTaichu5.0‑9B 开源（官方账号）
+- 素材：今日头条账号「中科紫东太初」（厂商官方发布）《重磅开源！紫东太初 ZDTaichu5.0‑9B》（2026-09-14，模型 9-15 开源）；正文在内联 URL 编码 JSON 的 articleInfo.content，解码 + HTML 清洗提取全文；归档 raw/zdt-taichu-5-0-9b-toutiao.md
+- 新增 topics/zdt-taichu-5-0-9b.md：约 9B 参数通用多模态模型，支持单图/多图/长视频/任意分辨率
+  - 四层能力链：空间感知 → 复杂三维空间推理 → 具身条件推理 → 物理交互决策
+  - 厂商自述成绩：九大空间理解基准 8 项同参数组别第一；MindCube-tiny 78.27；ViewSpatial 跨视角（仅本模型输出正确相对方位）；ERQA/RoboSpatial 同参数开源第一；视频定位（"从左到右第二个银色盒子"）只有本模型坐标正确
+  - 自适应循环推理：熵门控 + 前向传播内部循环（不依赖外部 CoT）+ 阻尼更新/双重停止判据/轨迹读出与状态回滚；内部循环提单步质量、外部任务循环接环境反馈
+  - 稀缺开源点：除权重外开放覆盖 预训练/SFT/高质量退火/GRPO 可验证强化学习 的完整数据生产管线（哈希-URL 双去重、三维能力标签体系、思维链合成、能力域-难度-质量三维标签、坐标命中/格式合规奖励）
+  - 落地（自述）：科研自动化干湿实验闭环、智能制造备料配送/机台上料、端侧设备控制
+- 新增 entities/zdt-taichu.md：中科紫东太初（中科院自动化所孵化、全球首个中文千亿参数级多模态大模型、SAIL 奖 + 网信办备案 + 信通院可信认证双认证）
+- 交叉引用：concepts/loop-engineering.md 相关概念区补充「内部循环 + 外部任务循环」互链
+- 可信度标注：全文标注"厂商官方自述，无第三方复现"，开源仓库地址标为待补
+- 标签：紫东太初 / ZDTaichu / 多模态大模型 / 空间具身 / 具身智能 / 开源 / GRPO / 循环推理 / 中科院自动化所
+- 更新 index.md + tags-index.md + log.md

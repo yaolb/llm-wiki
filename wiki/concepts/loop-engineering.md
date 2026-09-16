@@ -30,6 +30,7 @@ Loop Engineering：用户输入 → Agent Loop（思考→行动→观察→思�
 - [[AI Agent（智能体）]]
 - [[AI 编程（AI Programming / AI Coding）]]
 - [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — RSI²/MetaRSI² 的"下一步改哪里"就是 Loop 的调度决策
+- [[紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型]] — 具身场景的"内部循环 + 外部任务循环"两层 Loop 实例
 
 ## 谁来做 Loop 里的调度？—— Controller 评测
 
