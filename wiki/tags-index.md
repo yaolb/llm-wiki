@@ -67,6 +67,7 @@
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
 - [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
 - [AI Agent 技术全景报告 2026](topics/ai-agent-landscape-2026.md)
+- [AgentConnect](entities/agentconnect.md)
 - [Agent工具选择问题](concepts/agent-tool-selection.md)
 - [Agent记忆系统](concepts/agent-memory-system.md)
 - [CC-Connect](entities/cc-connect.md)
@@ -241,6 +242,10 @@
 
 - [J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5](topics/j-space-deepseek-v4-pro-0813.md)
 
+## Agent托管平台
+
+- [AgentConnect](entities/agentconnect.md)
+
 ## Agent架构
 
 - [AI Agent 技术全景报告 2026](topics/ai-agent-landscape-2026.md)
@@ -266,6 +271,10 @@
 ## Apache
 
 - [Apache Burr](entities/apache-burr.md)
+
+## Apache2.0
+
+- [AgentConnect](entities/agentconnect.md)
 
 ## BMAD
 
@@ -333,6 +342,10 @@
 - [cc-switch](entities/cc-switch.md)
 - [gstack](entities/gstack.md)
 - [khazix-skills](entities/khazix-skills.md)
+
+## Claude Tag
+
+- [AgentConnect](entities/agentconnect.md)
 
 ## ClickHouse
 
@@ -504,6 +517,10 @@
 - [IDMapping — 58 用户 ID 关系映射体系](topics/idmapping.md)
 - [万象 ID 映射 — 实现方案与实现流程](topics/wanxiang-idmapping-design.md)
 
+## IM集成
+
+- [AgentConnect](entities/agentconnect.md)
+
 ## Java
 
 - [Snail AI](entities/snail-ai.md)
@@ -600,6 +617,7 @@
 ## MCP
 
 - [58 集团统一指标系统 — API 网关方案设计](topics/58-indicator-api-gateway-design.md)
+- [AgentConnect](entities/agentconnect.md)
 - [ECC (Everything Claude Code)](entities/ecc.md)
 - [Firecrawl](entities/firecrawl.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
@@ -1239,6 +1257,7 @@
 
 ## 工具
 
+- [AgentConnect](entities/agentconnect.md)
 - [Claude Code](entities/claude-code.md)
 - [Codex CLI](entities/codex-cli.md)
 - [Firecrawl](entities/firecrawl.md)
@@ -1281,6 +1300,7 @@
 ## 开源
 
 - [A2A Agent-to-Agent 协议](concepts/a2a-protocol.md)
+- [AgentConnect](entities/agentconnect.md)
 - [AutoLink](entities/autolink.md)
 - [Codex CLI](entities/codex-cli.md)
 - [DeepSeek](entities/deepseek.md)
@@ -1854,6 +1874,10 @@
 - [OpenSquilla](entities/opensquilla.md)
 - [OpenSquilla — AI 代码生成的自验证与自修复](topics/opensquilla-ai-self-verification.md)
 - [自改进AI Agent](concepts/self-improving-agent.md)
+
+## 自托管
+
+- [AgentConnect](entities/agentconnect.md)
 
 ## 自改进Agent
 

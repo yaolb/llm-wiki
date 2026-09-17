@@ -45,3 +45,4 @@ OpenClaw（社区昵称：**龙虾**，因 Claw 意为钳子）是一个支持�
 ## 对比
 - [[Hermes Agent]] — 清华自进化单 Agent（爱马仕）
 - [[OpenClaw vs Hermes Agent — 执行派 vs 进化派全面对比]] — 深度对比分析
+- [[AgentConnect]] — **多角色 Agent 托管平台（Apache 2.0 自托管）**：把"IM 里 @Agent → 后台异步执行 → 结果回传"做成可自行部署的产品；与 OpenClaw 同处一个问题空间，区别是它**多角色 + Harness 可换**（Claude Code / Codex / DeepSeek Harness），而 OpenClaw 侧重单 Agent 的记忆分层

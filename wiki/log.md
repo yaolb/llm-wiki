@@ -583,3 +583,18 @@
 - 交叉引用：topics/data-stack-semantic-standardization.md、topics/apache-ossie-ai-data-retrieval.md、concepts/ontology.md（均补互链并更新 updated）
 - 标签：Agent上下文 / 元数据 / 语义层 / Ontology / Gravitino / Datastrato / 数据目录 / AI-Context-Platform / 上下文工程
 - 更新 index.md + tags-index.md（416 标签）+ log.md
+
+## [2026-09-17] ingest | AgentConnect：@Agent 下发任务的开源自托管平台（AI产品银海）
+- 素材：微信公众号「AI产品银海」《Claude Tag 被开源了？现在你可以随时 @任意 Agent》（2026-08-27）；微信正文经 curl + js_content 解析提取全文；归档 raw/agentconnect-open-source-agent-hosting-wechat.md
+- 性质提示：体验型产品文章（含作者实操演示），非厂商官方发布稿；能力描述为作者自述，未见第三方验证
+- 新增 entities/agentconnect.md（实体页）：
+  - 定位：开源、可自托管的 Agent 托管平台（Apache 2.0），把 Anthropic「Claude Tag」的 @Agent 下发任务模式产品化；核心判断"任务下发、后台执行和结果回传由同一套平台承接"
+  - 多角色托管：每个角色独立配置模型/记忆/工作区/权限/MCP/Connectors/Skill/沙箱；**Harness 可换**（Claude Code / Codex / DeepSeek Harness 一键创建）——这是与 Claude Tag（绑定 Claude）最大的不同
+  - 触发源：IM @（Discord/Slack/Telegram/GitHub/GitLab）、Webhook、代码仓库事件、定时 Schedule
+  - 实操演示（跨境电商选品）：百炼 MCP 取候选商品 → 统一类目/价格/热度 → 写入飞书多维表格「选品机会池」→ 补竞品价格与销量分布生成价格-评分-销量气泡图 → 高潜进重点视图 → 结论成飞书文档回传 Discord；团队不用重复搬运数据
+  - 可信数据源论证（全文最有价值段）：网页搜索整理的走势存在价格时间点/单位/时区/口径不一致，定时晨报会把这些误差直接写进结论；故 MCP 取可信数据、Skill 固定分析步骤与校验规则、Agentic 框架做执行；输出保留数据时间与来源、数据缺失明确标记
+  - 与 OpenClaw 对照表（新增）：多角色 + Harness 可换 + 多渠道 vs 单 Agent + L0–L3 分层记忆；共同点是"IM @ → 后台异步 → 回传"
+  - 作者判断："会调用模型的团队越来越多，能让 Agent 真正接手固定任务的团队仍然很少"；角色配置/Skill/数据连接/权限规则/任务流程都会沉淀为组织资产，故自托管价值在迁移不用从零
+- 交叉引用：entities/openclaw.md（对比区）、entities/snail-ai.md、concepts/ai-agent.md（相关实体）、concepts/mcp-model-context-protocol.md（相关实体）
+- 标签：工具 / 开源 / AI Agent / Agent托管平台 / MCP / 自托管 / Apache2.0 / IM集成 / Claude Tag
+- 更新 index.md + tags-index.md + log.md

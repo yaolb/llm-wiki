@@ -79,3 +79,4 @@ MCP 包含以下项目：
 
 ## 相关实体
 - [[Firecrawl]]（提供 MCP Server）
+- [[AgentConnect]] — 把 MCP 作为**角色级可信数据源**接入层：每个 Agent 角色单独配 MCP + Connectors + Skill，任务执行时按需调用

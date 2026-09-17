@@ -35,7 +35,11 @@ Snail AI 是由"爱组搭"团队开发的开源企业级 AI Agent 平台，基�
 在 Python 生态（LangChain、LlamaIndex）垄断 AI Agent 领域的背景下，Snail AI 为 Java 企业级开发提供了原生方案。
 
 ## 相关摘要
-- [[Snail AI — Java 生态的企业级 AI Agent 平台]]
+- 原文归档：`raw/agentconnect-open-source-agent-hosting-wechat.md`（「AI产品银海」，2026-08-27）
+
+## 相关概念
+- [[AgentConnect]] — 同为开源可自托管的 Agent 平台，但路线不同：Snail AI 是 **Java / Spring AI 生态的企业级集成框架**，AgentConnect 是 **IM 驱动的多角色 Agent 托管平台**（重点在"任务从哪进、结果交到哪"）
+- [[OpenClaw（🦞 龙虾）]]
 
 ## 延展阅读
 - [Snail AI GitHub](https://github.com/aizuda/snail-ai)

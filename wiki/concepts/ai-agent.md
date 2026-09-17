@@ -105,3 +105,4 @@ Agent 不硬编码单一模型提供商，通过 [[AI 网关与模型路由]] �
 - [[Hermes Agent]]
 - [[PYTHIA（本地 AI Agent 实时感知工具）]]
 - [[UZI-Skill（游资技能库）]]
+- [[AgentConnect]] — 多角色 Agent 托管平台（Apache 2.0 自托管）：IM 里 @Agent → 后台异步执行 → 结果回传
