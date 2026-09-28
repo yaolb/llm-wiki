@@ -215,6 +215,7 @@
 ## Agent-Harness
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md)
 
@@ -368,6 +369,10 @@
 ## Colocate Join
 
 - [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
+
+## Context
+
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
 
 ## Context Rot
 
@@ -533,6 +538,10 @@
 ## KV Cache
 
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
+
+## KV-Cache
+
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
 
 ## Karpathy
 
@@ -741,9 +750,14 @@
 
 - [用户画像：概念与方法论（两篇资料综合）](synthesis/user-profile-concept-methodology.md)
 
+## Pi Agent
+
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
+
 ## Prompt
 
 - [Loop Engineering](concepts/loop-engineering.md)
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
 
 ## Prompt Caching
 
@@ -963,6 +977,10 @@
 
 - [CC-Connect](entities/cc-connect.md)
 
+## compaction
+
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
+
 ## deepseek
 
 - [Cordis 与既有组合方案逐项对比](synthesis/cordis-vs-existing-composability-approaches.md)
@@ -1026,6 +1044,7 @@
 
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [GSD (Get Shit Done)](entities/gsd.md)
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
 - [上下文工程 (Context Engineering)](concepts/context-engineering.md)
 
 ## 上半年
@@ -2010,6 +2029,10 @@
 ## 长期记忆
 
 - [Agent Memory 五篇关键论文综述](synthesis/agent-memory-five-papers.md)
+
+## 长程任务
+
+- [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
 
 ## 阿里云
 

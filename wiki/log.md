@@ -598,3 +598,23 @@
 - 交叉引用：entities/openclaw.md（对比区）、entities/snail-ai.md、concepts/ai-agent.md（相关实体）、concepts/mcp-model-context-protocol.md（相关实体）
 - 标签：工具 / 开源 / AI Agent / Agent托管平台 / MCP / 自托管 / Apache2.0 / IM集成 / Claude Tag
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-09-28] ingest | Pi Agent 的 Context 管理（大模型智能/青稞AI）
+- 素材：微信公众号「大模型智能」转载「青稞AI」（作者 cecilia）《到底什么是 Context？万字长文谈 Pi Agent context 管理》（2026-09-28，约 14000 字）；微信正文经 curl + js_content 解析提取全文，末尾技术群邀请/推荐位文本已剔除；归档 raw/pi-agent-context-management-wechat.md
+- 性质：技术解析长文（作者以 Pi Agent 源码为对象逐层拆解），含大量内部数据结构定义，属一手工程细节分析，非厂商发布稿
+- 关联定位：Pi 即 concepts/pi-coding-agent.md 记录的 earendil-works 开源终端编码 Agent（MIT）；本篇补的是该实体页缺失的**内部机制层**
+- 文章起点：小红书争论「Skill 是 Prompt 还是 Context？」→ 作者先区分 Prompt（相对静态的指令设计）与 Context（运行中动态形成的信息环境）
+- 新增 topics/pi-agent-context-management.md：
+  - Context 五要素：System Prompt / Tool Definitions / User Messages / Assistant Messages / Tool Results；前两者为静态前缀，后三者为动态部分；三者分工 Model（决定下一步）· Harness（组装管理 Context、校验执行工具）· Environment（承载真实状态）
+  - KV-Cache 友好三原则：保持前缀稳定 / 动态信息向后追加（不回头改前缀）/ 用标准消息结构（system·user·assistant·tool，不自行拼接）
+  - 分层：AgentSession（管会话怎么跑：prompt/abort/continue、任务队列、重试、Compaction）vs AgentSessionRuntime（生命周期容器）；引入 AgentSessionServices 解决「切 Session 却沿用旧 cwd 资源」的环境错配——先按目标 cwd 重建 Services 再建 Session
+  - 消息模型：Tool Call 不是独立消息而是 AssistantMessage.content 的一部分；ToolResultMessage 经 beforeToolCall→execute→afterToolCall 生成，异常转错误结果而非中断 Loop
+  - Skill 两阶段：System Prompt 只放 name/description/location 索引 → 任务匹配后 read SKILL.md 正文才进入 Context
+  - 长程任务：agent_end 结束的是本轮 Run 的持续更新而非 Context 本身；历史沉淀 Session State；只有 compaction 真正改变历史形态
+  - Context 预算管理三步：预算内全量 / 超预算截断预览（保留尾部）/ 完整输出落盘按需 read（2000 行·50KB 双限，边产生边处理，清 ANSI）
+  - 两层 Failover：Provider 层不改 Agent Context（同轮重发）；Session 层先回滚失败 AssistantMessage 再从有效 Context 重启 → 说明 Context 还需支持回滚/恢复/重建
+  - Compaction 九个细节：①切点按 token 预算且不能切在 Tool Result 上 ②split-turn 补因果摘要 ③previous-summary 增量合并 ④summary 自带 token 预算 ⑤生成 task continuation state 而非聊天总结 ⑥read/write/edit 文件清单程序化保留（语义交 LLM、事实交程序）⑦摘要生成不走 Agent Loop（避免递归膨胀）⑧真正重建为 [CompactionSummary, ...RecentMessages] 专门消息类型 ⑨Compaction 记录持久化可追踪
+  - 结论：Compaction 是 Context representation transformation——把远端历史从高成本原始消息表示转成低成本结构化摘要表示；RunLoop 管增长，Compaction 管降维与重建
+- 交叉引用：concepts/pi-coding-agent.md（延伸阅读）、concepts/context-engineering.md、concepts/prompt-caching.md、concepts/agent-memory-system.md、topics/datastrato-agent-context-three-pillars.md（治理视角 vs 运行时视角对照）
+- 标签：Pi Agent / 上下文工程 / Context / compaction / KV-Cache / Agent-Harness / 长程任务 / Prompt
+- 更新 index.md + tags-index.md + log.md

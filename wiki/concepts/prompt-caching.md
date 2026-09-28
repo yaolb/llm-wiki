@@ -28,6 +28,8 @@ AI Agent 每次调用都需携带完整的系统提示词（可达数万 Token�
 
 ## 相关概念
 - [[AI 编程（AI Programming / AI Coding）]]
+- [[Pi Agent 的 Context 管理：组装、增长、压缩与重建]] — 把"缓存友好"写成三条硬约束：**保持前缀稳定 / 动态信息向后追加 / 使用标准消息结构**；Compaction 同时是缓存失效点
+- [[上下文工程 (Context Engineering)]]
 - [[AI Agent（智能体）]]
 - [[各大模型厂商 KV-Cache 处理方式全景对比]] — 六厂商 KV Cache 机制/定价全景：DeepSeek 磁盘缓存+MLA 64 token 细粒度、Claude 显式断点、GPT-5 自动、Gemini/Qwen 混合
 

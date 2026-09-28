@@ -56,6 +56,7 @@ Agent Memory 的研究从 2023 年到 2025 年快速演进，详见 → [[Agent 
 - [[AI Agent（智能体）]]
 - [[自改进AI Agent]]
 - [[Agent Memory 五篇关键论文综述]]
+- [[Pi Agent 的 Context 管理：组装、增长、压缩与重建]] — 本页的**运行时实现**：Compaction 生成的不是 conversation summary 而是 **task continuation state**（目标/约束/进展/决策/错误/下一步/关键文件）；且**语义信息交 LLM 蒸馏、确定性事实（read/write/edit 过的文件）由程序直接保留**
 
 ## 相关实体
 - [[OpenClaw]]

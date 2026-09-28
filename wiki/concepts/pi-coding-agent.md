@@ -139,6 +139,10 @@ Package 可包含 Extensions / Skills / Prompts / Themes。
 - GitHub：https://github.com/earendil-works/pi
 - Package 画廊：https://pi.dev/packages
 
+## 延伸阅读
+
+- [[Pi Agent 的 Context 管理：组装、增长、压缩与重建]] — 本页的**内部机制层**：Context 五要素、Runtime/Session/Services 分层、Agent Loop、工具输出预算（截断预览 + 完整落盘按需 read）、两层 Failover、Compaction 九个细节（切点不能落在 Tool Result、split-turn 摘要、增量合并、结构化任务记忆、文件操作程序化保留）
+
 ## 竞品对比
 
 | 维度 | Pi | Claude Code | OpenClaw |
