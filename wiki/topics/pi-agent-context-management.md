@@ -210,6 +210,14 @@ bash 等工具一次可能产生海量日志，容易撑满窗口。Pi 的策略
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — 另一条路线：Datastrato 讲**企业上下文该怎么搭**（治理视角），Pi 讲 **Context 在运行中怎么被管**（运行时视角）；两者都强调"上下文会变化/过期，需要持续维护"
 - [[AI Agent（智能体）]] — Model / Harness / Environment 三分法
 
+## 原文配图（本地留存）
+
+下列配图与原始网页快照（`original.html`）已全部落到本地 `raw/assets/pi-agent-context-management-wechat/`，随时可查看；原文链接见文首 `source_url`。
+
+![img-01](../../raw/assets/pi-agent-context-management-wechat/img-01.gif)
+
+![img-02](../../raw/assets/pi-agent-context-management-wechat/img-02.png)
+
 ## 外部链接
 
 - Pi 官网：https://pi.dev

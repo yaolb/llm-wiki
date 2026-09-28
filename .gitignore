@@ -29,3 +29,7 @@ RAG 检索增强生成.md
 .DS_Store
 Thumbs.db
 dev.log
+
+# 原始网页快照：体积大（单篇 4MB+），只留本地不入库
+# 正文图片仍入库——wiki 页要渲染它们
+raw/assets/**/original.html

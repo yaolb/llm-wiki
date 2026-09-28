@@ -6,10 +6,15 @@
 > 抓取说明：微信正文经 curl + 本地 HTML 解析（js_content）提取，正文完整；末尾微信 UI/推荐位文本已剔除
 > 性质提示：**技术解析长文（约 14000 字）**，作者以 Pi Agent 源码为对象逐层拆解 Context 管理，含大量内部数据结构定义，属一手工程细节分析；非厂商发布稿
 > 关联：Pi 即 `concepts/pi-coding-agent.md` 记录的 **earendil-works 开源终端编码 Agent**（MIT）。本文是该实体页缺失的**内部机制层**——实体页讲"是什么/怎么用"，本文讲"Context 怎么被组装、增长、压缩与重建"
+> 原始素材：`raw/assets/pi-agent-context-management-wechat/`（`original.html` 原始网页快照 4.1 MB + 2 张正文配图）——本地留存，随时可查看；原文链接见上
+
+![img-01](assets/pi-agent-context-management-wechat/img-01.gif)
 
 大模型智能｜分享
 来源 | 青稞AI
 作者 | cecilia
+
+![img-02](assets/pi-agent-context-management-wechat/img-02.png)
 
 01
 前言

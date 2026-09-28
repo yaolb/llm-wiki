@@ -72,7 +72,8 @@
 llm-wiki/
 ├── CLAUDE.md              # 本文件 — Wiki 操作规范
 ├── raw/                   # 原始素材（不可变，仅追加）
-│   └── assets/            # 图片等附件
+│   ├── <slug>.md          # 正文（Markdown）
+│   └── assets/<slug>/     # 原始网页 + 正文内图片（original.html / img-NN.*）
 ├── wiki/                  # LLM 维护的所有 Markdown
 │   ├── index.md           # 全站索引
 │   ├── log.md             # 操作日志
@@ -228,6 +229,25 @@ related_sources: 0
 
 ---
 
+## 原始素材本地化（强制）
+
+归档一篇素材时，**必须把原始文档与图片落到本地**——不能只留文字，也不能只留外链（微信图床会过期、且带防盗链会 403）。
+
+- **存放位置**：`raw/assets/<slug>/`
+  - `original.html` —— 原始网页完整快照（兜底一切解析遗漏）。**体积大（单篇 4MB+），已 `.gitignore`，只留本地不入库**
+  - `img-NN.<ext>` —— 正文内图片，按出现顺序编号，保留原始格式（png/gif/jpg）。**图片入库**——wiki 页要渲染它们，不入库则 GitHub/Obsidian 里全是断图
+- **正文引用**：`raw/<slug>.md` 在图片原位置写 `![img-NN](assets/<slug>/img-NN.<ext>)`，一律用**相对路径**——Obsidian / wiki-viewer / GitHub 都能直接渲染，做到「随时可查看」。
+- **wiki 页引用**：主题页/实体页需要配图时，用相对路径 `../../raw/assets/<slug>/img-NN.<ext>`。
+- **原始链接必留**：`raw/<slug>.md` 头部与 wiki 页的「基本信息」都要保留原文链接（有原发链接也一并写）。
+- **一条命令搞定**：
+  ```bash
+  python3 scripts/fetch-article.py <url> --assets raw/assets/<slug> --out raw/<slug>.md
+  ```
+  自动存 `original.html`、下载正文图片、在正文插入相对引用；装饰性小图（16px 间距图）自动跳过。
+- PDF / docx / 大文件直接放 `raw/assets/<slug>/`，不要把二进制塞进 Markdown。
+
+---
+
 ## 工作流：Ingest（摄入）
 
 ### 🚨 自动入库规则（2026-09-16 起）
@@ -236,13 +256,13 @@ related_sources: 0
 
 例外（先说明再定）：正文抓不到、内容与知识库明显无关、或来源/内容存疑需用户确认时。
 
-**抓取工具**：先用通用抓取（web_fetch 等）；失败立刻转 `scripts/fetch-article.py <url>`（已支持微信公众号 `js_content` 与今日头条内联 JSON `articleInfo.content`），不要反复重试同一工具。
+**抓取工具**：先用通用抓取（web_fetch 等）；失败立刻转 `scripts/fetch-article.py <url> --assets raw/assets/<slug> --out raw/<slug>.md`（已支持微信公众号 `js_content` 与今日头条内联 JSON `articleInfo.content`），不要反复重试同一工具。
 
 ### 步骤
 
 当用户要求摄入新素材时，按以下步骤操作：
 
-1. **读取素材**：读取 `raw/` 中的源文件。如果是网页文章，用 Obsidian Web Clipper 转换为 Markdown 后放入 `raw/`。
+1. **读取素材 + 本地化**：读取 `raw/` 中的源文件；网页文章按上面「原始素材本地化」抓取——正文落 `raw/<slug>.md`，原始网页与图片落 `raw/assets/<slug>/`，并在正文图片原位置插入相对引用。（Obsidian Web Clipper 仅作备选。）
 2. **讨论关键点**：与用户简要讨论素材的核心内容和值得强调的部分。
 3. **创建/更新摘要页**：在 `wiki/papers/` 或 `wiki/topics/` 下创建摘要页面，遵循对应模板。
 4. **更新实体页**：遍历摘要中涉及的所有实体（模型、人物、工具、数据集），如果实体页不存在则创建，存在则更新——在"相关摘要"区块添加指向新摘要的链接，如果新素材带来了新信息则更新正文。
