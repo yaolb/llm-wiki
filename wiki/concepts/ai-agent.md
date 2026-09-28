@@ -32,7 +32,7 @@ Agent 的核心循环：
 ## 关键架构
 
 ### 单 Agent 架构
-一个 LLM 驱动的 Agent 独立完成任务规划和执行。例如 [[OpenClaw]]、[[Hermes Agent]]。
+一个 LLM 驱动的 Agent 独立完成任务规划和执行。例如 [[openclaw]]、[[hermes-agent]]。
 
 ### 多 Agent 协作
 多个专业化 Agent 分工合作，类似团队协作：
@@ -65,7 +65,7 @@ Agent 的核心循环：
 ### 3. 学习型 Agent（Learning Agent）
 - 从交互反馈中持续改进性能
 - 使用机器学习（监督/无监督/强化学习）更新决策
-- 例子：推荐系统、自进化 Agent（[[Hermes Agent]]）
+- 例子：推荐系统、自进化 Agent（[[hermes-agent]]）
 - 适用：动态环境中的多步问题求解
 
 实际生产环境中的 AI Agent 通常是**混合型**，融合以上三类能力。
@@ -101,8 +101,8 @@ Agent 不硬编码单一模型提供商，通过 [[AI 网关与模型路由]] �
 - [[自改进AI Agent]]
 
 ## 相关实体
-- [[OpenClaw]]
-- [[Hermes Agent]]
+- [[openclaw]]
+- [[hermes-agent]]
 - [[PYTHIA（本地 AI Agent 实时感知工具）]]
 - [[UZI-Skill（游资技能库）]]
 - [[AgentConnect]] — 多角色 Agent 托管平台（Apache 2.0 自托管）：IM 里 @Agent → 后台异步执行 → 结果回传

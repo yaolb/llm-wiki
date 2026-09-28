@@ -25,5 +25,5 @@ CC-Connect 是一个桥接工具，让用户可以在飞书、微信等即时通
 
 ## 相关实体
 - [[Claude Code]]
-- [[OpenClaw]]
+- [[openclaw]]
 - [[cc-switch]]

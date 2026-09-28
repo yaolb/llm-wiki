@@ -172,7 +172,7 @@ source_url: https://docs.58corp.com/#/space/1518924893230518275
 
 ## 相关概念
 - [[灰度发布（Canary Release）]]
-- [[58 指标 API 网关方案设计]]
+- [[58-indicator-api-gateway-design]]
 
 ## 拓展阅读
 - [Spring Cloud Gateway 官方文档](https://spring.io/projects/spring-cloud-gateway)

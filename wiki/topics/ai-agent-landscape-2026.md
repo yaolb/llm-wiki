@@ -45,7 +45,7 @@ updated: 2026-07-06
 ### 6. 从工具到同事
 
 - Agent 定位转变：被动工具 → 主动参与者 → 同事
-- 自进化 Agent（[[Hermes Agent]]、[[OpenClaw]]）能自主学习和改进
+- 自进化 Agent（[[hermes-agent]]、[[openclaw]]）能自主学习和改进
 
 ### 7. 本地 Agent 与实时感知
 
@@ -64,7 +64,7 @@ updated: 2026-07-06
 
 ### 单 Agent 架构 vs 多 Agent 架构
 
-- **单 Agent**（[[OpenClaw]]、[[Hermes Agent]]）：简洁、可调试、适合明确任务
+- **单 Agent**（[[openclaw]]、[[hermes-agent]]）：简洁、可调试、适合明确任务
 - **多 Agent**（architect-loop、[[Comet]]）：各司其职、突破单模型天花板
 
 ## 关键挑战
@@ -82,8 +82,8 @@ updated: 2026-07-06
 - [[FDE (Forward Deployed Engineer)]]
 
 ## 相关实体
-- [[OpenClaw]]
-- [[Hermes Agent]]
+- [[openclaw]]
+- [[hermes-agent]]
 - [[Superpowers]]
 - [[OpenSpec]]
 - [[PageAgent]]

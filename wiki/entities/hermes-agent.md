@@ -47,5 +47,5 @@ Hermes：用户反馈 → Agent 自动分析失败原因 → Agent 自动修正�
 - [[自改进AI Agent]]
 
 ## 相关实体
-- [[OpenClaw]]（龙虾）
-- [[OpenClaw vs Hermes Agent — 执行派 vs 进化派全面对比]] — 深度对比分析
+- [[openclaw]]（龙虾）
+- [[openclaw-vs-hermes]] — 深度对比分析

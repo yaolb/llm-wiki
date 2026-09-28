@@ -52,7 +52,7 @@ RAG（检索增强生成）是一种将信息检索系统与大型语言模型�
 
 ## RAG 评估
 
-RAG 系统需要从检索质量、生成质量、端到端系统三个维度进行评估。主流框架包括 [[RAG评估体系与方法论|RAGAS（RAG 专用）和 DeepEval（通用 LLM 评估）]]，核心方法是 LLM-as-a-Judge。
+RAG 系统需要从检索质量、生成质量、端到端系统三个维度进行评估。主流框架包括 [[rag-evaluation|RAGAS（RAG 专用）和 DeepEval（通用 LLM 评估）]]，核心方法是 LLM-as-a-Judge。
 
 ## 相关概念
 - [[AI Agent（智能体）]]

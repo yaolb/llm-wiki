@@ -25,5 +25,5 @@ cc-switch 是一个跨平台 AI 助手桌面工具，104k Star。基于 Rust + T
 
 ## 相关实体
 - [[Claude Code]]
-- [[OpenClaw]]
-- [[Hermes Agent]]
+- [[openclaw]]
+- [[hermes-agent]]

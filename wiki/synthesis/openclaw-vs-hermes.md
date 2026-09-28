@@ -96,8 +96,8 @@ AI 时代真正的竞争力不是拥有某个工具，而是**对 AI 的认知�
 
 ## 相关页面
 
-- [[OpenClaw]] — 实体页
-- [[Hermes Agent]] — 实体页
+- [[openclaw]] — 实体页
+- [[hermes-agent]] — 实体页
 - [[AI Agent（智能体）]] — 概念页
 - [[自改进AI Agent]] — 概念页
 - [[AI编程Agent框架对比分析]] — 另一份对比（侧重编程Agent）

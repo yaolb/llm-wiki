@@ -64,4 +64,4 @@ python scripts/run_bo5.py   # best-of-5
 - arXiv: https://arxiv.org/abs/2607.05391
 - GitHub: https://github.com/llm-as-a-verifier/llm-as-a-verifier
 - TurboAgent: https://github.com/llm-as-a-verifier/TurboAgent
-- 原始素材：[[../raw/llm-as-a-verifier-wechat.md]]
+- 原始素材：`raw/llm-as-a-verifier-wechat.md`

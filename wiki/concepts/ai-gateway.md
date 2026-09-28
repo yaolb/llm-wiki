@@ -67,7 +67,7 @@ AI 网关是 Agent 基础设施的关键组件。Agent 通过网关访问多个�
 - [[MCP 模型上下文协议（Model Context Protocol）]]
 
 ## 相关实体
-- [[OpenClaw]]（内置多模型路由能力）
+- [[openclaw]]（内置多模型路由能力）
 
 ## 延展阅读
 - [One API GitHub](https://github.com/songquanpeng/one-api)

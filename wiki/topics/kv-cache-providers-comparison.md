@@ -109,4 +109,4 @@ KV Cache（Key-Value Cache）是 Transformer 大模型推理加速的核心机�
 - DeepSeek API 文档：https://api-docs.deepseek.com/zh-cn/guides/kv_cache
 - Synthorai：LLM Prompt Caching #2: Compare Claude, GPT, Gemini, DeepSeek
 - SWFTE：Prompt Caching (June 2026)
-- 完整原始素材：[[../raw/kv-cache-providers-comparison.md]]
+- 完整原始素材：`raw/kv-cache-providers-comparison.md`

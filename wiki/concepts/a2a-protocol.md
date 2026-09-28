@@ -99,4 +99,4 @@ A2A 规范分为三层：
 ## 相关概念
 
 - [[mcp-model-context-protocol]] — A2A 的互补协议，Agent-to-Tool
-- [[oracle-agent-a2a-a2ui-integration]] — Oracle 指标平台 A2A + A2UI 集成设计方案
+- [[oracle-agent-a2a-integration]] — Oracle 指标平台 A2A + A2UI 集成设计方案

@@ -78,4 +78,4 @@ source_url: https://mp.weixin.qq.com/s/RfAqfnlXwefg7B9RBRNokw
 
 ## 参考来源
 - 微信公众号「企业架构EA之家」：https://mp.weixin.qq.com/s/RfAqfnlXwefg7B9RBRNokw
-- 原始素材：[[../raw/ontology-modeling-five-steps-wechat.md]]
+- 原始素材：`raw/ontology-modeling-five-steps-wechat.md`

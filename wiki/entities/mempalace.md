@@ -30,5 +30,5 @@ MemPalace 是一个开源的 AI 记忆系统，55k Star，本地优先架构。�
 - [[自改进AI Agent]]
 
 ## 相关实体
-- [[OpenClaw]]
-- [[Hermes Agent]]
+- [[openclaw]]
+- [[hermes-agent]]

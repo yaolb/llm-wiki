@@ -51,7 +51,7 @@ DCF、Comps、LBO、DDM、EVA、SOTP、Risk-Adjusted PE、Monte Carlo 等。
 ## 相关概念
 - [[AI Agent（智能体）]]
 - [AI 投资分析（AI Investment Analysis）](https://www.investopedia.com/articles/investing/ai-in-investing.asp)
-- [[OpenClaw]]
+- [[openclaw]]
 
 ## 延展阅读
 - [GitHub 仓库](https://github.com/wbh604/UZI-Skill)
