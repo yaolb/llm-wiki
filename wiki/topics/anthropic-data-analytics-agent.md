@@ -57,6 +57,7 @@ Anthropic 官方博客分享数据团队实践：用 Claude 自动化 **95% 的�
 ## 相关主题
 - [[从 Arrow 到 Iceberg 到 Polaris 到 Ossie：语义标准化的最后一块拼图]] — 语义层在数据栈中的位置
 - [[WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化]] — 同类数据 Agent 实践
+- [[EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）]] — 同类 Data Agent 研究：都指出"验证环节决定能否上线"——本文是权威数据集校验，EvoOntology 是 Candidate/Parent 成对评测 Gate
 
 ## 延展阅读
 - [原文（Anthropic 官方博客）](https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude)

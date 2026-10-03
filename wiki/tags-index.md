@@ -395,6 +395,10 @@
 - [AI 小工具文档](topics/ai-tools/index.md)
 - [AI编程Agent框架对比分析](synthesis/agent-framework-comparison.md)
 
+## Data Agent
+
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+
 ## Data Cache
 
 - [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
@@ -429,6 +433,10 @@
 ## Elasticsearch
 
 - [Elasticsearch 倒排索引的 Bitmap 机制研究与万象借鉴方案](synthesis/elasticsearch-bitmap-inverted-index-adoption.md)
+
+## EvoOntology
+
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 
 ## FDE
 
@@ -628,6 +636,7 @@
 - [58 集团统一指标系统 — API 网关方案设计](topics/58-indicator-api-gateway-design.md)
 - [AgentConnect](entities/agentconnect.md)
 - [ECC (Everything Claude Code)](entities/ecc.md)
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Firecrawl](entities/firecrawl.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
 - [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
@@ -694,6 +703,7 @@
 ## Ontology
 
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 
@@ -1078,6 +1088,10 @@
 - [A2A Agent-to-Agent 协议](concepts/a2a-protocol.md)
 - [Oracle 指标平台 Agent A2A + A2UI 集成设计方案](synthesis/oracle-agent-a2a-integration.md)
 
+## 人大
+
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+
 ## 人群包
 
 - [万象人群包提取方案](synthesis/wanxiang-crowd-package-extraction.md)
@@ -1103,6 +1117,7 @@
 
 ## 企业AI
 
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 
@@ -1559,6 +1574,7 @@
 
 ## 本体论
 
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 
@@ -1909,6 +1925,7 @@
 ## 自进化
 
 - [Agent记忆系统](concepts/agent-memory-system.md)
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Hermes Agent（🧠 爱马仕）](entities/hermes-agent.md)
 - [OpenClaw（🦞 龙虾）](entities/openclaw.md)
 
@@ -1977,6 +1994,7 @@
 - [Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析](topics/anthropic-data-analytics-agent.md)
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 
@@ -2008,6 +2026,10 @@
 ## 跨数据源
 
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
+
+## 轨迹归因
+
+- [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 
 ## 软件2.0
 

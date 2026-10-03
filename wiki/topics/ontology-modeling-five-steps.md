@@ -75,6 +75,7 @@ source_url: https://mp.weixin.qq.com/s/RfAqfnlXwefg7B9RBRNokw
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]] — 数智化融合中知识组织的基础技术
 - [[MCP 模型上下文协议（Model Context Protocol）]] — 智能体工具调用的接口标准
 - [[语义层]] — 本体在数据侧的落地形态
+- [[EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）]] — 同一问题域的最新研究（2026-09）：本体建完以后靠 Agent **执行轨迹**自维护，Candidate/Parent 成对验证才接受；Tool Layer 贡献 57% 增益，说明"怎么用"比"补多少"更重要
 
 ## 参考来源
 - 微信公众号「企业架构EA之家」：https://mp.weixin.qq.com/s/RfAqfnlXwefg7B9RBRNokw

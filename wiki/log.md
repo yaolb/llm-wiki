@@ -618,3 +618,21 @@
 - 交叉引用：concepts/pi-coding-agent.md（延伸阅读）、concepts/context-engineering.md、concepts/prompt-caching.md、concepts/agent-memory-system.md、topics/datastrato-agent-context-three-pillars.md（治理视角 vs 运行时视角对照）
 - 标签：Pi Agent / 上下文工程 / Context / compaction / KV-Cache / Agent-Harness / 长程任务 / Prompt
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-03] ingest | EvoOntology：让 Data Agent 自己维护本体层（DataFunTalk）
+
+- 素材：微信公众号「DataFunTalk」《重磅开源 EvoOntology：打掉本体"建设、维护、更新"难题》（2026-10-01）；微信正文经 fetch-article.py 抓取，--assets 落盘原始快照 + 正文图 21 张；归档 raw/evontology-self-evolving-ontology.md
+- 性质：**媒体对论文的解读稿**（DataFunTalk 技术社区媒体），非论文原文；所有实验数字均转述自论文，**未见第三方复现验证**
+- 论文：《EvoOntology: A Self-Evolving Ontology Layer for Data Agents》，中国人民大学团队（RUC-DataLab），2026-09-14 发布并开源；arXiv 2609.15779 / GitHub ruc-datalab/EvoOntology；作者之一张绍磊（人大信息学院助理教授）将于 DACon 2026 北京站（10-23~24）分享
+- 新增 topics/evontology-self-evolving-ontology.md：
+  - 核心命题：Ontology 从「提前写好的静态说明书」→「Agent 运行时查询、并用执行轨迹反向更新的服务」；维护者从数据团队变成 Agent 自己
+  - ① 静态 Semantic Layer 塞进 Prompt 反而降准：DDR-Bench Trajectory-Wise，Claude-Sonnet-5 无 Ontology 72.5% → 静态 57.5% → EvoOntology 81.3%；GPT-5.6-sol 68.5% → 65.5% → 93.5%；六模型平均 +17.8 pt
+  - ② 三层结构：Content（Terms/Mappings/Constraints/Evidence）、Schema（本体自身结构）、Tool（Agent 怎么调用）；只给轻量 Manifest，按需经 MCP 的 browse/resolve 查询
+  - ③ 轨迹反向更新：Builder Agent 冷启动建初始本体（含 Evidence）→ Evolution Agent 分析轨迹找失败模式 → 定位该改哪层 → 生成**局部 Patch**（非重建）→ Candidate vs Parent 同组验证任务成对评测，更好才接受
+  - 消融：完整 89.5%；取消 Gate 78.3%；取消 Attribution 也下降 → Self-Evolving ≠ 自由改库
+  - ④ 成本反降：轮均输入 3.2K→4.6K，但轮数 14.6→8.4，总 Token 52.6K→42K（−20%），Trajectory-Wise 69.5%→89.5%；对比普通 Memory 75.8%——Memory 存"过去怎么做"，Ontology 沉淀"可查询可组合的业务规则"
+  - ⑤ 跨模型不通用：四模型各自进化所得 Term 两两 Jaccard ≤0.62，交叉迁移至少降 6.6 pt（平均差最高 10.9 pt）；层贡献 Tool 57% / Content 34% / Schema 9% → **"怎么用"比"补多少"更重要**
+  - 局限（论文自认）：仅 DDR-Bench/InsightBench/BIRD 类 Benchmark；真实企业权限/规则冲突/多人修改/审计/版本治理复杂得多
+- 交叉引用：concepts/ontology.md、topics/ontology-modeling-five-steps.md、topics/apache-ossie-ai-data-retrieval.md、topics/data-stack-semantic-standardization.md、topics/anthropic-data-analytics-agent.md（均加反向引用）
+- 标签：Ontology / 本体论 / 语义层 / Data Agent / 自进化 / MCP / EvoOntology / 轨迹归因 / 企业AI / 人大
+- 更新 index.md + tags-index.md + log.md
