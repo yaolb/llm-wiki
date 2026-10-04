@@ -18,6 +18,10 @@
   - m.toutiao.com / www.toutiao.com/article/<id>/ → 内联 URL 编码 JSON，取 articleInfo.content
 
 注意：先试 web_fetch 之类的通用抓取工具，失败再用本脚本；不要反复重试同一工具。
+
+抓取兜底：微信新壳页（正文由前端 JS 注入，HTTP 直接拿不到 js_content）或头条内联 JSON
+未命中时，本脚本会自动调用同目录的 render-html.js，用无头 Chromium 渲染后再解析
+——自动定位 playwright 包与已安装的 Chromium 构建，无需手设 NODE_PATH / executablePath。
 """
 import argparse
 import datetime as _dt
@@ -25,7 +29,10 @@ import html
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import urllib.parse
 import urllib.request
 
@@ -43,6 +50,13 @@ EXT_BY_CTYPE = {
     "image/gif": ".gif", "image/webp": ".webp", "image/svg+xml": ".svg",
     "image/bmp": ".bmp", "image/avif": ".avif",
 }
+
+# 各站点首选的无头渲染入口（render-html.js 内部按此顺序找正文容器）
+RENDER_SELECTORS = ["#js_content", ".rich_media_content", "article", "body"]
+
+
+class ExtractFailed(Exception):
+    """静态解析拿不到正文（典型：微信新壳页 / 头条内联 JSON 未命中），转渲染兜底。"""
 
 
 def http_get(url, mobile=False, referer=""):
@@ -179,7 +193,7 @@ def fetch_wechat(url):
         date = _dt.datetime.fromtimestamp(int(ct)).strftime("%Y-%m-%d")
     m = re.search(r'id="js_content"[^>]*>(.*)', page, re.S)
     if not m:
-        raise SystemExit("wechat: js_content not found (page may be blocked/removed)")
+        raise ExtractFailed("wechat: js_content not found (新壳页或被删，转渲染兜底)")
     body = m.group(1)
     cuts = [i for i in (body.find(k) for k in TAIL_MARKERS) if i > 0]
     if cuts:
@@ -191,7 +205,7 @@ def fetch_toutiao(url):
     page = http_get(url, mobile=True)
     m = re.search(r"(\%7B%22sessionConfig[^<]{5000,})", page) or re.search(r"(\%7B[^<]{5000,})", page)
     if not m:
-        raise SystemExit("toutiao: inline payload not found (try the m.toutiao.com article URL)")
+        raise ExtractFailed("toutiao: inline payload not found (转渲染兜底，或改用 m.toutiao.com 文章 URL)")
     data = json.loads(urllib.parse.unquote(m.group(1)))
     ai = data.get("articleInfo") or {}
     title = ai.get("title") or ""
@@ -200,6 +214,32 @@ def fetch_toutiao(url):
     date = _dt.datetime.fromtimestamp(int(pt)).strftime("%Y-%m-%d %H:%M") if pt else ""
     origin = ai.get("url") or ""
     return title, author, date, ai.get("content", ""), origin, page
+
+
+def _node_bin():
+    """优先用 conda llm 环境的 node（系统 node 版本可能过低）。"""
+    for c in ("/Users/yaolianbin/soft/miniconda3/envs/llm/bin/node",):
+        if os.path.exists(c):
+            return c
+    return shutil.which("node") or "node"
+
+
+def render_page(url):
+    """无头 Chromium 渲染兜底；返回 (title, author, date, body_html, full_html)。"""
+    helper = os.path.join(os.path.dirname(os.path.abspath(__file__)), "render-html.js")
+    if not os.path.exists(helper):
+        raise SystemExit("render-html.js not found next to fetch-article.py")
+    tmpd = tempfile.mkdtemp(prefix="render-")
+    out_html = os.path.join(tmpd, "page.html")
+    out_json = os.path.join(tmpd, "data.json")
+    r = subprocess.run([_node_bin(), helper, url, out_html, out_json],
+                       capture_output=True, text=True, timeout=300)
+    if r.returncode != 0 or not os.path.exists(out_json):
+        raise SystemExit("render fallback failed: " + ((r.stderr or "")[-800:]))
+    data = json.load(open(out_json, encoding="utf-8"))
+    page = open(out_html, encoding="utf-8", errors="ignore").read()
+    return (data.get("title", ""), data.get("acct", ""), data.get("date", ""),
+            data.get("bodyHtml", "") or data.get("text", ""), page)
 
 
 def main():
@@ -214,10 +254,19 @@ def main():
     a = ap.parse_args()
 
     if "mp.weixin.qq.com" in a.url:
-        title, author, date, body, page = fetch_wechat(a.url)
+        try:
+            title, author, date, body, page = fetch_wechat(a.url)
+        except ExtractFailed as e:
+            print("  wechat 静态解析失败（%s）→ 无头渲染兜底 …" % e, file=sys.stderr)
+            title, author, date, body, page = render_page(a.url)
         origin = ""
     elif "toutiao.com" in a.url:
-        title, author, date, body, origin, page = fetch_toutiao(a.url)
+        try:
+            title, author, date, body, origin, page = fetch_toutiao(a.url)
+        except ExtractFailed as e:
+            print("  toutiao 静态解析失败（%s）→ 无头渲染兜底 …" % e, file=sys.stderr)
+            title, author, date, body, page = render_page(a.url)
+            origin = ""
     else:
         raise SystemExit("unsupported source: only mp.weixin.qq.com and toutiao.com are implemented")
 
@@ -238,16 +287,14 @@ def main():
     if asset_rel:
         text = inline_images(text, mapping, asset_rel)
 
-    header = [f"# {title}" if title else "# (untitled)",
-              "",
+    header = [f"# {title}" if title else "# (untitled)", ""] + [x for x in (
               f"> 来源：{author}" if author else "",
               f"> 链接（原文）：{a.url}",
               f"> 链接（原发）：{origin}" if origin else "",
               f"> 日期：{date}" if date else "",
               f"> 原始素材：`{asset_rel}/`（original.html + {len(mapping)} 张图）" if asset_rel else "",
-              "",
-              ""]
-    out = "\n".join(h for h in header if h is not None) + text + "\n"
+          ) if x] + ["", ""]
+    out = "\n".join(header) + text + "\n"
     if a.out:
         with open(a.out, "w", encoding="utf-8") as f:
             f.write(out)
