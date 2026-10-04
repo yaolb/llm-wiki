@@ -636,3 +636,18 @@
 - 交叉引用：concepts/ontology.md、topics/ontology-modeling-five-steps.md、topics/apache-ossie-ai-data-retrieval.md、topics/data-stack-semantic-standardization.md、topics/anthropic-data-analytics-agent.md（均加反向引用）
 - 标签：Ontology / 本体论 / 语义层 / Data Agent / 自进化 / MCP / EvoOntology / 轨迹归因 / 企业AI / 人大
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-04] ingest | HyperFrames：用HTML就能快速做出视频（青鱼学AI）
+
+- 素材：微信公众号「青鱼学AI」《HyperFrames：用HTML就能快速做出视频》（2026-08-31 18:09），短帖
+- 抓取：web_fetch 失败 → curl 拿到的是 JS 渲染外壳（无 js_content / rich_media_content）→ 改用无头 Chromium（playwright 1.63 + headless_shell-1228，executablePath 指定）渲染取正文；原始快照（渲染后 DOM，3.7MB，已 gitignore）落 `raw/assets/hyperframes-html-video-wechat/original.html`
+- 归档：`raw/hyperframes-html-video-wechat.md`（正文约 400 字，无图）
+- 新增 `entities/hyperframes.md`：
+  - HeyGen 开源的程序化视频渲染框架，Apache 2.0 免费可商用
+  - 核心：把做视频变成写网页——HTML + `data-*` 属性排时间线 → 无头浏览器逐帧渲染 → FFmpeg 编码 MP4，无需剪辑、帧级精确、输出确定可复用
+  - 「为 AI Agent 而生」：内置 20 个 Agent Skills，AI 编程助手自主完成 规划→写HTML→配动画→渲染出片；配套 50+ 组件市场 / Studio 可视化编辑器 / Figma 导入 / 云端渲染
+  - GitHub `heygen-com/hyperframes`；官网 `hyperframes.heygen.com`
+- 交叉引用：`entities/html-video.md`（其「渲染引擎架构」默认引擎 Hyperframes → 改为指向本页，并加「相关」区块反向引用）
+- 注意：html-video 页写的是引擎名 "Hyperframes"（小写 f），本篇为 HeyGen 同名项目，判断为同一物，已做互链；若后续发现为不同项目需拆分
+- 标签：视频生成 / AI编程 / 开源工具 / html-to-video / Agent Skills / HeyGen / HyperFrames
+- 更新 index.md + tags-index.md + log.md

@@ -43,6 +43,7 @@
 - [UZI-Skill：AI 股票深度分析插件](sources/uzi-skill-stock-analysis.md)
 
 ### Entities
+- [HyperFrames](entities/hyperframes.md) — HeyGen 开源的程序化视频渲染框架（Apache 2.0）：把做视频变成写网页（HTML + `data-*` 排时间线 → 无头浏览器逐帧渲染 → FFmpeg 编码 MP4），帧级精确、输出可复现；内置 20 个 Agent Skills 让 AI 编程助手全流程出片，配套 50+ 组件市场 / Studio / Figma 导入 / 云端渲染；是 [[html-video]] 的默认渲染引擎（2026-08）`#视频生成 #开源工具 #html-to-video #Agent Skills #HeyGen #HyperFrames`
 - [紫东太初](entities/zdt-taichu.md) — 中科院自动化所孵化的跨模态"国家队"，全球首个中文千亿参数级多模态大模型，SAIL 奖 + 网信办备案 + 信通院可信认证"双认证"；2026-09 开源 ZDTaichu5.0‑9B `#公司 #多模态大模型 #中科院自动化所 #具身智能`
 - [Apache Burr](entities/apache-burr.md)
 - [AutoLink](entities/autolink.md)

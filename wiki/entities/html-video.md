@@ -35,7 +35,7 @@ Open Design · Windsurf CLI · Trae CLI · Claude Code · Cursor · Codex · Gem
 
 | 引擎 | 范式 | 状态 |
 |------|------|------|
-| **Hyperframes** | HTML + CSS + GSAP | ✅ 默认（无头 Chromium + ffmpeg） |
+| **[[HyperFrames]]** | HTML + CSS + GSAP | ✅ 默认（无头 Chromium + ffmpeg） |
 | Remotion | React 组件 | 🗺️ 计划中 |
 | Motion Canvas / Revideo | TypeScript Canvas | 🗺️ 计划中 |
 | Manim | 数学/3D | 🔬 调研中 |
@@ -43,6 +43,10 @@ Open Design · Windsurf CLI · Trae CLI · Claude Code · Cursor · Codex · Gem
 ## 模板系统
 
 内置 21 个模板，涵盖：数据可视化（NYT 风格折线图等）、片头/片尾、电影级效果（胶片颗粒 + 漏光）、代码演示（打字机 + 终端光标 VFX）、产品宣传等。
+
+## 相关
+
+- [[HyperFrames]] — HeyGen 开源的独立渲染框架，本项目的默认引擎（2026-08 有独立介绍帖）
 
 ## 参考
 

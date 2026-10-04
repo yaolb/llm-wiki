@@ -139,6 +139,7 @@
 - [ECC (Everything Claude Code)](entities/ecc.md)
 - [GSD (Get Shit Done)](entities/gsd.md)
 - [GitHub Spec Kit](entities/spec-kit.md)
+- [HyperFrames](entities/hyperframes.md)
 - [Karpathy AI编码方法论](topics/karpathy-ai-coding-methodology.md)
 - [Loop Engineering](concepts/loop-engineering.md)
 - [MUX0](entities/mux0.md)
@@ -207,6 +208,10 @@
 ## Agent Memory
 
 - [Agent Memory 五篇关键论文综述](synthesis/agent-memory-five-papers.md)
+
+## Agent Skills
+
+- [HyperFrames](entities/hyperframes.md)
 
 ## Agent 评测
 
@@ -512,6 +517,10 @@
 - [OpenClaw（🦞 龙虾） vs Hermes Agent（🧠 爱马仕）— 执行派 vs 进化派全面对比](synthesis/openclaw-vs-hermes.md)
 - [cc-switch](entities/cc-switch.md)
 
+## HeyGen
+
+- [HyperFrames](entities/hyperframes.md)
+
 ## Hive
 
 - [用户-标签 Bitmap 构建：工程实现详解](concepts/bitmap-construction-engineering.md)
@@ -519,6 +528,10 @@
 ## Hooks
 
 - [ECC (Everything Claude Code)](entities/ecc.md)
+
+## HyperFrames
+
+- [HyperFrames](entities/hyperframes.md)
 
 ## ID-Mapping
 
@@ -1009,6 +1022,7 @@
 
 ## html-to-video
 
+- [HyperFrames](entities/hyperframes.md)
 - [html-video](entities/html-video.md)
 
 ## meishi
@@ -1363,6 +1377,7 @@
 ## 开源工具
 
 - [GitHub Spec Kit](entities/spec-kit.md)
+- [HyperFrames](entities/hyperframes.md)
 - [html-video](entities/html-video.md)
 
 ## 开源库
@@ -1951,6 +1966,7 @@
 
 ## 视频生成
 
+- [HyperFrames](entities/hyperframes.md)
 - [html-video](entities/html-video.md)
 
 ## 角色化
