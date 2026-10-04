@@ -651,3 +651,17 @@
 - 注意：html-video 页写的是引擎名 "Hyperframes"（小写 f），本篇为 HeyGen 同名项目，判断为同一物，已做互链；若后续发现为不同项目需拆分
 - 标签：视频生成 / AI编程 / 开源工具 / html-to-video / Agent Skills / HeyGen / HyperFrames
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-04] ingest | 顶层本体、行业本体库整理（含开源）（基线沉思）
+
+- 素材：微信公众号「基线沉思」《顶层本体、行业本体库整理（含开源）》（2026-09-03 17:57）——一份**人工整理的本体标准链接清单**
+- 抓取：web_fetch 只回 readability 片段（722B）→ 改用无头 Chromium 渲染取全文（5023 字）；原始快照落 `raw/assets/ontology-standards-and-libraries/original.html`（已 gitignore）；正文无图（结尾一张知识星球二维码未收录）
+- 归档：`raw/ontology-standards-and-libraries.md`（18 张分组表，含全部名称+URL）
+- 新增 `topics/ontology-standards-and-libraries.md`：
+  - 结构：5 个顶层本体（BFO 2.0 / DOLCE / UFO-OntoUML / SUMO / GFO）+ W3C 跨行业基础设施 8 项（OWL 2 / RDF 1.1 / SKOS / PROV-O / DCAT 3 / SSN-SOSA / Schema.org / SPARQL 1.1）+ 16 个行业本体域
+  - 行业域：制造/工业4.0、能源/电力、油气/流程、金融/监管、医疗/生命科学、建筑/BIM、供应链/零售、智慧城市/IoT、数字孪生、法律/合规、农业/食品、交通/物流
+  - 代表项：IOF、AAS(IDTA)、IEC CIM OWL、FIBO、SNOMED CT、HL7 FHIR(+RDF)、OBO Foundry(GO/ChEBI/UBERON)、IFC+ifcOWL、BOT、CityGML 3.0、DTDL、W3C WoT TD、ETSI SAREF 全系列
+  - 作者提示：ISO 正式标准多需付费，但对应 **OWL/RDF 实现版本通常可在 GitHub 免费获取**
+- 交叉引用：`concepts/ontology.md`（相关概念+1）、`topics/ontology-modeling-five-steps.md`（相关概念+1）均加反向引用
+- 标签：Ontology / 本体论 / 顶层本体 / 行业本体 / 语义层 / 开源标准 / OWL / RDF / 知识图谱 / 参考资料
+- 更新 index.md + tags-index.md + log.md

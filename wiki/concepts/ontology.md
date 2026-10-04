@@ -108,3 +108,4 @@ RAG 解决"知道什么"，Ontology 解决"怎么运转"。
 - [[本体建模五步法：本体论+AI如何进入复杂工业场景]] — 五步工程落地路径（实体五类/属性四类/关系六类/跨域影响网络/规则+生成式双驱动）
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — 把本体定位为 Agent 上下文三重支柱的**第三层**：统一元数据（Gravitino）→ 开放语义层 → Ontology，本体负责把业务意图映射到**操作边界内**
 - [[EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）]] — 本体从「静态说明书」变为「运行时服务」：DDR-Bench 上静态 Semantic Layer 反而**降准**（Sonnet-5 72.5%→57.5%），EvoOntology 升到 81.3%；Agent 执行轨迹反向生成局部 Patch，经成对验证 Gate 才接受
+- [[顶层本体与行业本体库整理（含开源）]] — 选型清单：5 个顶层本体（BFO/DOLCE/UFO/SUMO/GFO）+ W3C 基础设施 + 16 个行业本体（FIBO/SNOMED CT/IFC/IOF/SAREF…），多数有 GitHub 上的 OWL/RDF 开源实现

@@ -708,6 +708,10 @@
 
 - [OKF 开放知识格式](concepts/okf-open-knowledge-format.md)
 
+## OWL
+
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
+
 ## OneID
 
 - [用户画像系列：从标签体系到 AI 检索](topics/user-profile-series.md)
@@ -719,6 +723,7 @@
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## Open Design
 
@@ -815,6 +820,10 @@
 ## RAGAS
 
 - [RAG 评估体系与方法论](topics/rag-evaluation.md)
+
+## RDF
+
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## RSI
 
@@ -1194,6 +1203,10 @@
 
 - [Huashu Design](entities/huashu-design.md)
 
+## 参考资料
+
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
+
 ## 参考资料汇编
 
 - [用户画像系列文章 · 参考资料汇编](sources/user-profile-series-reference.md)
@@ -1387,6 +1400,10 @@
 ## 开源情报
 
 - [PYTHIA（本地 AI Agent 实时感知工具）](entities/pythia.md)
+
+## 开源标准
+
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## 开源社区
 
@@ -1592,6 +1609,7 @@
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## 本地优先
 
@@ -1780,6 +1798,7 @@
 - [RAG-Anything](entities/rag-anything.md)
 - [SeedER](entities/seeder.md)
 - [Understand Anything](entities/understand-anything.md)
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## 知识库
 
@@ -1952,6 +1971,10 @@
 
 - [群体智能（Swarm Intelligence / 蜂巢理论）](concepts/swarm-intelligence.md)
 
+## 行业本体
+
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
+
 ## 规格驱动
 
 - [BMAD](entities/bmad.md)
@@ -2013,6 +2036,7 @@
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## 语义搜索
 
@@ -2083,6 +2107,10 @@
 ## 阿里开源
 
 - [PageAgent](entities/pageagent.md)
+
+## 顶层本体
+
+- [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## 预测
 
