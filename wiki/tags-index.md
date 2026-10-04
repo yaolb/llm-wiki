@@ -282,6 +282,10 @@
 
 - [AgentConnect](entities/agentconnect.md)
 
+## Attention
+
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
+
 ## BMAD
 
 - [BMAD](entities/bmad.md)
@@ -423,6 +427,7 @@
 ## DeepSeek
 
 - [J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5](topics/j-space-deepseek-v4-pro-0813.md)
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 - [LLM-as-a-Verifier：验证作为新的 Scaling 轴](topics/llm-as-a-verifier.md)
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md)
@@ -462,6 +467,10 @@
 ## GNN
 
 - [SeedER](entities/seeder.md)
+
+## GQA
+
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 
 ## GRPO
 
@@ -558,6 +567,7 @@
 
 ## KV Cache
 
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
 
 ## KV-Cache
@@ -658,6 +668,7 @@
 
 ## MLA
 
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
 
 ## MemGPT
@@ -950,6 +961,10 @@
 ## Tool选择
 
 - [Agent工具选择问题](concepts/agent-tool-selection.md)
+
+## Transformer
+
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 
 ## TypeScript
 
@@ -1470,6 +1485,7 @@
 
 ## 推理优化
 
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
 
 ## 推理引擎
@@ -1590,6 +1606,10 @@
 ## 星火
 
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
+
+## 显存
+
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 
 ## 智能体框架
 
@@ -1853,6 +1873,10 @@
 - [紫东太初](entities/zdt-taichu.md)
 - [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
+## 线性注意力
+
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
+
 ## 组织级
 
 - [AI Native 研发体系](topics/ai-native-dev-system.md)
@@ -2087,6 +2111,10 @@
 ## 金融
 
 - [UZI-Skill（游资技能库）](entities/uzi-skill.md)
+
+## 长上下文
+
+- [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 
 ## 长期记忆
 

@@ -665,3 +665,18 @@
 - 交叉引用：`concepts/ontology.md`（相关概念+1）、`topics/ontology-modeling-five-steps.md`（相关概念+1）均加反向引用
 - 标签：Ontology / 本体论 / 顶层本体 / 行业本体 / 语义层 / 开源标准 / OWL / RDF / 知识图谱 / 参考资料
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-04] ingest | KV Cache 机制详解（亦行学社）
+
+- 素材：微信公众号「亦行学社」（原文「小H无记」）《KV Cache 机制详解》（2026-09-29 18:49），科普长文，约 1.5 万字 + 28 张图
+- 抓取：web_fetch 仅回 readability 片段（812B）→ 无头 Chromium 渲染取全文 + 懒加载滚屏触发图片；`--assets` 流程下载 28 张正文图全部成功；原始快照落 `raw/assets/kv-cache-mechanism-explained/original.html`（已 gitignore）
+- 归档：`raw/kv-cache-mechanism-explained.md`（16354 字，图在正文原位引用）
+- 新增 `topics/kv-cache-mechanism-explained.md`：七章脉络（RNN 困境→Attention→Transformer→Q/K/V→自回归与因果掩码→缓存什么→显存代价→六维优化→四家实战→参考论文）
+  - 一句话本质：KV cache = 用显存换计算
+  - 分界：Prefill 算力密集（定 TTFT）/ Decode 带宽密集（每步只算 1 token 却读全部 KV）——所有稀疏/驱逐优化只在 Decode 划算
+  - 显存公式 `2 × batch × 层数 × KV头数 × 头维度 × token数 × 字节`；Llama2-7B 每 token 512KB、4096 ctx≈2GB；GQA(4头) 比 MHA(32头) 省 8 倍；256K ctx≈128GB
+  - 四大开源模型：DeepSeek MLA（KV−93.3%、吞吐+5.76×，cache≈2.25 组 GQA）／Qwen GQA→Gated DeltaNet／GLM MHA→MLA+DSA（MLA 省存储、DSA 省计算，动态稀疏不省存储）／Kimi KDA+MLA 3:1 混合（K2 KV−75%、吞吐 6×、1M ctx；K3 93 层=69 KDA+24 Gated MLA）
+  - 启示：缓存对象从「多头 K/V」→「潜向量」→「循环状态」；推理系统存储层要兼容「混合架构 + 超长上下文」
+- 交叉引用：`topics/kv-cache-providers-comparison.md`（相关概念加反向引用）
+- 标签：KV Cache / 推理优化 / Attention / 显存 / DeepSeek / MLA / GQA / 线性注意力 / 长上下文 / Transformer
+- 更新 index.md + tags-index.md + log.md

@@ -99,6 +99,7 @@ KV Cache（Key-Value Cache）是 Transformer 大模型推理加速的核心机�
 
 ## 相关概念
 - [[Prompt Caching]] — KV Cache 的上层应用：缓存 System Prompt 与常用上下文，节省 50-90% 输入 Token
+- [[KV Cache 机制详解：从 Attention 到四大开源模型架构]] — 原理推导 + 架构演进纵切面：显存公式、Prefill/Decode 分界、MLA/GQA/DSA/线性注意力四家对比
 - [[混合专家模型（Mixture of Experts, MoE）]]
 
 ## 相关实体
