@@ -695,3 +695,23 @@
 - 交叉引用（双向）：`concepts/ontology.md`、`topics/ontology-modeling-five-steps.md`、`topics/ontology-standards-and-libraries.md`、`topics/evontology-self-evolving-ontology.md` 均加反向引用
 - 标签：Ontology / 本体论 / 语义层 / Microsoft Fabric / Fabric IQ / 知识图谱 / RDF / OWL / 属性图 / GQL / Palantir / Neo4j / LLM grounding / 选型
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-12] ingest | Jev 模型：单步判别式决策模型（知乎 @谷粒）
+
+- 素材：知乎专栏 @谷粒《万字长文解读 Jev 模型：是什么以及怎么用》（2026-09-22 编辑于 12:02 · 江苏），13,835 字，无正文图、数据以表格承载
+- **抓取**：知乎对匿名/无头抓取返回 **403**（`zh-zse-ck` 签名 + 登录墙），`web_fetch` 与 curl（含 Googlebot/Bingbot UA）全部 403；**改用有头真实 Chrome（playwright chromium-1228 完整版 Google Chrome for Testing.app）渲染通过**，取 `.Post-RichText`
+- **工具固化**：`render-html.js` 新增第 5 参数「逗号分隔 CSS 选择器」；`fetch-article.py` 新增 `fetch_zhihu()` 分支（静态失败即渲染兜底）、`SITE_SELECTORS` 站点选择器表、以及**未内置来源的通用渲染兜底**（原为直接 SystemExit）
+- 归档：`raw/jev-model-zhihu-guli.md`（28,797 bytes）；快照 `raw/assets/jev-model-zhihu-guli/original.html`（已 gitignore，无正文图）
+- 新增 `topics/jev-model.md`（17,185 bytes）：
+  - **定位**：不生成文字的单步判别模型；去掉自回归解码循环，**一次前向传播**输出离散标签；`choice`/`score`/`noul` 三原语 + 置信度；TypeSafe AI（创始人 Diogo Almeida）；输入 $0.042/M Token、输出免费、端到端 70–500 ms
+  - **命名**：杰文斯悖论（成本降百倍 → 写死 if-else 处都接模型）；双系统叙事（System 1 反射弧 / System 2 深推）
+  - **原理**：末位 Logits 掩码投影 / NLI 交叉编码器两条复现路径；**KV Cache 前缀共享**解高并发（一次 Prefill，几十候选共享同一 KV 指针）；**RLCD 优化 ECE** 做置信度校准；注意力带来的两个结构性问题（无关项干扰 / 选项顺序敏感）
+  - **数据**：0.5B 提取 logits <30 ms；长文本 360→29,835 Token 为 57.5→218 ms；并发 1→1,500 为 70→610 ms；Jev 86.6% vs 本地 Qwen2.5-7B 73.8% 一致性
+  - **失败模式**：缺思维链（钓鱼邮件 Claude Haiku 更优）/ 选项顺序偏差 / 无关项干扰 / 未校准风险 / 无文本生成 / 单步局限
+  - **四种设计模式**：推测性扇出 / 置信度门控 / 复合评分 / 分层分类
+  - **生产架构**：混合路由 + 成本延迟测算（月度 $25,200→$5,140.80，−79.6%；P50 1,800→70 ms，−96.1%）；三种网关形态；ReflexGate 中间件；影子流量校验；社区案例 pi-warden / pi-jev-auto-mode / jev-router
+  - **选型**：四问 + BERT/LLM/Jev 三范式对比表 + 适合/不适合清单 + 两点工程建议
+  - ⚠️ **入库时做了实际核对**：官方站 `jev.kuhung.me` / `typesafe.ai` 均 200；GitHub 搜 `jev in:name` 共 **13,604 个仓库**（`browser-use/jev-ultrafast` ⭐22,679、`jev-chat/jev-chat-jarvis` ⭐7,656、`tamaratran/fast-jev-compaction` ⭐7,593、`TheoLeeCJ/SemIf-OpenJev` ⭐4,787、`yibie/awesome-jev` ⭐2,286）；但文中引用的 `harshatheg/Qwen-2.5-1B-RLCD`、`AlexWortega/openjev`、`multimodalart/jev-reproductions-tracker` **查无此库（404）**，`rorshopping/jev-on-a-laptop`（⭐24）真实存在 → 已在页内加「核对结果」警示
+- 交叉引用（双向）：`concepts/ai-gateway.md`、`topics/kv-cache-mechanism-explained.md`、`topics/pi-agent-context-management.md` 均加反向引用
+- 标签：决策模型 / Jev / TypeSafe / 判别模型 / System One / 非自回归 / 单步推理 / 模型路由 / 模型网关 / KV Cache / Logits 校准 / RLCD / 置信度门控 / 蒸馏 / Agent 安全
+- 更新 index.md + tags-index.md + log.md

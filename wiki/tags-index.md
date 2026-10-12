@@ -213,6 +213,10 @@
 
 - [HyperFrames](entities/hyperframes.md)
 
+## Agent 安全
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## Agent 评测
 
 - [LoopArena：把模型的 Loop 调度能力单独拎出来考](topics/looparena-benchmark.md)
@@ -573,8 +577,13 @@
 
 - [PageAgent](entities/pageagent.md)
 
+## Jev
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## KV Cache
 
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 - [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
 
@@ -652,6 +661,10 @@
 ## LoRA
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+
+## Logits 校准
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## Loop Engineering
 
@@ -863,6 +876,10 @@
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
+## RLCD
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## RSI
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
@@ -968,6 +985,10 @@
 - [Comet](entities/comet.md)
 - [统一开发范式 (OpenSpec × Superpowers)](concepts/dev-flow-unified-paradigm.md)
 
+## System One
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## TDD
 
 - [Superpowers](entities/superpowers.md)
@@ -992,6 +1013,10 @@
 ## Transformer
 
 - [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
+
+## TypeSafe
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## TypeScript
 
@@ -1220,9 +1245,17 @@
 
 - [万象人群包提取方案](synthesis/wanxiang-crowd-package-extraction.md)
 
+## 决策模型
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## 分布式系统
 
 - [群体智能（Swarm Intelligence / 蜂巢理论）](concepts/swarm-intelligence.md)
+
+## 判别模型
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## 刷新策略
 
@@ -1240,6 +1273,10 @@
 
 - [A2A Agent-to-Agent 协议](concepts/a2a-protocol.md)
 - [MCP 模型上下文协议（Model Context Protocol）](concepts/mcp-model-context-protocol.md)
+
+## 单步推理
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## 原型
 
@@ -1743,6 +1780,10 @@
 
 - [混合专家模型（Mixture of Experts, MoE）](concepts/moe-mixture-of-experts.md)
 
+## 模型网关
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## 模型融合
 
 - [FuseAI](entities/fuseai.md)
@@ -1758,6 +1799,7 @@
 ## 模型路由
 
 - [AI 网关与模型路由](concepts/ai-gateway.md)
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## 法国
 
@@ -1956,6 +1998,10 @@
 - [Firecrawl](entities/firecrawl.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
 
+## 置信度门控
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
 ## 美事文档
 
 - [AI 小工具文档](topics/ai-tools/index.md)
@@ -2023,6 +2069,10 @@
 ## 自验证
 
 - [LLM-as-a-Verifier：验证作为新的 Scaling 轴](topics/llm-as-a-verifier.md)
+
+## 蒸馏
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## 蜂群
 
@@ -2173,6 +2223,10 @@
 ## 阿里开源
 
 - [PageAgent](entities/pageagent.md)
+
+## 非自回归
+
+- [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 
 ## 顶层本体
 

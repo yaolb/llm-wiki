@@ -54,6 +54,20 @@ EXT_BY_CTYPE = {
 # 各站点首选的无头渲染入口（render-html.js 内部按此顺序找正文容器）
 RENDER_SELECTORS = ["#js_content", ".rich_media_content", "article", "body"]
 
+# 按域名定制的渲染正文选择器（无头渲染时传入 render-html.js）
+SITE_SELECTORS = {
+    "zhihu.com": [".Post-RichText", ".RichText.ztext", "#content", "article"],
+    "zhuanlan.zhihu.com": [".Post-RichText", ".RichText.ztext", "#content", "article"],
+}
+
+
+def selectors_for(url):
+    host = urllib.parse.urlsplit(url).netloc.lower()
+    for k, v in SITE_SELECTORS.items():
+        if host.endswith(k):
+            return v
+    return RENDER_SELECTORS
+
 
 class ExtractFailed(Exception):
     """静态解析拿不到正文（典型：微信新壳页 / 头条内联 JSON 未命中），转渲染兜底。"""
@@ -232,7 +246,7 @@ def render_page(url):
     tmpd = tempfile.mkdtemp(prefix="render-")
     out_html = os.path.join(tmpd, "page.html")
     out_json = os.path.join(tmpd, "data.json")
-    r = subprocess.run([_node_bin(), helper, url, out_html, out_json],
+    r = subprocess.run([_node_bin(), helper, url, out_html, out_json, ",".join(selectors_for(url))],
                        capture_output=True, text=True, timeout=300)
     if r.returncode != 0 or not os.path.exists(out_json):
         raise SystemExit("render fallback failed: " + ((r.stderr or "")[-800:]))
@@ -240,6 +254,23 @@ def render_page(url):
     page = open(out_html, encoding="utf-8", errors="ignore").read()
     return (data.get("title", ""), data.get("acct", ""), data.get("date", ""),
             data.get("bodyHtml", "") or data.get("text", ""), page)
+
+
+def fetch_zhihu(url):
+    """知乎专栏/回答：静态页基本拿不到正文（客户端渲染 + 登录墙），直接走渲染兜底。"""
+    page = ""
+    try:
+        page = http_get(url)
+    except Exception:
+        page = ""
+    m = re.search(r'<div class="Post-RichText[^"]*"[^>]*>(.*?)</div>\s*</div>', page, re.S)
+    if m and len(re.sub("<[^>]+>", "", m.group(1))) > 500:
+        title = ""
+        mt = re.search(r'<h1[^>]*class="Post-Title"[^>]*>(.*?)</h1>', page, re.S)
+        if mt:
+            title = html.unescape(re.sub("<[^>]+>", "", mt.group(1))).strip()
+        return title, "", "", m.group(1), page
+    raise ExtractFailed("zhihu: 正文需客户端渲染（转渲染兜底）")
 
 
 def main():
@@ -267,8 +298,17 @@ def main():
             print("  toutiao 静态解析失败（%s）→ 无头渲染兜底 …" % e, file=sys.stderr)
             title, author, date, body, page = render_page(a.url)
             origin = ""
+    elif "zhihu.com" in a.url:
+        try:
+            title, author, date, body, page = fetch_zhihu(a.url)
+        except ExtractFailed as e:
+            print("  zhihu 静态解析失败（%s）→ 无头渲染兜底 …" % e, file=sys.stderr)
+            title, author, date, body, page = render_page(a.url)
+        origin = ""
     else:
-        raise SystemExit("unsupported source: only mp.weixin.qq.com and toutiao.com are implemented")
+        print("  未内置该来源，直接走无头渲染兜底 …", file=sys.stderr)
+        title, author, date, body, page = render_page(a.url)
+        origin = ""
 
     # ---- 原始素材本地化 ----
     asset_rel, mapping = "", {}

@@ -3,7 +3,9 @@
  * 无头浏览器渲染抓取（兜底）：脚本/curl 拿到的 HTML 里根本没有正文时使用。
  *
  * 用法：
- *   node scripts/render-html.js <URL> [out.html] [out.json]
+ *   node scripts/render-html.js <URL> [out.html] [out.json] [selectors]
+ *   selectors: 逗号分隔的 CSS 选择器，按序尝试定位正文容器；
+ *              省略时用通用列表（微信 #js_content → .rich_media_content → article → body）。
  *
  * 自动定位 playwright 包与已安装的 Chromium 构建，无需手设 NODE_PATH / executablePath。
  * out.json 内容：title / acct / date / text（正文纯文本）/ bodyHtml（#js_content 内层 HTML，
@@ -19,6 +21,8 @@ const os = require('os');
 const URL_ = process.argv[2];
 const OUT_HTML = process.argv[3];
 const OUT_JSON = process.argv[4];
+const SEL_ARG = process.argv[5] || '';
+const SELECTORS = SEL_ARG.split(',').map(s => s.trim()).filter(Boolean);
 if (!URL_) {
   console.error('用法: node scripts/render-html.js <URL> [out.html] [out.json]');
   process.exit(2);
@@ -77,7 +81,13 @@ const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleW
   const page = await ctx.newPage();
   await page.goto(URL_, { waitUntil: 'domcontentloaded', timeout: 60000 });
   await page.waitForTimeout(8000);
-  try { await page.waitForSelector('#js_content', { timeout: 20000 }); } catch (e) { console.error('[render] 无 #js_content，按全文取'); }
+  const waitSels = SELECTORS.length ? SELECTORS : ['#js_content'];
+  let waited = false;
+  for (const s of waitSels) {
+    if (waited) break;
+    try { await page.waitForSelector(s, { timeout: 20000 }); waited = true; } catch (e) {}
+  }
+  if (!waited) console.error('[render] 未命中等待选择器，按全文取');
   // 懒加载图片：滚到底再回顶
   await page.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 800) {
@@ -87,8 +97,12 @@ const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleW
     window.scrollTo(0, 0);
   });
   await page.waitForTimeout(4000);
-  const data = await page.evaluate(() => {
-    const c = document.querySelector('#js_content') || document.querySelector('.rich_media_content') || document.body;
+  const data = await page.evaluate((sels) => {
+    let c = null;
+    const list = (sels && sels.length) ? sels
+      : ['#js_content', '.rich_media_content', 'article', 'body'];
+    for (const s of list) { const el = document.querySelector(s); if (el && el.innerText.trim().length > 50) { c = el; break; } }
+    if (!c) c = document.body;
     const imgs = [...c.querySelectorAll('img')]
       .map(i => i.getAttribute('data-src') || i.currentSrc || i.src || '').filter(Boolean);
     const pick = s => { const el = document.querySelector(s); return el ? el.innerText.trim() : ''; };
@@ -100,7 +114,7 @@ const MOBILE_UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleW
       bodyHtml: c.innerHTML,
       imgs,
     };
-  });
+  }, SELECTORS);
   if (OUT_HTML) fs.writeFileSync(OUT_HTML, await page.content());
   if (OUT_JSON) fs.writeFileSync(OUT_JSON, JSON.stringify(data, null, 2));
   console.log(`title: ${data.title} | acct: ${data.acct} | date: ${data.date}`);

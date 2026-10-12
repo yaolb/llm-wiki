@@ -209,6 +209,7 @@ bash 等工具一次可能产生海量日志，容易撑满窗口。Pi 的策略
 - [[Agent记忆系统]] — Compaction 的"结构化任务记忆 + 确定性事实程序化保留"与记忆分层同构
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — 另一条路线：Datastrato 讲**企业上下文该怎么搭**（治理视角），Pi 讲 **Context 在运行中怎么被管**（运行时视角）；两者都强调"上下文会变化/过期，需要持续维护"
 - [[AI Agent（智能体）]] — Model / Harness / Environment 三分法
+- [[Jev 模型：单步判别式决策模型]] — 社区项目 `pi-warden` / `pi-jev-auto-mode` 就在 Pi 的 bash/write/edit 调用口上用单步判别做**语义审批**（无法判定时默认阻断）
 
 ## 原文配图（本地留存）
 
