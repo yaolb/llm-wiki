@@ -46,6 +46,7 @@ source_url: https://mp.weixin.qq.com/s/5HsGQlZAn4VVq-hel8iiKQ
 - [[EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）]] — 建完以后谁维护：Agent 运行时自进化
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] — Ontology 在企业 Agent 上下文里的位置
 - [[Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基]] — 语义层落地：指标口径与取数链路
+- [[从本体论到 Fabric Ontology]] — 微软 Fabric 的落地实现，篇末「优先复用成熟标准本体（SNOMED CT / FIBO / GO）」直接引用本清单
 
 ## 延展阅读
 

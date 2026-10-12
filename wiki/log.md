@@ -680,3 +680,18 @@
 - 交叉引用：`topics/kv-cache-providers-comparison.md`（相关概念加反向引用）
 - 标签：KV Cache / 推理优化 / Attention / 显存 / DeepSeek / MLA / GQA / 线性注意力 / 长上下文 / Transformer
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-12] ingest | 从本体论到 Fabric Ontology（Deon的学习小站）
+
+- 素材：微信公众号「Deon的学习小站」《从本体论到 Fabric Ontology》（2026-09-15），长篇教学/实操笔记，约 4.3 万字 + 19 张图，三篇 + 四附录
+- 抓取：web_fetch 直接报 `Readability ... returned no content` → `fetch-article.py` **自动走新加的无头渲染兜底**（本次兜底链路首个真实用例），19/19 图全部本地化；快照 5.1MB 落 `raw/assets/fabric-ontology-from-ontology/original.html`（已 gitignore）
+- 归档：`raw/fabric-ontology-from-ontology.md`（93402 bytes）
+- 新增 `topics/fabric-ontology-from-ontology.md`（10813 bytes）：
+  - 贯穿案例：连锁奶茶店冷链断裂追责（投诉→批次→车→制冷状态 / 投诉→门店→冷柜→温度历史）
+  - 第一篇：哲学本体论 → Gruber 定义考据 → 术语表/分类学/本体 → 语义网 RDF/RDFS/OWL/SPARQL 为何难普及（败在 shared）→ 知识图谱实用主义转向 → **RDF 图 vs 属性图分叉**（GQL 2024 = ISO/IEC 39075）→ **LLM 三种失败**（术语歧义/关系臆测/无法解释）+ grounding 上限 + 从回答到执行动作
+  - 第二篇：Fabric IQ（Microsoft IQ 四块之一）三层结构；六类 Item；**Ontology declares what connects and why. Graph stores and traverses.**；实测建本体会自动生成 3 个 Item（Lakehouse+SQLEndpoint+GraphModel）→ 本体是**一层声明**非独立存储；**属性图 + GQL 不是 RDF + SPARQL**；对象模型（实体类型/键只能 string|integer/静态+时序属性/关系有名字有方向/属性名全局唯一 1–26 字符）；数据绑定（不复制数据、静态绑定仅一个、类型映射、**硬限制**：必须托管表 / 不能启用 OneLake 安全 / 不能启用列映射[列名含空格自动触发] / **手动刷新**）；实体类型键缺失导致**静默保存失败**；查询层是**路由器**（Graph→GQL、Eventhouse→KQL）+ NL2Ontology；9 章实操含**8 条踩坑清单**
+  - 第三篇：对比 Palantir Foundry（动力学元素 action types/functions 是最大差异）/ RDF-OWL 栈（强推理+跨组织 IRI）/ Neo4j（schema 仅指索引与约束，本体层需自建）/ 基线 LLM+表结构；**10.7 什么时候不该用本体**（三类不适场景 + 该用的信号）；作者对贯穿案例的诚实结论：「本体划算但非必需，用它论证客户必须买则是夸大」
+  - ⭐ 作者自带「证据边界」：第 10 章不含性能与 TCO 测量；Palantir/RDF/Neo4j 三列全部来自官方文档、作者未实操；Fabric Ontology 处于**预览状态**
+- 交叉引用（双向）：`concepts/ontology.md`、`topics/ontology-modeling-five-steps.md`、`topics/ontology-standards-and-libraries.md`、`topics/evontology-self-evolving-ontology.md` 均加反向引用
+- 标签：Ontology / 本体论 / 语义层 / Microsoft Fabric / Fabric IQ / 知识图谱 / RDF / OWL / 属性图 / GQL / Palantir / Neo4j / LLM grounding / 选型
+- 更新 index.md + tags-index.md + log.md

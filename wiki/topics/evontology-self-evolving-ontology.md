@@ -144,6 +144,7 @@ EvoOntology **目前仍是研究工作**：
 - [[Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基]] —— 同属"AI 取数的语义层"问题域；Ossie 强调**用开放标准把语义层建起来**，EvoOntology 强调**建完以后靠轨迹自维护**，两者是同一链条的不同环节
 - [[从 Arrow 到 Iceberg 到 Polaris 到 Ossie：语义标准化的最后一块拼图]] —— "语义层需要持续保鲜"的判断与本篇一致
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] —— 产品化路线，同样以 Ontology 收口
+- [[从本体论到 Fabric Ontology]] —— 微软产品视角的对照：Fabric 的本体层同样是**人工定义 + 手动刷新**（物化图），把「谁来维护」这道题留白——正好反衬本篇的「自进化」价值
 - [[Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析]] —— 同属 Data Agent 落地；都指出**验证环节决定能否上线**
 - [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] —— **Candidate/Parent 成对评测 + 拒绝则回滚**是其"测试集 + 持续更新闭环"的工程镜像
 - [[58 集团统一指标系统 — API 网关方案设计]] / [[万象 AI 分析平台]] —— 企业侧"统一语义层"的现实工程语境（指标口径统一是同一类问题）

@@ -452,6 +452,10 @@
 
 - [FDE (Forward Deployed Engineer)](concepts/fde.md)
 
+## Fabric IQ
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
+
 ## Flink
 
 - [万象 ID 映射 — 实现方案与实现流程](topics/wanxiang-idmapping-design.md)
@@ -471,6 +475,10 @@
 ## GQA
 
 - [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
+
+## GQL
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 
 ## GRPO
 
@@ -601,6 +609,10 @@
 
 - [OKF 开放知识格式](concepts/okf-open-knowledge-format.md)
 
+## LLM grounding
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
+
 ## LLM-Wiki
 
 - [LLM Wiki — 基于 LLM 的结构化知识库方法论](topics/llm-wiki-methodology.md)
@@ -687,6 +699,10 @@
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 
+## Microsoft Fabric
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
+
 ## Milvus
 
 - [Milvus 3.0 Highlight：词法+语义高亮解决 Agent 搜索噪音](topics/milvus-3-0-highlight.md)
@@ -715,12 +731,17 @@
 
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
 
+## Neo4j
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
+
 ## OKF
 
 - [OKF 开放知识格式](concepts/okf-open-knowledge-format.md)
 
 ## OWL
 
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## OneID
@@ -732,6 +753,7 @@
 
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
@@ -780,6 +802,10 @@
 ## PMF
 
 - [FDE (Forward Deployed Engineer)](concepts/fde.md)
+
+## Palantir
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 
 ## Pandas
 
@@ -834,6 +860,7 @@
 
 ## RDF
 
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## RSI
@@ -1324,6 +1351,10 @@
 
 - [万象文档归档索引](topics/wanxiang-docs-archive.md)
 
+## 属性图
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
+
 ## 工作流
 
 - [BMAD](entities/bmad.md)
@@ -1627,6 +1658,7 @@
 ## 本体论
 
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
@@ -1818,6 +1850,7 @@
 - [RAG-Anything](entities/rag-anything.md)
 - [SeedER](entities/seeder.md)
 - [Understand Anything](entities/understand-anything.md)
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
 
 ## 知识库
@@ -2058,6 +2091,7 @@
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
@@ -2102,6 +2136,10 @@
 ## 软件工程
 
 - [测试驱动开发（Test-Driven Development, TDD）](concepts/test-driven-development.md)
+
+## 选型
+
+- [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 
 ## 递归自我改进
 

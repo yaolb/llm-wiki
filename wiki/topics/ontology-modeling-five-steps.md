@@ -77,6 +77,7 @@ source_url: https://mp.weixin.qq.com/s/RfAqfnlXwefg7B9RBRNokw
 - [[语义层]] — 本体在数据侧的落地形态
 - [[EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）]] — 同一问题域的最新研究（2026-09）：本体建完以后靠 Agent **执行轨迹**自维护，Candidate/Parent 成对验证才接受；Tool Layer 贡献 57% 增益，说明"怎么用"比"补多少"更重要
 - [[顶层本体与行业本体库整理（含开源）]] — 建之前先选骨架：顶层本体（BFO/UFO/SUMO…）+ 行业本体（IOF/FIBO/IFC/SAREF…）的可下载清单
+- [[从本体论到 Fabric Ontology]] — 五步法在产品里的一个实例：微软 Fabric 把「业务梳理→本体建模→数智化融合」落成实体类型 / 关系 / 数据绑定三层操作
 
 ## 参考来源
 - 微信公众号「企业架构EA之家」：https://mp.weixin.qq.com/s/RfAqfnlXwefg7B9RBRNokw
