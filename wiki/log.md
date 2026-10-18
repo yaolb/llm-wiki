@@ -774,3 +774,23 @@
 - 核实：HTTP 200；Jupyter Notebook；MIT；创建与最后推送均为 2020-12-05；⭐0 / fork 0；无 description
 - 判定：**个人复现仓库，非 ACE2P / SCHP 官方实现**，7 年未更新，不可直接用于生产选型
 - 已写入 `wiki/topics/mobilesam-vs-ace2p.md` 的「参考实现仓库」小节，并在「待验证」补充骨干网络未公开的说明
+
+## [2026-10-19] ingest | Helix Foundry：图 + SQL 自动构建跨源企业本体
+
+- 原文：DataFunTalk《Helix Foundry开源：图与SQL联手，自动构建跨源企业本体》（2026-10-18）
+  https://mp.weixin.qq.com/s/gmn3baN1x23P5inIE_WlDA
+- 抓取：`web_fetch` 只拿到标题（正文 JS 注入），改用 `scripts/fetch-article.py` 直接命中 `js_content`，**7,607 字 + 6 张图全本地化**
+- 仓库核实（2026-10-19）：`HelixDB/helix-foundry` HTTP 200，**TypeScript**，**Apache-2.0**，⭐**1,599** / fork 242 / open issue 17，创建 **2026-10-07**，最后推送 **2026-10-13**；官网 helix-db.com 200
+- 归档：`raw/helix-foundry-graph-sql-ontology.md`；素材 `raw/assets/helix-foundry-graph-sql-ontology/`（original.html + img-01…img-06）
+- 新页：`wiki/topics/helix-foundry-graph-sql-ontology.md`
+- 核心内容：
+  - 11 个数据集（Stripe/WorkOS/PostHog/PlanetScale/S3）→ 难点不在写 SQL 而在**跨源实体身份识别**
+  - **确定性程序发现关系，AI 只改写描述命名、不决定结构**，人确认后物化——刻意规避 LLM 推断直接入库
+  - 架构：HelixDB（对象/边/发布状态）+ DuckDB（SQL/聚合）+ Parquet（不可变快照）；**非统一混合查询引擎**
+  - 执行安全：只加载获准快照、单条 SELECT、默认 2 并发 × 512MB、凭据隔离
+  - 实测：3 万客户/7 万订单/6.77 万关系，v0.0.12 发布 ~64 秒（M1 Pro 8C8G）
+  - Data Agent（qwen3:4b）：6 次调用/14,516 Token/153 秒 → 32 Customer + 240 Order + 240 关系 + 35 延迟订单
+  - 与 dbt MetricFlow 分工不同；指标治理仍需人工
+  - 边界：单机 MVP、无多租户、无写回/分布式、大规模分页待完善、**备份恢复脚本未经真实 Compose 验证**
+- 双向引用：`topics/fabric-ontology-from-ontology.md`、`topics/evontology-self-evolving-ontology.md`、`topics/datastrato-agent-context-three-pillars.md`、`concepts/ontology.md`
+- 顺手修复：`wiki/index.md` 中两处条目粘连（第 17 行 8 条、第 20 行 2 条挤在同一行），已按 `` ` `` 边界拆分为独立行

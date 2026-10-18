@@ -94,6 +94,7 @@ source_url: https://mp.weixin.qq.com/s/Mwfqc1ij1lGF_x42sn_EzQ
 - [[本体建模五步法：本体论+AI如何进入复杂工业场景]] —— 同一问题域的方法论篇
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] —— 国内厂商把 Ontology 定位为 Agent 上下文第三层
 - [[Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基]] —— 语义层落地的工程视角
+- [[Helix Foundry：图 + SQL 自动构建跨源企业本体]] —— **开源实现路线**：本地优先，图/SQL 分工（HelixDB 存对象与边、DuckDB 跑分析、Parquet 锁快照版本），且**明确不让 LLM 决定本体结构**（确定性发现 + 人工确认）。正可对照本篇「什么时候不该用本体」的三条判据
 
 ## 延展阅读
 

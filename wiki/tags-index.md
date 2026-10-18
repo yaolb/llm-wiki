@@ -302,6 +302,10 @@
 
 - [Apache Burr](entities/apache-burr.md)
 
+## Apache-2.0
+
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+
 ## Apache2.0
 
 - [AgentConnect](entities/agentconnect.md)
@@ -439,6 +443,7 @@
 ## Data Agent
 
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 
 ## Data Cache
 
@@ -471,6 +476,10 @@
 ## Dream模式
 
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
+## DuckDB
+
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 
 ## Effect-Systems
 
@@ -567,6 +576,10 @@
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 - [自改进AI Agent](concepts/self-improving-agent.md)
+
+## HelixDB
+
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 
 ## Hermes
 
@@ -814,6 +827,7 @@
 
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
@@ -884,6 +898,10 @@
 ## Pandas
 
 - [2026年上半年绩效自评](topics/h1-2026-performance-review.md)
+
+## Parquet
+
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 
 ## Persona
 
@@ -1269,6 +1287,10 @@
 - [紫东太初](entities/zdt-taichu.md)
 - [紫东太初 ZDTaichu5.0‑9B：10B 内空间具身最强通用多模态模型](topics/zdt-taichu-5-0-9b.md)
 
+## 主数据管理
+
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+
 ## 云平台
 
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
@@ -1424,6 +1446,7 @@
 ## 图数据库
 
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 
 ## 图生图
 
@@ -1829,6 +1852,7 @@
 ## 本体论
 
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
@@ -2036,6 +2060,7 @@
 
 ## 知识图谱
 
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [LightRAG](entities/lightrag.md)
 - [RAG-Anything](entities/rag-anything.md)
 - [SeedER](entities/seeder.md)
@@ -2318,6 +2343,7 @@
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
@@ -2356,6 +2382,10 @@
 ## 跨数据源
 
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
+
+## 跨源数据
+
+- [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 
 ## 轨迹归因
 

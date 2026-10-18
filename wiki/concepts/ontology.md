@@ -110,3 +110,4 @@ RAG 解决"知道什么"，Ontology 解决"怎么运转"。
 - [[EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）]] — 本体从「静态说明书」变为「运行时服务」：DDR-Bench 上静态 Semantic Layer 反而**降准**（Sonnet-5 72.5%→57.5%），EvoOntology 升到 81.3%；Agent 执行轨迹反向生成局部 Patch，经成对验证 Gate 才接受
 - [[顶层本体与行业本体库整理（含开源）]] — 选型清单：5 个顶层本体（BFO/DOLCE/UFO/SUMO/GFO）+ W3C 基础设施 + 16 个行业本体（FIBO/SNOMED CT/IFC/IOF/SAREF…），多数有 GitHub 上的 OWL/RDF 开源实现
 - [[从本体论到 Fabric Ontology]] — 把「哲学 → 语义网 → 大模型时代 → 产品落地」一次讲通的长文：Fabric 选**属性图 + GQL**（非 RDF/SPARQL）、本体是**一层声明**（建它会自动生成 Lakehouse/SQLEndpoint/GraphModel）、图是**物化的需手动刷新**
+- [[Helix Foundry：图 + SQL 自动构建跨源企业本体]] — **开源的最小可跑本体层**：跨源实体发现→确定性关系建议→人工确认→物化进 HelixDB→DuckDB 查询；关键取舍是**不让 LLM 决定结构**，只让它改写描述与命名，用快照版本 + 人工审核兜底
