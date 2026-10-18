@@ -332,6 +332,10 @@
 - [Codex CLI](entities/codex-cli.md)
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
 
+## CLIP
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
 ## Catalog
 
 - [StarRocks Catalog 数据加速策略深度分析：同构 vs 异构](topics/starrocks-catalog-acceleration-strategy.md)
@@ -475,6 +479,10 @@
 ## Fabric IQ
 
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
+
+## FastSAM
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## Flink
 
@@ -741,6 +749,10 @@
 
 - [Mistral](entities/mistral.md)
 
+## MobileSAM
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
 ## Model Context Protocol
 
 - [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
@@ -930,6 +942,10 @@
 
 - [cc-switch](entities/cc-switch.md)
 
+## SAM
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
 ## SDD
 
 - [BMAD](entities/bmad.md)
@@ -957,6 +973,10 @@
 ## SeedER
 
 - [SeedER](entities/seeder.md)
+
+## Segment Anything
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## Skill
 
@@ -1062,6 +1082,10 @@
 ## VLA
 
 - [FlashRT](entities/flashrt.md)
+
+## ViT
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## Vibe Coding
 
@@ -1331,6 +1355,10 @@
 ## 国家队
 
 - [紫东太初](entities/zdt-taichu.md)
+
+## 图像分割
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## 图数据库
 
@@ -1965,6 +1993,7 @@
 ## 知识蒸馏
 
 - [InfiFusion](entities/infifusion.md)
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## 知识融合
 
@@ -2143,6 +2172,10 @@
 - [Spec驱动开发 (SDD)](concepts/spec-driven-development.md)
 - [统一开发范式 (OpenSpec × Superpowers)](concepts/dev-flow-unified-paradigm.md)
 
+## 视觉大模型
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
 ## 视频生成
 
 - [HyperFrames](entities/hyperframes.md)
@@ -2151,6 +2184,10 @@
 ## 角色化
 
 - [gstack](entities/gstack.md)
+
+## 解耦蒸馏
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## 训练方法
 
@@ -2235,6 +2272,14 @@
 ## 软件工程
 
 - [测试驱动开发（Test-Driven Development, TDD）](concepts/test-driven-development.md)
+
+## 轻量化
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
+## 边缘计算
+
+- [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## 选型
 

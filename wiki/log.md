@@ -732,3 +732,19 @@
 - 交叉引用（双向）：`concepts/agent-memory-system.md`、`entities/agentconnect.md`、`topics/jev-model.md` 均加反向引用
 - 标签：Agent OS / 智能体操作系统 / PilotDeck / 清华 / THUNLP / OpenBMB / 面壁智能 / 白盒记忆 / Dream模式 / Always-on / 智能路由 / 工作舱 / Agent记忆 / MCP
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-19] ingest | SAM / FastSAM / MobileSAM 三条轻量化路线对比（CSDN）
+
+- 素材：CSDN 博客 qq_45752541《【图像分割】大模型SegmentAnything、FastSAM与MobileSAM对比》（2023-10-11 修改），正文 3,664 字符，**16/16 张图全部本地化**
+- 抓取：CSDN 静态 HTML 直出，一次命中；顺手给 `fetch-article.py` 新增 `fetch_csdn()` 分支（正文在 `#content_views`，到 `</article>` 结束；标题取 `h1.title-article`），不再依赖通用渲染兜底
+- 归档：`raw/sam-fastsam-mobilesam-csdn.md`；快照 `raw/assets/sam-fastsam-mobilesam-csdn/original.html`（已 gitignore）
+- 新增 `topics/sam-fastsam-mobilesam.md`（6,882 bytes）：
+  - **SAM 打底**：ViT-H 图像编码器 **600M+ 参数** vs 掩码解码器 **<4M** → 瓶颈明确在编码器；支持点/框/文字提示，零样本迁移
+  - **FastSAM（换架构）**：中科院自动化所 2023-06-22；CNN backbone + 「全实例分割 → 指令匹配」两阶段；point 走位置最优区域、box 走最大 IoU、text 走 CLIP 图文对齐；**仅用 SA-1B 2% 数据**训练即接近 SAM，**提速 50 倍**；代价是边缘不平滑
+  - **MobileSAM（换编码器 + 解耦蒸馏）**：诊断出「编码器+解码器耦合优化」是效果差的根因；把 ViT-H 知识单独蒸馏进轻量编码器，**解码器直接复用**；单卡 **<1 天**、体积 **小 60+ 倍**、**~10ms/图**（8ms encoder + 2ms decoder）、比 FastSAM **小 7 倍、快 4 倍**；解耦蒸馏算力消耗 **<1%**
+  - **三者对比表**：架构/参数/速度/训练数据/分割质量/提示类型/适用场景
+  - **四个洞察**：轻量化两条正交路线（改架构 vs 改规模+蒸馏）；解耦是关键工程判断；瓶颈定位比压缩技巧更重要；数据效率是另一条杠杆（2% 数据 + 架构先验）
+  - ⚠️ **时效标注**：2023 年综述，未覆盖 SAM 2 及后续迭代；指标为论文/作者口径，未独立复现
+- 交叉引用：`topics/zdt-taichu-5-0-9b.md`、`concepts/model-fusion.md`、`topics/jev-model.md` 已在页内引用（后两者为“另一条降本路线”的对照）
+- 标签：图像分割 / SAM / Segment Anything / FastSAM / MobileSAM / 轻量化 / 知识蒸馏 / 解耦蒸馏 / ViT / CLIP / 边缘计算 / 视觉大模型
+- 更新 index.md + tags-index.md + log.md

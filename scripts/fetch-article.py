@@ -256,6 +256,29 @@ def render_page(url):
             data.get("bodyHtml", "") or data.get("text", ""), page)
 
 
+def fetch_csdn(url):
+    """CSDN 博客：静态 HTML 直出，正文在 #content_views，到 </article> 结束。"""
+    page = http_get(url)
+    m = re.search(r'<div id="content_views"[^>]*>(.*?)</article>', page, re.S)
+    if not m:
+        raise ExtractFailed("csdn: content_views not found（可能需登录或已删除）")
+    body = m.group(1)
+
+    def text_of(pats):
+        for p in pats:
+            mm = re.search(p, page, re.S)
+            if mm:
+                v = html.unescape(re.sub("<[^>]+>", "", mm.group(1))).strip()
+                if v:
+                    return v
+        return ""
+
+    title = text_of([r'<h1[^>]*class="title-article"[^>]*>(.*?)</h1>', r"<title>(.*?)</title>"])
+    author = text_of([r'class="follow-nickName"[^>]*>(.*?)</a>'])
+    date = text_of([r'<span class="time"[^>]*>(.*?)</span>'])
+    return title, author, date, body, page
+
+
 def fetch_zhihu(url):
     """知乎专栏/回答：静态页基本拿不到正文（客户端渲染 + 登录墙），直接走渲染兜底。"""
     page = ""
@@ -298,6 +321,13 @@ def main():
             print("  toutiao 静态解析失败（%s）→ 无头渲染兜底 …" % e, file=sys.stderr)
             title, author, date, body, page = render_page(a.url)
             origin = ""
+    elif "csdn.net" in a.url:
+        try:
+            title, author, date, body, page = fetch_csdn(a.url)
+        except ExtractFailed as e:
+            print("  csdn 静态解析失败（%s）→ 无头渲染兜底 …" % e, file=sys.stderr)
+            title, author, date, body, page = render_page(a.url)
+        origin = ""
     elif "zhihu.com" in a.url:
         try:
             title, author, date, body, page = fetch_zhihu(a.url)
