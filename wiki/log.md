@@ -748,3 +748,22 @@
 - 交叉引用：`topics/zdt-taichu-5-0-9b.md`、`concepts/model-fusion.md`、`topics/jev-model.md` 已在页内引用（后两者为“另一条降本路线”的对照）
 - 标签：图像分割 / SAM / Segment Anything / FastSAM / MobileSAM / 轻量化 / 知识蒸馏 / 解耦蒸馏 / ViT / CLIP / 边缘计算 / 视觉大模型
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-19] ingest | ChatGPT 会话三篇：MobileSAM vs ACE2P + 图像颜色校正两篇
+
+- 素材：用户自有 ChatGPT 会话（经 **ego lite / ego-browser** 已登录态提取，spaceId 20）
+  - 《MobileSAM与ACE2P对比》 https://chatgpt.com/c/6ad50397-de9c-83ea-9696-7e2162f0f0de
+  - 《豆包图生图颜色适配》 https://chatgpt.com/c/6acc6d62-c0c8-83ea-9731-3c1e4b160d72
+  - 《解释清晰度差异》 https://chatgpt.com/c/6ad0aa8c-721c-83ea-a976-a1811c702fc7
+- 背景：ChatGPT 私有会话 `/c/` 对匿名抓取返回 403（后端接口亦 403，share 页只有 SPA 空壳）。按用户要求改用 ego lite，通过 `ego-browser nodejs` 的 `taskSpace` / `page.goto` / `page.evaluate` 提取正文
+- 归档原始正文：
+  - `raw/chatgpt-mobilesam-vs-ace2p.md`
+  - `raw/chatgpt-doubao-seedream-color-correction.md`
+  - `raw/chatgpt-seedream-1k-2k-quality-eval.md`
+- 新增三个 wiki 页：
+  1. `topics/mobilesam-vs-ace2p.md` —— 通用交互式分割 vs 人体语义解析；MobileSAM（TinyViT，9.66M，12ms，CPU ~3s）vs ACE2P（自动部位/服装类别）；A-CE2P 属 SCHP 增强版、SCHP 是替代方案（LIP 20 类）；换裤子推荐「人体解析 + MobileSAM 精修 + 保护蒙版 + Seedream + OpenCV 校色」，语义蒙版不能直接当最终生成蒙版
+  2. `topics/doubao-seedream-color-correction.md` —— **图像颜色校正主文**：色差四因（生成式重绘/光照适配/语义颜色/多图冲突）；不要匹配平均 RGB，改用 Lab：商品均匀受光面料取基准 → 主要校 a*/b* → L* 受约束 → Mask 羽化 → ΔE00 多区域验收；α 从 0.7 起；Seedream 5.0 Pro API（`doubao-seedream-5-0-pro-260628`，2K/PNG/多图≤10）；Java+OpenCV 4 核 8G 无 GPU、单任务 130–250MB
+  3. `topics/seedream-1k-2k-quality-eval.md` —— **图像颜色校正验收侧**：1K/1.5K/2K 三档（1.5K 与 1K 同价，待核实）；效果差距大于像素差距；六维评测（区域保持 25/商品特征 25/自然度 20/色彩 15/清晰度 10/缺陷 5）+ 硬性否决；Java/OpenCV 算 MAE/PSNR/Laplacian/ΔE76（生产升 ΔE00）；视觉模型补语义；阈值 综合≥85、PSNR≥35dB、MAE≤3/255、ΔE00≤5；100 组×5 次盲评，看每张合格图成本
+- **标签要求落实**：两篇颜色相关页均打上 `#图像颜色校正`；分割篇打 `#图像分割 / #MobileSAM / #ACE2P / #人体解析` 等
+- 说明：侧边栏《比较XMP模式区别》经核实是 **DDR5 内存 XMP 超频**，与图像颜色无关，未打颜色标签
+- 来源性质均为 ChatGPT 生成内容，已在页内标注「需回官方文档/实测核对」

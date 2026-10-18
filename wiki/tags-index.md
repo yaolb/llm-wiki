@@ -14,6 +14,10 @@
 - [RAG 评估与 DeepEval 方案](sources/rag-evaluation-deepeval.md)
 - [UZI-Skill：AI 股票深度分析插件](sources/uzi-skill-stock-analysis.md)
 
+## 1.5K
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+
 ## 2026
 
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
@@ -42,6 +46,10 @@
 ## A2UI
 
 - [Oracle 指标平台 Agent A2A + A2UI 集成设计方案](synthesis/oracle-agent-a2a-integration.md)
+
+## ACE2P
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 
 ## AGENT调研
 
@@ -322,6 +330,10 @@
 - [用户画像系列：从标签体系到 AI 检索](topics/user-profile-series.md)
 - [用户编码机制（User Code Encoding）](concepts/user-code-encoding.md)
 
+## CE2P
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
+
 ## CLAUDE.md
 
 - [Karpathy AI编码方法论](topics/karpathy-ai-coding-methodology.md)
@@ -594,8 +606,10 @@
 
 ## Java
 
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
 - [Snail AI](entities/snail-ai.md)
 - [Snail AI — Java 生态的企业级 AI Agent 平台](topics/snail-ai-agent-platform.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
 ## JavaScript
 
@@ -665,6 +679,10 @@
 ## LLM融合框架
 
 - [InfiFusion](entities/infifusion.md)
+
+## Lab色彩空间
+
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
 ## LangChain替代
 
@@ -751,6 +769,7 @@
 
 ## MobileSAM
 
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
 ## Model Context Protocol
@@ -816,6 +835,11 @@
 
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
+## OpenCV
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
+
 ## OpenClaw
 
 - [Agent记忆系统](concepts/agent-memory-system.md)
@@ -848,6 +872,10 @@
 ## PMF
 
 - [FDE (Forward Deployed Engineer)](concepts/fde.md)
+
+## PSNR
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
 
 ## Palantir
 
@@ -945,6 +973,11 @@
 ## SAM
 
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
+
+## SCHP
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 
 ## SDD
 
@@ -973,6 +1006,11 @@
 ## SeedER
 
 - [SeedER](entities/seeder.md)
+
+## Seedream
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
 ## Segment Anything
 
@@ -1054,6 +1092,10 @@
 
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
 - [AutoLink](entities/autolink.md)
+
+## TinyViT
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 
 ## Tool选择
 
@@ -1170,6 +1212,11 @@
 
 - [万象](entities/wanxiang.md)
 
+## ΔE00
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
+
 ## 万象
 
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
@@ -1230,6 +1277,10 @@
 
 - [A2A Agent-to-Agent 协议](concepts/a2a-protocol.md)
 - [Oracle 指标平台 Agent A2A + A2UI 集成设计方案](synthesis/oracle-agent-a2a-integration.md)
+
+## 人体解析
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 
 ## 人大
 
@@ -1358,11 +1409,25 @@
 
 ## 图像分割
 
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
+## 图像质量评测
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+
+## 图像颜色校正
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
 ## 图数据库
 
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+
+## 图生图
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
 
 ## 基准测试
 
@@ -1955,6 +2020,12 @@
 - [用户-标签 Bitmap 位图构建](concepts/user-tag-bitmap-construction.md)
 - [用户编码机制（User Code Encoding）](concepts/user-code-encoding.md)
 
+## 电商换装
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
+
 ## 画像
 
 - [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md)
@@ -2148,6 +2219,18 @@
 
 - [LLM-as-a-Verifier：验证作为新的 Scaling 轴](topics/llm-as-a-verifier.md)
 
+## 色度迁移
+
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
+
+## 蒙版
+
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
+
+## 蒙版生成
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
+
 ## 蒸馏
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
@@ -2175,6 +2258,10 @@
 ## 视觉大模型
 
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
+## 视觉评审
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
 
 ## 视频生成
 
@@ -2221,6 +2308,10 @@
 
 - [从 Arrow 到 Iceberg 到 Polaris 到 Ossie：语义标准化的最后一块拼图](topics/data-stack-semantic-standardization.md)
 
+## 语义分割
+
+- [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
+
 ## 语义层
 
 - [Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析](topics/anthropic-data-analytics-agent.md)
@@ -2240,6 +2331,11 @@
 ## 语义高亮
 
 - [语义高亮技术全景：从词法匹配到语义剪枝](synthesis/semantic-highlighting-techniques.md)
+
+## 豆包
+
+- [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
 ## 豆包提示语
 
@@ -2333,6 +2429,10 @@
 ## 预测
 
 - [PYTHIA（本地 AI Agent 实时感知工具）](entities/pythia.md)
+
+## 颜色保真
+
+- [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
 ## 飞书
 
