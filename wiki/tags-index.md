@@ -209,6 +209,10 @@
 
 - [Agent Memory 五篇关键论文综述](synthesis/agent-memory-five-papers.md)
 
+## Agent OS
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
 ## Agent Skills
 
 - [HyperFrames](entities/hyperframes.md)
@@ -271,6 +275,14 @@
 ## Agent行为规范
 
 - [Karpathy AI编码方法论](topics/karpathy-ai-coding-methodology.md)
+
+## Agent记忆
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
+## Always-on
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## Anthropic
 
@@ -439,6 +451,10 @@
 ## DreamX
 
 - [LoopArena：把模型的 Loop 调度能力单独拎出来考](topics/looparena-benchmark.md)
+
+## Dream模式
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## Effect-Systems
 
@@ -687,6 +703,7 @@
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Firecrawl](entities/firecrawl.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 - [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
 - [本体论 (Ontology)](concepts/ontology.md)
@@ -783,6 +800,10 @@
 
 - [OpenAI 内部数据代理（Data Agent）](concepts/openai-data-agent.md)
 
+## OpenBMB
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
 ## OpenClaw
 
 - [Agent记忆系统](concepts/agent-memory-system.md)
@@ -831,6 +852,10 @@
 ## Pi Agent
 
 - [Pi Agent 的 Context 管理：组装、增长、压缩与重建](topics/pi-agent-context-management.md)
+
+## PilotDeck
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## Prompt
 
@@ -992,6 +1017,10 @@
 ## TDD
 
 - [Superpowers](entities/superpowers.md)
+
+## THUNLP
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## Tauri
 
@@ -1399,6 +1428,10 @@
 - [Superpowers](entities/superpowers.md)
 - [已 Push 代码撤回：Git revert vs reset](concepts/git-revert-vs-reset.md)
 
+## 工作舱
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
 ## 工具
 
 - [AgentConnect](entities/agentconnect.md)
@@ -1679,9 +1712,17 @@
 
 - [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 
+## 智能体操作系统
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
 ## 智能体框架
 
 - [OpenClaw（🦞 龙虾） vs Hermes Agent（🧠 爱马仕）— 执行派 vs 进化派全面对比](synthesis/openclaw-vs-hermes.md)
+
+## 智能路由
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## 最佳实践
 
@@ -1827,6 +1868,10 @@
 
 - [DeepSeek](entities/deepseek.md)
 
+## 清华
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
 ## 清华大学
 
 - [Hermes Agent（🧠 爱马仕）](entities/hermes-agent.md)
@@ -1885,6 +1930,10 @@
 ## 画像
 
 - [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md)
+
+## 白盒记忆
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## 知识图谱
 
@@ -2227,6 +2276,10 @@
 ## 非自回归
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+
+## 面壁智能
+
+- [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
 ## 顶层本体
 

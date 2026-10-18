@@ -116,6 +116,7 @@ IM 里一次 @  →  任务接收  →  找到对应 Agent 角色  →  Agent �
 - [[Snail AI]] — 另一条开源 Agent 平台路线（Java / Spring AI 生态）
 - [[MCP 模型上下文协议（Model Context Protocol）]] — AgentConnect 的可信数据源与工具接入层
 - [[AI Agent（智能体）]] — "从回答问题走向接手固定任务"是本文的前提
+- [[PilotDeck 2.0：清华开源的智能体操作系统]] — 另一个 Agent 平台：它用 **WorkSpace 工作舱**做项目级隔离（文件/记忆/技能各一套），与 AgentConnect 的"**多角色托管 + 可换 Harness**"形成两条路线对照
 - [[WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化]] — 同样是"多角色专家 Agent 分工"，但走的是专用平台而非通用托管
 
 ## 延展阅读

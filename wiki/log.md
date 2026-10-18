@@ -715,3 +715,20 @@
 - 交叉引用（双向）：`concepts/ai-gateway.md`、`topics/kv-cache-mechanism-explained.md`、`topics/pi-agent-context-management.md` 均加反向引用
 - 标签：决策模型 / Jev / TypeSafe / 判别模型 / System One / 非自回归 / 单步推理 / 模型路由 / 模型网关 / KV Cache / Logits 校准 / RLCD / 置信度门控 / 蒸馏 / Agent 安全
 - 更新 index.md + tags-index.md + log.md
+
+## [2026-10-18] ingest | PilotDeck 2.0：清华开源的智能体操作系统（量子位）
+
+- 素材：今日头条「量子位」《清华开源！智能体操作系统任务成本降83%，AI记忆可查可改》（2026-10-17 19:30），短链 `https://m.toutiao.com/is/9HOhFI9b7yw/` → 正文页 `7697597470469063187`
+- 抓取：`fetch-article.py` 头条内联 JSON 路径一次命中，正文 3,452 字符（该稿本身短），**9/9 张图全部本地化**（含 4 张 GIF 演示）
+- 归档：`raw/tsinghua-agent-os-memory.md`；快照 `raw/assets/tsinghua-agent-os-memory/original.html`（已 gitignore）
+- 新增 `topics/pilotdeck-2-agent-os.md`（8,280 bytes）：
+  - **定位**：清华 THUNLP + 面壁智能 + OpenBMB + AI9Stars 开源的「Agent 操作系统」，以 **WorkSpace（工作舱）** 为基本单位——每项目独立文件系统/记忆库/技能集，解决多项目并行的**上下文污染与记忆串台**
+  - **三根支柱**：① **白盒记忆**（生成→抽取→存储→调用全链路可见；可逐条查看、手改、删除、一键固定；**Dream 模式**空闲时归纳/提炼/去重 + **一键回滚**）② **Always-on**（关窗口仍后台推进长任务、主动发现候选任务、成果落地为本地文件 + 进展总结）③ **Smart Routing**（任务难度识别 + 端云协同分层编排：强模型管决策、弱模型干执行/润色/格式）
+  - **数据（厂商自述）**：自媒体场景 Opus 4.5 全开 $12.58 → 主 Opus 4.5 + 子 Sonnet 4.5 **$2.83**（≈省 70%）；7 个高难任务 MiniMax-M2.7 单体 37.1 分/$1.90、Sonnet 4.6 单体 69.1 分/$18.36、**主 Sonnet 4.6 + 子 MiniMax-M2.7 = 70.6 分 / $3.15**（**−82.8%**，标题「降 83%」出处）；Workbuddy Bench 配 Qwen3.6-35B-A3B **79.1** > Claude Code 77.3
+  - **坐标**：对比 Claude Code/Cursor/Trae Solo（IDE）、Claude Cowork（桌面项目隔离）、WorkBuddy（IM 接入），PilotDeck 主打**长周期多项目生产力**
+  - **部署**：一键安装（macOS/Linux、Windows PowerShell）、源码、Docker Compose；Web/CLI/IM 三端一致；原生 **MCP**；**AGPL-3.0**
+  - **实测核对**：GitHub `OpenBMB/PilotDeck` **HTTP 200**，⭐4,591 / fork 512 / issue 155，TypeScript，创建 2026-05-22，最近推送 **2026-10-16**，官网 `pilotdeck.openbmb.cn`；README 确认 2.0 于 **2026-10-15** 发布
+  - ⚠️ 成本/得分/对比基线均为官方与新闻稿口径，**未见第三方复现**；Workbuddy Bench 题目与评分细节未公开
+- 交叉引用（双向）：`concepts/agent-memory-system.md`、`entities/agentconnect.md`、`topics/jev-model.md` 均加反向引用
+- 标签：Agent OS / 智能体操作系统 / PilotDeck / 清华 / THUNLP / OpenBMB / 面壁智能 / 白盒记忆 / Dream模式 / Always-on / 智能路由 / 工作舱 / Agent记忆 / MCP
+- 更新 index.md + tags-index.md + log.md
