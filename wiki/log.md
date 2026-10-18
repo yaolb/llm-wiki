@@ -767,3 +767,10 @@
 - **标签要求落实**：两篇颜色相关页均打上 `#图像颜色校正`；分割篇打 `#图像分割 / #MobileSAM / #ACE2P / #人体解析` 等
 - 说明：侧边栏《比较XMP模式区别》经核实是 **DDR5 内存 XMP 超频**，与图像颜色无关，未打颜色标签
 - 来源性质均为 ChatGPT 生成内容，已在页内标注「需回官方文档/实测核对」
+
+## [2026-10-19] update | MobileSAM vs ACE2P 页补充参考实现仓库核实
+
+- 用户补发原文中出现的 GitHub 链接 `rajatb94/human_parsing`
+- 核实：HTTP 200；Jupyter Notebook；MIT；创建与最后推送均为 2020-12-05；⭐0 / fork 0；无 description
+- 判定：**个人复现仓库，非 ACE2P / SCHP 官方实现**，7 年未更新，不可直接用于生产选型
+- 已写入 `wiki/topics/mobilesam-vs-ace2p.md` 的「参考实现仓库」小节，并在「待验证」补充骨干网络未公开的说明
