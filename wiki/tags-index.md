@@ -305,6 +305,7 @@
 ## Apache-2.0
 
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## Apache2.0
 
@@ -631,6 +632,7 @@
 ## Jev
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## KV Cache
 
@@ -700,6 +702,10 @@
 ## LangChain替代
 
 - [Apache Burr](entities/apache-burr.md)
+
+## Laya
+
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## Lean4
 
@@ -792,6 +798,10 @@
 ## Model-RSI
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
+
+## ModernBERT
+
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## NAS
 
@@ -962,6 +972,7 @@
 ## RLCD
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## RSI
 
@@ -1089,6 +1100,7 @@
 ## System One
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## TDD
 
@@ -1273,6 +1285,10 @@
 
 - [本体论 (Ontology)](concepts/ontology.md)
 
+## 严格适当评分规则
+
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
+
 ## 中国
 
 - [DeepSeek](entities/deepseek.md)
@@ -1374,6 +1390,7 @@
 ## 决策模型
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## 分布式系统
 
@@ -1643,6 +1660,7 @@
 
 ## 强化学习
 
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 - [SeedER](entities/seeder.md)
 
 ## 循环推理
@@ -1922,6 +1940,10 @@
 
 - [LightRAG](entities/lightrag.md)
 
+## 概率校准
+
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
+
 ## 模型
 
 - [DeepSeek](entities/deepseek.md)
@@ -1958,6 +1980,7 @@
 
 - [AI 网关与模型路由](concepts/ai-gateway.md)
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## 法国
 
@@ -2447,6 +2470,7 @@
 ## 非自回归
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
+- [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 
 ## 面壁智能
 

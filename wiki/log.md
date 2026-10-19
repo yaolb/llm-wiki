@@ -794,3 +794,25 @@
   - 边界：单机 MVP、无多租户、无写回/分布式、大规模分页待完善、**备份恢复脚本未经真实 Compose 验证**
 - 双向引用：`topics/fabric-ontology-from-ontology.md`、`topics/evontology-self-evolving-ontology.md`、`topics/datastrato-agent-context-three-pillars.md`、`concepts/ontology.md`
 - 顺手修复：`wiki/index.md` 中两处条目粘连（第 17 行 8 条、第 20 行 2 条挤在同一行），已按 `` ` `` 边界拆分为独立行
+
+## [2026-10-19] ingest | Laya：421M 非自回归 System 1 决策模型（Jev 开源替代）
+
+- 原文：魔搭 ModelScope 社区《Laya 开源：比Jev快4倍！421M 参数，33 毫秒完成 System 1 决策》（2026-09-21）
+  https://mp.weixin.qq.com/s/9SJf3nhK25rZcZwQNTg7mw
+- 抓取：`scripts/fetch-article.py` 命中 `js_content`，**9,614 字 + 21 张图全本地化**（6.3 MB）
+- 核实（2026-10-19）：`NandhaKishorM/laya` HTTP 200，Python，**Apache-2.0**，⭐**33,414** / fork 3,002 / issue 89，创建 **2026-09-18**，推送 **2026-10-17**；
+  ModelScope 模型页 200；PyPI `laya` **0.4.11**；HF Space `convaiinnovations/laya-demo` 存在
+  ⚠️ 文章称"GitHub 2.1k Stars"，一个月后实际已 33,414
+- 归档：`raw/laya-system1-decision-model.md`；素材 `raw/assets/laya-system1-decision-model/`（original.html + img-01…img-21）
+- 新页：`wiki/topics/laya-system1-decision-model.md`
+- 核心内容：
+  - 421M ＝ ModernBERT-large（395M）＋ 决策头；`[MASK]` 选项抽取 + 带拟合温度 T 的 Softmax
+  - 行动/升级头：[CLS] + 4 个分布特征 → 1028 维 → [P(act), P(escalate)]
+  - RLCD：严格适当评分规则（对数/球面/RPS）＋ REINFORCE 组均值优势，零监督 CE
+  - 成本矩阵 act对 +1 / act错 −3 / escalate −0.5 → **自动学出 62.5% 自动行动阈值**
+  - TD(λ=1.0) 前缀增长解决多轮数据泄漏；置信度 = 1 − H/logK
+  - 25,424 题实测：P50 38.4ms、任务内 83.8%（ECE 0.060）、零样本 65.1%（ECE 0.207）
+  - 选择性自动化：前 50% 覆盖时准确率 92.2%；阈值 0.85 可自动处理约一半工单
+- **批判点已写入待验证**：「快 4 倍」取 Jev 最佳 150ms（对均值 400ms 实为 10.4 倍）；云端 API vs 本地前向口径不对等；
+  「自托管 $0.00」忽略 GPU 摊销；零样本 ECE 0.207 说明校准是任务家族内性质
+- 双向引用：`topics/jev-model.md`（新增 Laya 条目）、AI 网关与模型路由、KV Cache、Pi Agent、Agent 全景、PilotDeck、Helix Foundry
