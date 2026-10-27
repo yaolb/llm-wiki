@@ -95,6 +95,7 @@ source_url: https://mp.weixin.qq.com/s/Mwfqc1ij1lGF_x42sn_EzQ
 - [[Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）]] —— 国内厂商把 Ontology 定位为 Agent 上下文第三层
 - [[Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基]] —— 语义层落地的工程视角
 - [[Helix Foundry：图 + SQL 自动构建跨源企业本体]] —— **开源实现路线**：本地优先，图/SQL 分工（HelixDB 存对象与边、DuckDB 跑分析、Parquet 锁快照版本），且**明确不让 LLM 决定本体结构**（确定性发现 + 人工确认）。正可对照本篇「什么时候不该用本体」的三条判据
+- [[NVIDIA Auto Ontology：从元数据自动生成本体]] —— **第三条路线**：不物化图、不要求复制数据，只做**语义目录 + MCP 供应**；与 Fabric「本体是一层声明、图需手动刷新」形成对照，也补上 Palantir/Snowflake/Databricks 的四方落点差异
 
 ## 延展阅读
 

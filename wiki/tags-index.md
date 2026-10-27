@@ -240,6 +240,10 @@
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md)
 
+## Agent-Toolkit
+
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
+
 ## Agentic-RAG
 
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](topics/agentic-rag.md)
@@ -314,6 +318,10 @@
 ## Attention
 
 - [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
+
+## Auto-Ontology
+
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 
 ## BMAD
 
@@ -748,6 +756,7 @@
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Firecrawl](entities/firecrawl.md)
 - [Firecrawl — AI 原生的网页数据采集引擎](topics/firecrawl-web-scraping.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 - [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
@@ -811,6 +820,14 @@
 
 - [AutoLink](entities/autolink.md)
 
+## NVIDIA
+
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
+
+## NVIDIA-NIM
+
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
+
 ## Nacos
 
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
@@ -838,6 +855,7 @@
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
@@ -1229,6 +1247,10 @@
 ## meishi
 
 - [万象开发设计文档](topics/wanxiang-dev-docs/index.md)
+
+## pgvector
+
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 
 ## scaling
 
@@ -1625,6 +1647,7 @@
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 - [Milvus](entities/milvus.md)
 - [Mistral](entities/mistral.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
 - [Qwen](entities/qwen.md)
 - [Snail AI — Java 生态的企业级 AI Agent 平台](topics/snail-ai-agent-platform.md)
@@ -1804,6 +1827,7 @@
 ## 数据治理
 
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 
 ## 数据湖
 
@@ -1871,6 +1895,7 @@
 
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)
@@ -2085,6 +2110,7 @@
 
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [LightRAG](entities/lightrag.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 - [RAG-Anything](entities/rag-anything.md)
 - [SeedER](entities/seeder.md)
 - [Understand Anything](entities/understand-anything.md)
@@ -2367,6 +2393,7 @@
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+- [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
 - [本体论 (Ontology)](concepts/ontology.md)

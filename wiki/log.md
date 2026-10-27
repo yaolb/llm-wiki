@@ -816,3 +816,23 @@
 - **批判点已写入待验证**：「快 4 倍」取 Jev 最佳 150ms（对均值 400ms 实为 10.4 倍）；云端 API vs 本地前向口径不对等；
   「自托管 $0.00」忽略 GPU 摊销；零样本 ECE 0.207 说明校准是任务家族内性质
 - 双向引用：`topics/jev-model.md`（新增 Laya 条目）、AI 网关与模型路由、KV Cache、Pi Agent、Agent 全景、PilotDeck、Helix Foundry
+
+## [2026-10-27] ingest | NVIDIA Auto Ontology：从元数据自动生成本体
+
+- 原文：DataFunTalk《NVIDIA 开源 Auto Ontology，本体创建时间缩短 90%》（2026-10-24，文末注明截至 10-23 校对）
+  https://mp.weixin.qq.com/s/DXdqHAA-5enaRKvY5bkt-g
+- 抓取：`scripts/fetch-article.py` 命中 `js_content`，**6,470 字 + 8 张图全本地化**
+- ⚠️ 核实受阻：抓取时 `api.github.com` 与 `github.com`/`blogs.nvidia.com` 均请求超时，**`NVIDIA/auto-ontology` 仓库未在线核实**（星数/许可/活跃度未知），已在页面显式标注
+- 归档：`raw/nvidia-auto-ontology.md`；素材 `raw/assets/nvidia-auto-ontology/`（original.html + img-01…img-08）
+- 新页：`wiki/topics/nvidia-auto-ontology.md`
+- 核心内容：
+  - 2026-10-21 NVIDIA 扩展 Agent Toolkit，Auto Ontology 纳入 **Agent Knowledge Foundation**
+  - 五个动词：Discover / Ground / Validate / Expose / Learn
+  - 技术栈：FastAPI + Next.js + PostgreSQL/pgvector + NVIDIA NIM；连 Databricks/Snowflake/PostgreSQL/DuckDB；Docker Compose/K8s
+  - 九个只读 MCP 工具，MCP 只是 API 的 HTTP 客户端（不持凭证），鉴权分层
+  - `ask_question` 最多 100 行 + row_count/truncated；只读 ≠ 无风险
+  - 安全：未配 Vault 时连接对象（含密码）可能明文存 PostgreSQL；后端端口勿暴露公网
+  - 治理：候选/待审/已认证三态；Learn 只吸收已认证纠正
+  - 四家对比：Palantir（执行型）/ Snowflake Horizon Context / Databricks Genie Ontology → 「NVIDIA 首次」不成立
+- **批判点**：90% 是厂商自测初始建设效率，无测试规模/基线/评价方法；插图系编辑重绘非官方截图；四家对比无同数据集评测
+- 双向引用：helix-foundry、fabric-ontology、evontology、concepts/ontology、datastrato

@@ -244,6 +244,7 @@ Helix Foundry 记录分析依赖的数据版本，让用户能追溯"执行这�
 
 - [[从本体论到 Fabric Ontology]] —— 同一命题的另一条路线：微软走 **RDF/属性图 + GQL 托管平台**，Helix Foundry 走**本地优先 + 图/SQL 分工**；Fabric 那篇给了"什么时候不该用本体"的判据（三跳以上遍历才值 / 外键填充率 <90% 先修数据）
 - [[EvoOntology：让 Data Agent 自己维护本体层]] —— 都用"本体 + 验证"约束 Agent，但 EvoOntology 让 Agent **用执行轨迹反向改本体**，Helix Foundry 则**禁止 LLM 决定初始结构**
+- [[NVIDIA Auto Ontology：从元数据自动生成本体]] —— **最直接的同类对照**：同样从元数据自动生成本体，但 NVIDIA 用 **NIM 推理**提候选 + **三态审核**兜底，Helix Foundry 用**确定性发现 + 人确认**并反对 LLM 决定结构；执行侧也不同（Helix 用 DuckDB 算，Auto Ontology 只供语义）
 - [[Datastrato 2.0：Agent Context 的三重支柱]] —— 同样把 Ontology 当作 Agent 上下文的第三层；可对照"混合路径建模"与本篇的"确定性发现 + 人工确认"
 - [[本体建模五步法]] —— 人工建模流程 vs 本篇的自动化草案生成
 - [[从 Arrow 到 Iceberg 到 Polaris 到 Ossie]] —— 语义标准化的长链条上，Helix Foundry 属于**执行侧**（把语义物化后真的跑 SQL）

@@ -149,6 +149,7 @@ EvoOntology **目前仍是研究工作**：
 - [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] —— **Candidate/Parent 成对评测 + 拒绝则回滚**是其"测试集 + 持续更新闭环"的工程镜像
 - [[58 集团统一指标系统 — API 网关方案设计]] / [[万象 AI 分析平台]] —— 企业侧"统一语义层"的现实工程语境（指标口径统一是同一类问题）
 - [[Helix Foundry：图 + SQL 自动构建跨源企业本体]] —— **对照组**：同用「本体 + 验证」约束 Agent，但 Helix Foundry **禁止 LLM 决定初始结构**（确定性程序发现、AI 只改名），EvoOntology 则让 Agent **用执行轨迹反向改本体**；两者对「谁有权改本体」给出了相反答案
+- [[NVIDIA Auto Ontology：从元数据自动生成本体]] —— **Learn 的克制版**：只吸收**已认证的纠正**、权力仍归人；对比 EvoOntology 让 Agent 用轨迹**自动**改本体并经 Gate 验证——两者对「谁能改本体」的答案不同
 
 ## 待验证
 
