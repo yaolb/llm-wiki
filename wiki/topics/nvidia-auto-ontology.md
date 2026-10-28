@@ -244,6 +244,45 @@ FastAPI 使用的内部用户身份头由 **Next.js 网关转发**，**后端端
 
 > 当业务知识从散落的文档与提示词，进入**可检索、可审核的共享语义目录**，Agent 才有条件从演示走向长期运行。
 
+## 追加核实（2026-10-28 直读 `docs/mcp.md` 与 `AGENTS.md`）
+
+### 更正：是 10 个 MCP 工具，不是 9 个
+
+媒体稿列了 9 个，官方 `docs/mcp.md` 实际有 **10 个**，多出 `can_execute_sql`（判断某条 SQL 能否执行）：
+
+`search_terms` · `get_term` · `get_term_columns` · `get_term_sql_attributes` · `get_sql_attribute` · `describe_table` · `can_execute_sql` · `check_answerable` · `check_readiness` · `ask_question`
+
+### 更正：MCP 是独立服务，默认端口 3003
+
+完整端口表应为：**3000** 前端/网关 · **3001** FastAPI 后端 · **3002** 摄取 worker · **3003** MCP 服务。
+
+`AUTO_ONTOLOGY_MCP_PUBLIC_URL` 默认 `http://localhost:3003`，前端须取同一值，否则签发的 token 资源 URL 不匹配。
+
+### MCP 的鉴权模型（比「只读」更重要的区别）
+
+- **MCP 走 OAuth 登录**，token 是不透明的，服务端调用 Auto Ontology 的 **OAuth UserInfo** 端点校验
+- **权限每次调用都从账号解析**，不来自 token → 改角色、封用户、删授权**立即生效**
+- 服务端**无法为自己的 token 配置权限**（否则所有调用者都会冒用其身份与对话历史）
+- **MCP 按设计只读**；**写入走 Next.js 的 `/api/...` 面**，不在 MCP 里
+
+### 写入路径其实存在（此前容易误读）
+
+`AGENTS.md` 把工作拆成三个 skill：
+
+| skill | 职责 |
+| --- | --- |
+| `nvidia-ontology-setup` | Helm/Compose 安装、连接、摄取、编译、就绪验证、排障 |
+| `nvidia-ontology-management` | 查看/建模/**修改**/安全发布：术语、SQL 属性、语义关系、YAML 导入导出、结果定义治理；含 `references/modeling.md`、`references/publication.md` |
+| `nvidia-ontology-query` | Agent 如何调用（**MCP 优先，REST 兜底**）、发现语义、校验 SQL/行/答案 |
+
+生命周期：**安装/连接/就绪 → 查看/建模 → 分阶段应用/回读 → 查询校验 → 受治理发布 → 新查询回读**。
+
+> 一条值得学的工程原则：**「缺产品支持的步骤必须返回明确的 gap 或 receipt，而不是自己发明一个操作」**。
+
+### 分发方式
+
+这三个 skill 会镜像到 `github.com/nvidia/skills`（`npx skills add nvidia/skills`）与 build.nvidia.com/skills；每个 skill 需含 `SKILL.md`、`skill-card.md`、`evals/evals.json`。
+
 ## 与库内已有线索的关系
 
 - [[Helix Foundry：图 + SQL 自动构建跨源企业本体]] —— **最直接的对照**：两者都从元数据自动生成本体。差异在「谁拍板」——Helix Foundry 用**确定性程序发现 + 人确认**，明确**不让 LLM 决定结构**；Auto Ontology 用 **NIM 推理**生成候选，靠**三态审核（候选/待审/已认证）**兜底。另一个差异是执行侧：Helix 用 DuckDB 跑 SQL，Auto Ontology 只做语义供应、不接管计算
