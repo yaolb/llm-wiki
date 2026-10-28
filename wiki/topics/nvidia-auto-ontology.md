@@ -13,9 +13,53 @@ source_url: https://mp.weixin.qq.com/s/DXdqHAA-5enaRKvY5bkt-g
 > 原文：https://mp.weixin.qq.com/s/DXdqHAA-5enaRKvY5bkt-g
 > 原始素材：`raw/nvidia-auto-ontology.md`；快照与 **8 张图**见 `raw/assets/nvidia-auto-ontology/`
 > **来源性质**：DataFunTalk 对 NVIDIA 官方公告/文档的**第三方解读**；文中插图是编辑依官方文档**重绘的示意图，不是 NVIDIA 原始截图**。
-> 仓库核实（2026-10-27，经 `api.github.com`）：`NVIDIA/auto-ontology` HTTP 200，**Python**，**⭐195 / fork 27 / open issue 28**，创建 **2026-04-27**，最后推送 **2026-10-26**（仍在活跃维护）。
-> ⚠️ 注意：`github.com` 网页与 SSE 在大陆侧会超时，但 **API 可达**——核实仓库元数据请走 API。
+> 仓库核实（**2026-10-28 实拉 README 与 API**）：`NVIDIA/auto-ontology`，**Python**，**Apache-2.0**，**⭐417 / fork 52 / watch 5 / open issue 28**，创建 **2026-04-27**，最后推送 **2026-10-28 06:34**（当日仍在提交），体积约 **22 MB**，默认分支 `main`。
+> ⚠️ 星数一天内 **195 → 417**（翻倍），属媒体曝光驱动的短期冲高，不代表生产采用。
 > 技术细节（技术栈、九个工具、安全配置）均转述自该解读稿，仍需以官方 README 为准。
+
+## 仓库实测（2026-10-28 直读 README）
+
+### 自我定位
+
+> "Agents can retrieve documents and query databases, but **reliability gates agentic analytics**: a revenue metric answered faster is worth nothing if the number is wrong."
+
+定义自己是**上下文层**（context layer），回答六个问题：数据在哪、是什么意思、该不该用、怎么用、从哪来、什么与之相似。
+
+### 真实软件组件（README 原表）
+
+| 组件 | 技术 | 端口 |
+| --- | --- | --- |
+| 前端 | **Next.js 16**（React 19 / TypeScript / Tailwind 4）、**Better Auth**、**Prisma** | 3000 |
+| 后端 | **FastAPI**（Python 3.12+）、**LangChain** | 3001 |
+| 摄取 worker | FastAPI（Python 3.12+） | 3002 |
+| 存储 | **Postgres + pgvector**（应用元数据 + 语义目录 + 向量库**同一个库**） | 5432 |
+| 凭证 | **HashiCorp Vault（可选）** | — |
+
+### 默认 NIM 模型
+
+- LLM：`nvidia/nemotron-3-nano-30b-a3b`
+- Embedding：`nvidia/nemotron-3-embed-1b`
+- Rerank：`nvidia/llama-nemotron-rerank-vl-1b-v2`
+
+配置用**三元组**（`<PREFIX>_ENDPOINT` / `_API_KEY` / `_MODEL`），`DEFAULT_MODELS_*` 兜底、可逐个覆盖；**任何 OpenAI 兼容端点都能接**，不锁死 NIM。
+
+### 安全实现细节（比解读稿准确）
+
+- **凭证明文风险确认为官方自述**：未配 Vault 时，整个连接对象（含密码）JSON 序列化后**不加密**存在目录行
+- ⚠️ **更危险的一条**：Vault 只在 `VAULT_ADDR`、`VAULT_NAMESPACE`、`VAULT_ROLE_ID`、`VAULT_SECRET_ID` **全部齐备**时才启用；**部分配置会被忽略并打警告后回落到明文**——典型的「以为配了其实没配」失败模式
+- **API Token**：只存 **SHA-256 哈希**、只显示一次；**以所有者身份行事**（无独立权限）；**不能管理 Token**（防泄漏后自我续期）；删除即 401
+- **内部身份头** `x-auto-ontology-user-id` 由 Next.js 网关转发，FastAPI **不做独立校验** → 3001 端口**绝不可公网暴露**
+
+### 对话会话
+
+- `POST /api/chat/completions` 返回 **SSE**（`step` / `result` / `error` + `[DONE]`）
+- `conversation_id` 由客户端生成；同会话并发请求返回 **409 Conversation in progress**
+- 上下文只取**最近 5 轮、上限 12,000 字符**，且**不复用**内部思考、图表载荷、原始结果集
+
+### 两个容易被忽略的仓库事实
+
+- **「本项目当前不接受外部贡献」**（README 明文）——Apache-2.0 许可，但外部 PR/Issue 不被接纳，**采用者只能等官方**
+- 基准测试**不在本仓库**：BIRD 等 Text-to-SQL 评测指向 `NVIDIA/ontology-sql-eval`；**README 没有任何准确率数字**
 
 ## 一句话
 
@@ -211,6 +255,7 @@ FastAPI 使用的内部用户身份头由 **Next.js 网关转发**，**后端端
 
 ## 待验证 / 证据边界
 
+- **README 未给任何准确率/延迟数字**：BIRD 等基准指向 `NVIDIA/ontology-sql-eval`，本项目只讲架构与配置 → 「多准」必须自己去那个仓库跑
 - **90% 无测试细节**：官方未公开样本规模、基线定义、人工审核工时、评价方法——**不能据此估算企业上线周期**
 - **仓库已核实元数据**（⭐195 / fork 27 / 创建 2026-04-27 / 推送 2026-10-26，Python），但**许可协议未取到**（API 返回被截断）；星数不大，说明**社区热度远低于 Helix Foundry（⭐1,599）或 Laya（⭐33,414）**，不宜当作成熟生态
 - 文中技术栈（FastAPI/Next.js/pgvector/NIM）**全部转述自解读稿**，未逐项比对官方 README
