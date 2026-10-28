@@ -306,86 +306,71 @@ FastAPI 使用的内部用户身份头由 **Next.js 网关转发**，**后端端
 
 ## 代码级实现（2026-10-28 实读源码）
 
-> 依据：GitHub API 拉取 （775 条路径，**457 个 .py**）＋ 3 个核心文件原文（、、）。前端 TS 未展开。
+> 依据：GitHub API 拉取 `git/trees/main`（775 条路径，**457 个 .py**）＋ 3 个核心文件原文：`semantic/compile.py`、`db_probe/executor.py`、`agents/sql_unconstructable.py`。前端 TS 未展开。
 
-### 子包与规模（按 py 文件数）
+### 子包规模（按 py 文件数）
 
-| 子包 | 文件数 | 职责 |
-| --- | --- | --- |
-|  | **135** | 检索与问答主战场 |
-|  | 86 | FastAPI 接口层 |
-|  | 48 | 术语/属性/规则/PII/分区/属主/分组 |
-|  | 37 | 元数据编目（sqlglot 解析、增量摄取） |
-|  | 32 | 11 种方言连接器 + Vault |
-|  | 31 | 语义层编译 |
-|  | 17 | 共用 |
-|  | 16 | 摄取 worker |
-|  | 7 | PII 识别 |
-|  | 5 | 向量库 |
+`retrieval/` **135** · `server/` 86 · `dal/` 48 · `catalog/` 37 · `connectors/` 32 · `semantic/` 31 · `utils/` 17 · `ingestion_service/` 16 · `pii_detection/` 7 · `vdb/` 5。
 
- 内部再分五块：**text_to_sql**（约 20 个专职 agent）、**db_probe**（活库探针）、**interactive**（澄清/补全/实体消解/证据）、**entity_coverage**（问题覆盖度）、**kumo**（KumoRFM 预测查询）。
+`retrieval/` 内再分五块：**text_to_sql**（约 20 个专职 agent）、**db_probe**（活库探针）、**interactive**（澄清/补全/实体消解/证据）、**entity_coverage**（问题覆盖度）、**kumo**（KumoRFM 预测查询）。
 
-### 关键技术一：语义编译是四阶段流水线（compile.py 实证）
+### 关键技术一：语义编译四阶段（compile.py）
 
+```
+compile_semantic_layer      # 逐表生成 taxonomy + embedding 写入 VDB
+  → resolve_semantic_fks    # 解析语义外键边
+  → suggest_sql_attributes  # 从查询历史反推 SQL 属性
+  → build_bridge_tables_sql_attributes
+```
 
+- 并发上限 `SEMANTIC_LLM_MAX_INFLIGHT=6`；注释直言表级并行 × 表内扇出使速率相乘，曾打出 **HTTP 503 ResourceExhausted**
+- FK 解析在某个库上「跑过 300 秒以上」，故取消后直接跳过 FK/属性/桥表三阶段（Terms 已可用）
+- 把四阶段计数打成一行终态日志——此前最后一行是桥表数，**分不清跑完还是死在桥表**
 
-三个工程细节值得单独记：
+### 关键技术二：db_probe 真查库（executor.py）
 
-1. **并发上限是「乘积」而不是「和」**：（默认）。源码注释直言表级并行 × 表内扇出导致请求速率相乘，曾打出 **HTTP 503 ResourceExhausted**
-2. **取消语义**：FK 解析「在某个库上跑过 300 秒以上」，所以一旦取消就**直接跳过 FK / SqlAttribute / 桥表三个阶段**——因为 Terms 已经可用，没必要让人干等
-3. **可判读的完成日志**：把四阶段计数打成一行汇总。注释说明此前「最后一个日志是桥表数」，**分不清跑完还是死在桥表阶段**，于是补了一行终态
+文件自称「**every live query 的唯一收口**」，强制四条：
 
-### 关键技术二：db_probe 是真在查库（executor.py 实证）
+- 只允许**单条** `SELECT`/`WITH`，内部出现 `;` 直接拒
+- 禁词正则：`insert|update|delete|drop|alter|create|replace|truncate|grant|revoke|attach|detach|pragma|vacuum|reindex|merge|call|exec|execute|copy|into`
+- 无 LIMIT 自动补 `LIMIT DB_PROBE_MAX_ROWS`
+- 每题调用预算 `DB_PROBE_MAX_CALLS`
 
-文件开头自称：
+执行方式：**跑在调用线程上**（连接器长寿命且线程亲和，新开连接会泄漏），约束靠 LIMIT + 预算而非墙钟超时。注释写明同一 executor 将承接 **Phase-2 模型自由探索**。
 
-> "Hardened, read-only probe executor. **This is the single choke point for every live query the probing layer issues.**"
+对应 `join_path_check.py`、`jsonb_path_check.py`、`literal_check.py`——**不靠提示词，靠真去库里问一次**。
 
-它强制四条：
+### 关键技术三：留了「答不出来」的正式出口
 
-- **只允许单条**  / ：内部出现  直接拒（防多语句）
-- **禁词正则**：
-- **没 LIMIT 就自动补** 
-- **每题调用预算** ，超了就停
+`agents/sql_unconstructable.py` 返回结构与成功路径完全同形。注释：空响应会让用户看到笼统的「something went wrong」，且服务端**不持久化这一轮**——所以必须填 `final_response`。
 
-> 更关键的是**执行方式**：探针**跑在调用线程上**，而不是新开连接——注释说明连接器是长寿命且线程亲和（SQLite 绑定创建线程），新开连接会**泄漏**。所以约束靠「LIMIT + 调用预算」而不是墙钟超时。
->
-> 文档还写明：同一个 executor 将来要承接 **Phase-2 的模型自由探索循环**，即「模型自己写 SQL 去探库」也会继承这层护栏。
+与 AGENTS.md「缺支持必须返回 gap 或 receipt」是同一原则的代码化。
 
-**这是整个项目最有价值的设计**：不靠提示词约束模型，而是**真去数据库问一次**——join 路径对不对、字面量存不存在。对应目录里的 、、。
+### 实际技术路径
 
-### 关键技术三：给它留了「答不出来」的正式出口
+```
+① connectors      11 种方言（Vault 管凭证，Databricks 走 OAuth）
+② catalog         sqlglot 解析 DDL/SQL → 确定性 AST 抽取 → 增量摄取 → 查询统计
+③ semantic        四阶段编译 → Terms + embedding 进 VDB + 语义 FK + 属性 + 桥表
+④ entity_coverage 判断语义层是否覆盖问题（即 check_answerable）
+⑤ semantic_search pgvector 召回 → relevant_tables / candidates
+⑥ text_to_sql     约 20 agent：意图 → 证据精化 → 由语义/由表生成 SQL
+                  → join/jsonb/字面量校验 → 重建 → 解析校验 → 执行 → 响应
+⑦ interactive     澄清、完整性、实体消解、追问合并、输出类型
+```
 
- 是一个**专职失败 agent**，返回结构与成功路径**完全同形**（ /  /  /  / ）。
+### 必须修正的认知
 
-源码注释交代了原因：
+结构解析用 **sqlglot**、关系验证用 **db_probe 真查库**、语义外键有专门 `semantic_fk` 阶段、SQL 属性从**查询历史**反推。LLM 只在两处出现：编译期写术语/描述，问答期写 SQL 草稿。
 
-> 空响应会让用户看到笼统的「something went wrong」，而且服务端**根本不持久化这一轮**——所以这个节点必须把  填上，否则等于什么都没发生。
-
-> 这与  那条「缺产品支持的步骤必须返回明确的 gap 或 receipt」是同一条原则的代码化。
-
-### 技术路径（实际执行顺序）
-
-
-
-### 一个必须修正的认知
-
-**「AI 在干重活」的印象是错的。**
-
-- 结构解析 → **sqlglot**（确定性 AST），不是 LLM
-- 关系验证 → **db_probe 真查库**，不是 LLM
-- 语义外键 → 专门的  解析阶段
-- SQL 属性 → **从查询历史反推**
-- LLM 只在两处出现：**编译期写术语/描述**，**问答期写 SQL 草稿**
-
-> 真正的架构是「**LLM 提议 + 确定性验证**」：模型写的 SQL 要过 join 路径检查、JSONB 路径检查、字面量存在性检查、语法解析校验、值锚定、数值类型检查、空结果修补。**七个关卡，全是代码，不是提示词。**
+> 架构本质是「**LLM 提议 + 确定性验证**」：join 路径、JSONB 路径、字面量存在性、语法解析、值锚定、数值类型、空结果修补——**七道关卡全是代码**。
 
 ### 附带发现
 
-- ****：集成 KumoRFM 预测查询（ /  /  / ），对应 README 里的 
-- ** +  + **：治理不是摆设，有独立检测模块
-- ****：模型 YAML 导入导出，语义层可以搬走
-- ** + **：业务规则与 SQL 片段可沉淀复用
+- `kumo/`：KumoRFM 预测查询（pql_gen / predictor / budget / graph_cache），对应 `KUMO_RFM_API_KEY`
+- `pii_detection/` + `dal/pii.py` + `dal/zones.py`：治理有独立检测模块
+- `dal/model_interchange.py`：语义层 YAML 导入导出，可搬迁
+- `dal/rules.py` + `sql_fragments.py`：业务规则与 SQL 片段可沉淀
 
 ## 与库内已有线索的关系
 
