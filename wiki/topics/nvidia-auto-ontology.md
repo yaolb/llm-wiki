@@ -283,6 +283,27 @@ FastAPI 使用的内部用户身份头由 **Next.js 网关转发**，**后端端
 
 这三个 skill 会镜像到 `github.com/nvidia/skills`（`npx skills add nvidia/skills`）与 build.nvidia.com/skills；每个 skill 需含 `SKILL.md`、`skill-card.md`、`evals/evals.json`。
 
+### 提交历史透露的工程重心（2026-10-19 ~ 10-25，8 条）
+
+| 日期 | 作者 | 提交 |
+| --- | --- | --- |
+| 10-25 | liofnv | Merge PR **#390** `fix/mysql-dialect-rules` |
+| 10-25 | Lio Fleishman | MySQL 规则：多保留 4 位小数是默认行为 |
+| 10-25 | Lio Fleishman | MySQL 规则：除法多留 4 位；允许放宽已存储的小比率 |
+| 10-25 | Lio Fleishman | 新增 MySQL 方言规则：**禁止四舍五入转型**、总体统计 |
+| 10-20 | tomer-levin-nv | 把**语义外键目标**暴露给 SQL 生成（#387） |
+| 10-20 | DinaLaptii | 修 **BIRD interact decimal**（#385） |
+| 10-20 | tomer-levin-nv | 选择**默认语义外键 JOIN 路径**（#384） |
+| 10-19 | liofnv | 读取嵌套与空列类型（#383） |
+
+**三个判断：**
+
+1. **PR 编号已到 #390**，半年近 400 个 PR——开发强度很高，但是**内部团队在提 PR**（合并源多为 `NVIDIA/...` 分支），与「不接受外部贡献」一致
+2. **工程重心几乎全在「SQL 正确性」**：MySQL 方言的舍入/除法精度、语义外键 JOIN 路径、嵌套与空列类型。**不是在堆 UI 功能**
+3. **BIRD 评测是真实在跑的工作流**（#385 直接修 BIRD 的 decimal 交互）——说明「去 ontology-sql-eval 跑基准」不是形式主义
+
+> 这三条恰好印证了 README 那句「**reliability gates agentic analytics**」——他们真的在磕「数字算错」这件事，而不是磕「回答得快」。
+
 ## 与库内已有线索的关系
 
 - [[Helix Foundry：图 + SQL 自动构建跨源企业本体]] —— **最直接的对照**：两者都从元数据自动生成本体。差异在「谁拍板」——Helix Foundry 用**确定性程序发现 + 人确认**，明确**不让 LLM 决定结构**；Auto Ontology 用 **NIM 推理**生成候选，靠**三态审核（候选/待审/已认证）**兜底。另一个差异是执行侧：Helix 用 DuckDB 跑 SQL，Auto Ontology 只做语义供应、不接管计算
