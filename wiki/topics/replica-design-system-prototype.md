@@ -186,6 +186,53 @@ Hub **不是 GitHub 提供的服务**，是你们自己部署。要求：
 
 > 反过来说：**它值钱的地方恰恰是这个假设。**
 
+## 附：用 DeepSeek 替换 Copilot 的可行性（2026-11-04 代码核实）
+
+### 结论
+
+**可行，而且不需要改 Replica 一行代码——前提是接受「宿主仍是 Copilot app，只换模型」。**
+
+两条官方证据：
+
+1. **Replica 自己的文档**（`docs/local-prototyping.md`）写明：
+   > Copilot requires GitHub sign-in… You can use a Copilot plan or **connect your own model provider**.
+2. **GitHub BYOK 文档**支持列表含 **“Any OpenAI-compatible HTTP endpoint”**，配置项为 **显示名 / Base URL / API Key**。DeepSeek 的 `/v1/chat/completions` 正是 OpenAI 兼容格式。
+
+### 配置路径（零改码）
+
+```
+Copilot app → 设置 → Add LLM models (BYOK) → 选择 OpenAI-compatible
+  Base URL: https://api.deepseek.com/v1
+  Model:    deepseek-chat
+  API Key:  <你的 key>
+→ 模型选择器里选 DeepSeek → Replica 插件与画布照常使用
+```
+
+### 但要注意五个硬约束
+
+| 约束 | 说明 |
+| --- | --- |
+| **宿主换不掉** | BYOK 只替换模型，Copilot app + GitHub 登录仍是必需项；Replica 是**Copilot 扩展**（`.github/extensions/replica-prototype/`，manifest 仅 `{"name":"replica-prototype","version":1}`） |
+| **工具调用可靠性** | 画布命令走 `agent-commands/index.mjs`（invoke + 5s 超时 + 队列）；模型必须稳定产出合法工具调用，否则画布不动 |
+| **视觉能力** | 仓库有 `capture-review-revision` 截图链路；DeepSeek 主力对话模型是纯文本，需 DeepSeek-VL 或放弃图像评审 |
+| **长上下文与规范遵守** | Replica 的价值就是「按你的设计系统生成」；模型指令跟随弱，就退化成普通 AI 生成 |
+| **数据出境** | 设计系统文档与代码会发往 DeepSeek 服务器；企业合规可能是硬阻断点 |
+
+### 如果连 Copilot 也不想要（三条路）
+
+- **A 换模型（推荐先做）**：Copilot BYOK + DeepSeek，**0 改码**，1 小时可验证
+- **B 换宿主**：保留 `starters/` 与画布渲染资源，把 `agent-commands` 的 invoke 协议改写成 MCP Server / CLI，再接入 Claude Code、Codex、OpenClaw——**中等工作量**（需复刻画布桥接与插件安装流程）
+- **C 重做产品**：把 Replica 当参考实现重写，**大工程**，不建议
+
+### 最小验证（约 1–2 小时）
+
+1. 申请 DeepSeek key，先用 `curl` 验证 `/v1/chat/completions` 与 function calling 可用
+2. Copilot app 里加 BYOK provider，选中 DeepSeek
+3. 建 Replica starter 仓库 → 开画布 → 跑 `/setup-skills` → 喂一份小型设计规范
+4. 同一 prompt 分别用 DeepSeek 与 Copilot 原生模型生成，比较四项：**组件复用、规范符合、工具调用成功率、单页成本**
+
+> ⚠️ 待实测：`deepseek-reasoner` 历史版本不支持 function calling，画布链路应优先用 `deepseek-chat`；BYOK 对 Copilot 高级功能（云会话、hooks、计费）的支持范围官方未逐项说明。
+
 ## 与库内已有线索的关系
 
 - [[上下文工程 (Context Engineering)]] —— Replica 是「**规范即上下文**」的工程样本：不是把设计系统塞进提示词，而是编译成 Copilot 可调用的 skills，并留下审核痕迹
