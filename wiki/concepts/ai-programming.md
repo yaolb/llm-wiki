@@ -48,3 +48,4 @@ AI 不仅生成代码，还**自主验证代码的正确性**。代表：[[OpenS
 - [[测试驱动开发（Test-Driven Development, TDD）]]
 - [[红绿回归测试（Red-Green-Regression Pipeline）]]
 - [AI 自验证（Self-Verification）](https://arxiv.org/search/?query=self-verification+AI[AI 自验证（Self-Verification in AI）](https://arxiv.org/search/?query=self-verification+AI[[AI 自验证]]searchtype=all)searchtype=all)
+- [[Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型]] —— 代码侧靠测试与类型约束，界面侧靠**设计系统约束 + 审批前置**；其示例 prompt 是一份可直接套用的 agent 施工合同

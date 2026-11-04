@@ -35,3 +35,4 @@ updated: 2026-07-04
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]]
 - [[MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子]] — Harness-RSI 把能力放进上下文：成本在该侧，本页策略在需求侧
 - [[Pi Agent 的 Context 管理：组装、增长、压缩与重建]] — 把本页的原则落到**具体实现**：Context 五要素、KV-Cache 友好三原则（保持前缀稳定/动态信息向后追加/标准消息结构）、Skill 两阶段加载、工具输出预算与 Compaction 降维重建
+- [[Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型]] —— **规范即上下文**的界面侧样本：设计系统不塞进提示词，而是编译成 Copilot skills，并在写入前设人审门

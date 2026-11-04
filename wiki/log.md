@@ -836,3 +836,23 @@
   - 四家对比：Palantir（执行型）/ Snowflake Horizon Context / Databricks Genie Ontology → 「NVIDIA 首次」不成立
 - **批判点**：90% 是厂商自测初始建设效率，无测试规模/基线/评价方法；插图系编辑重绘非官方截图；四家对比无同数据集评测
 - 双向引用：helix-foundry、fabric-ontology、evontology、concepts/ontology、datastrato
+
+## [2026-11-04] ingest | Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型
+
+- 原文：「梁記士多」《Replica 开源了：给 AI 套上设计规范，生成对齐产品体系的界面原型》（2026-10-29）
+  https://mp.weixin.qq.com/s/dLiDa322Uy2oQWoXnBnXaQ
+- 抓取：`scripts/fetch-article.py` 命中 `js_content`，**5,141 字 + 3 张图全本地化**
+- 仓库核实（2026-11-04）：`github/replica` HTTP 200，**TypeScript**，**MIT**，⭐**163** / fork 23 / issue 15，创建 **2026-10-15**，推送 **2026-11-04**
+  ⚠️ 文章写稿时（10-29）为 ⭐43 / 29 issue → 一周 star 近 4 倍，issue 由 29 降至 15
+- 归档：`raw/replica-design-system-prototype.md`；素材 `raw/assets/replica-design-system-prototype/`（original.html + img-01…03）
+- 新页：`wiki/topics/replica-design-system-prototype.md`
+- 核心内容：
+  - 问题：模型不知道你的圆角/间距/空状态/文案调性 → 只能按训练数据平均值生成，于是「每张原型都长得很 AI」
+  - 解法：**把约束前置**——设计师先写 guidance（组件/模式/文档），团队任何人再用自然语言调用
+  - 四件事：设计系统原型 / 自然语言出可交互结果（画布在 Copilot 旁）/ 自托管 Hub 收反馈 / MIT 可改造
+  - 四件套可拆开：Starters + 插件 + Hub + build action；本地路径不需要 Docker、域名、仓库
+  - **最关键 `/setup-skills`**：三类已批准来源 → 起草指导 → 人审核 → 单独授权落盘；未审核只能探索 starter
+  - 示例 prompt ＝「给 agent 的施工合同」：交互与边界状态 → 分支隔离 → 不推送不发布 → 确认基线已提交 → 提交前必问
+  - Hub 自托管：Linux + Docker、通配子域 HTTPS、GitHub App、备份；数据留 90 天，可导出 Segment/Mixpanel/自建端点，不回传 GitHub
+  - 局限：强依赖 Copilot、仅 macOS/Linux、「像」是概率非保证、Hub 运维重、MIT 边界
+- 双向引用：`concepts/context-engineering.md`、`concepts/ai-programming.md`、`synthesis/ai-dev-trifecta.md`

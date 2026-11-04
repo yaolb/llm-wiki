@@ -123,6 +123,10 @@
 
 - [cc-switch](entities/cc-switch.md)
 
+## AI原型
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+
 ## AI取数
 
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
@@ -271,6 +275,10 @@
 ## Agent托管平台
 
 - [AgentConnect](entities/agentconnect.md)
+
+## Agent施工合同
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## Agent架构
 
@@ -440,6 +448,10 @@
 
 - [LoopArena：把模型的 Loop 调度能力单独拎出来考](topics/looparena-benchmark.md)
 
+## Copilot
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+
 ## Cordis
 
 - [时空可组合性编程范式 — Cordis 与动态组合演算](topics/spatiotemporal-composability.md)
@@ -567,6 +579,11 @@
 
 - [Codex CLI](entities/codex-cli.md)
 - [GitHub Spec Kit](entities/spec-kit.md)
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+
+## GitHubDesign
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## Google
 
@@ -761,6 +778,10 @@
 - [Spring AI 基础上实现 MCP 与接口统一管理 — 方案深度研究报告](topics/spring-ai-mcp-architecture-research.md)
 - [万象AI分析平台](topics/wanxiang-ai-analysis.md)
 - [本体论 (Ontology)](concepts/ontology.md)
+
+## MIT
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## MLA
 
@@ -1004,6 +1025,10 @@
 ## Redis
 
 - [万象 ID 映射 — 实现方案与实现流程](topics/wanxiang-idmapping-design.md)
+
+## Replica
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## RoaringBitmap
 
@@ -1346,6 +1371,10 @@
 
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
 
+## 人审门
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+
 ## 人群包
 
 - [万象人群包提取方案](synthesis/wanxiang-crowd-package-extraction.md)
@@ -1425,6 +1454,10 @@
 ## 刷新策略
 
 - [StarRocks 物化视图深度解析：原理、使用与场景](concepts/starrocks-materialized-view.md)
+
+## 前端工程
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## 动态组合
 
@@ -2273,6 +2306,7 @@
 ## 自托管
 
 - [AgentConnect](entities/agentconnect.md)
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## 自改进Agent
 
@@ -2321,6 +2355,10 @@
 
 - [BMAD](entities/bmad.md)
 - [BMAD vs OpenSpec：AI驱动开发的航母与特种兵](synthesis/bmad-vs-openspec.md)
+
+## 规范即上下文
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## 规范驱动
 
@@ -2372,6 +2410,10 @@
 ## 设计变更
 
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
+
+## 设计系统
+
+- [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
 
 ## 评估
 

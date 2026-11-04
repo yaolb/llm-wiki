@@ -45,3 +45,4 @@ Spec 定义 → Role 分配 → Skill 执行 → 验证 → 交付
 - [[Spec驱动开发 (SDD)]]
 - [[测试驱动开发（Test-Driven Development, TDD）]]
 - [[统一开发范式 (OpenSpec × Superpowers)]]
+- [[Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型]] —— 可对照「规范/工具/验收」三段式：规范＝guidance，工具＝Copilot 画布，验收＝审核与授权落盘
