@@ -130,3 +130,50 @@ README 示例用 GSAP：gsap.timeline({ paused: true })，并把时间轴挂到 
 - npm 下载量与版本节奏未核实
 - 「450 个块」为 README 自述，未逐个验证可用性
 - 与 Remotion 的对比表由官方提供，立场不完全中立（尤其许可与动画模式两行）
+
+## 实测验证：能否直接使用（2026-11-04）
+
+**结论：能，端到端跑通；但首次使用会被两件事卡住，需手动绕过。**
+
+环境：macOS Apple Silicon 12 核 ｜ Node v22.14.0 ｜ npm 10.9.2 ｜ FFmpeg 8.1.2 ｜ Chrome 已装 ｜ 包 hyperframes 0.9.10（node ≥22，解包 23.9 MB）
+
+跑通步骤：
+
+```
+npx hyperframes init demo -e blank    # 几秒，生成 6 个文件
+npx hyperframes render                # 10s / 1080p / 30fps / 300 帧
+```
+
+产物：1920×1080 / 30fps / 300 帧 / 10.0s / 29 KB，**总渲染 7.3 秒**（8 workers，硬件 GPU）：compile 2.8s · setup 1.2s · capture 2.4s · encode 0.7s · assemble 0.1s。
+
+### 坑一：首次渲染卡在 skills add
+
+render 启动时会执行 `skills add https://github.com/heygen-com/hyperframes`（git clone 整个仓库）。GitHub 慢或被墙时会长时间挂住。
+
+绕过：`HYPERFRAMES_SKIP_SKILLS=1 npx hyperframes render`
+
+### 坑二：chrome-headless-shell 残留锁
+
+首次渲染下载 chrome-headless-shell 到 `~/.cache/hyperframes/`。中途中断会留下 `.chrome.install.lock` 与 `.chrome-staging-<uuid>/`，之后每次渲染都会打印「Waiting for another hyperframes process to finish installing chrome-headless-shell」并永远等下去。
+
+绕过（二选一）：
+
+1. `rm -f ~/.cache/hyperframes/.chrome.install.lock && rm -rf ~/.cache/hyperframes/.chrome-staging-*`
+2. 指向已有浏览器：`HYPERFRAMES_BROWSER_PATH=/path/to/chrome-headless-shell`
+
+### 可用环境变量
+
+HYPERFRAMES_SKIP_SKILLS · HYPERFRAMES_BROWSER_PATH · HYPERFRAMES_FFMPEG_PATH · HYPERFRAMES_FFPROBE_PATH · HYPERFRAMES_CONFIG_DIR · HYPERFRAMES_MEDIA_HOME · HYPERFRAMES_NO_TELEMETRY · HYPERFRAMES_DEBUG · HYPERFRAMES_API_KEY · HYPERFRAMES_RENDER_DETACHED
+
+### 代码观察
+
+- init 生成 index.html + hyperframes.json + package.json + meta.json + AGENTS.md + CLAUDE.md（后两者是给编码 Agent 的说明书，各 7.4 KB）
+- CLI 命令面很宽：init/add/capture/catalog/preview/present/publish/render/open/catch-up，以及 lint/check/validate/beats/audio/inspect/keyframes/snapshot/media-treatment/normalize-audio/grade-compare/compare/diff/measure/reverse/billing/templates/info
+- skills 随 npm 包分发（dist/skills/），但 CLI 仍会尝试从 GitHub 更新，这是坑一来源
+
+### 适用判断
+
+- **本地 PoC / 个人出片**：可用，两条命令
+- **CI / 自动化**：可用但要固定——预装浏览器 + SKIP_SKILLS + 锁清理
+- **团队协作 / 评审**：需自建 Studio 或 Hub，成本另算
+- **替代 AI 视频生成**：不可，定位不同（确定性 vs 创意生成）
