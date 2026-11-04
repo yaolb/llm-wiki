@@ -134,6 +134,8 @@ PilotDeck 的站位是**长周期、多项目的生产力工作**，抓手是"�
 - [[AI Agent（智能体）]] / [[AI Agent 技术全景报告 2026]] —— Agent OS 是今年 harness 竞争的一个新分层
 - [[AgentConnect]] —— 另一个"Agent 托管平台"路线（多角色 + 可换 Harness + IM 触发），与 PilotDeck 的"工作舱隔离"形成对照
 
+- [[OpenBot：把 Codex 与 Claude Code 组成协作团队]] —— **对照**：PilotDeck 是自带 OS 与记忆体系的工作舱，OpenBot 是**外挂在你已有的 CLI 上**做隔离与调度；前者换生态，后者复用已有订阅
+
 ## 待验证
 
 - 成本与得分数据全部来自官方 README / 新闻稿，**未见第三方复现**

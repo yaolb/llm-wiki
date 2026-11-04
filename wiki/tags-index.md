@@ -416,6 +416,10 @@
 
 - [AgentConnect](entities/agentconnect.md)
 
+## ClaudeCode
+
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
+
 ## ClickHouse
 
 - [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md)
@@ -429,6 +433,7 @@
 ## Codex
 
 - [OpenAI 内部数据代理（Data Agent）](concepts/openai-data-agent.md)
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 
 ## Coding Agent
 
@@ -920,6 +925,10 @@
 
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
+## OpenBot
+
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
+
 ## OpenCV
 
 - [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
@@ -985,6 +994,10 @@
 ## PilotDeck
 
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
+## PolyForm
+
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 
 ## Prompt
 
@@ -1221,6 +1234,7 @@
 
 ## TypeScript
 
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
 
 ## UI
@@ -1456,6 +1470,10 @@
 
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
 
+## 任务队列
+
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
+
 ## 企业AI
 
 - [EvoOntology：让 Data Agent 自己维护本体层（自进化 Ontology）](topics/evontology-self-evolving-ontology.md)
@@ -1623,6 +1641,7 @@
 ## 多Agent协作
 
 - [AI Agent 技术全景报告 2026](topics/ai-agent-landscape-2026.md)
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 
 ## 多智能体
 
@@ -2022,6 +2041,7 @@
 ## 本地优先
 
 - [MemPalace](entities/mempalace.md)
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 
 ## 果蝇
 
@@ -2072,6 +2092,10 @@
 ## 桌面工具
 
 - [cc-switch](entities/cc-switch.md)
+
+## 桌面应用
+
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 
 ## 检索
 
@@ -2345,6 +2369,10 @@
 ## 编码Agent
 
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
+
+## 编程Agent
+
+- [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
 
 ## 编程助手
 

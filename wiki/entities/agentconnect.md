@@ -122,3 +122,4 @@ IM 里一次 @  →  任务接收  →  找到对应 Agent 角色  →  Agent �
 ## 延展阅读
 
 - [AgentConnect GitHub](https://github.com/agentconnect-md/agentconnect)
+- [[OpenBot：把 Codex 与 Claude Code 组成协作团队]] —— 托管平台 vs 本地桌面：AgentConnect 走云端多租户，OpenBot 走单机自带订阅与本地工作区

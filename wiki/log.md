@@ -918,3 +918,20 @@
   - 5.0 将调整许可（PR #3750）
 - 新页：wiki/entities/remotion.md
 - 双向引用：entities/hyperframes.md、topics/code-video-hyperframes-vs-remotion.md
+
+## [2026-11-04] ingest | OpenBot：把 Codex 与 Claude Code 组成协作团队
+
+- 原文：AG雷达（2026-11-04）https://mp.weixin.qq.com/s/5az1SylUXNFHIm4JGv7hLw
+- 抓取：scripts/fetch-article.py，**2,558 字 + 2 张图全本地化**
+- 核实（2026-11-04）：`nightly-labs/openbot`，**TypeScript**，⭐**5,426** / fork 553，创建 **2026-08-12**，当日仍推送；
+  license 字段 **NOASSERTION / Other**（对应 PolyForm Noncommercial 1.0.0）；最近版本 v0.56（10-30）→ v0.60（11-03），**5 天 5 版**
+- 归档：raw/openbot-agent-team.md；素材 raw/assets/openbot-agent-team/
+- 新页：wiki/entities/openbot.md
+- 核心内容：
+  - 本地优先桌面工作台，不生产 agent，给已付费的编程 agent 加调度层（名字/指令/独立工作区/消息队列）
+  - agent 可互发消息、交接、互审、传文件；忙时排队，可暂停/恢复/取消
+  - 换模型不换人：Claude↔Codex 切换保留工作区与对话；额度/过载自动切备用并留记录
+  - 支持 Codex/Claude Code/Gemini/Grok/Cursor/Cline/OpenCode/Ollama/LM Studio/ACP
+  - 限制：完全访问权限不逐步确认；非离线；迭代极快
+  - 许可：PolyForm Noncommercial 1.0.0，个人非商业免费，商用需单独授权
+- 双向引用：topics/pilotdeck-2-agent-os.md、topics/agent-task-dag-orchestration.md、entities/agentconnect.md
