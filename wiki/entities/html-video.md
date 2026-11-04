@@ -54,3 +54,4 @@ Open Design · Windsurf CLI · Trae CLI · Claude Code · Cursor · Codex · Gem
 
 - [GitHub 项目](https://github.com/nexu-io/html-video)
 - [Open Design 官网](https://open-design.ai)
+- [[HyperFrames：把 HTML 渲染成视频的开源框架]] —— 该项目的完整技术档案：HTML+data 属性定义时间线、逐帧 seek 渲染、9 个 skill、约 450 个块、frame.md 设计系统转换

@@ -892,3 +892,18 @@
   - heygen-com/hyperframes：Apache-2.0，⭐78,566（**高于 Remotion**），创建 2026-03-10（原文「2026 年 4 月」「一个多月」自相矛盾）
   - 因此原文「Remotion 靠生态碾压新人」的解释不成立，问题更可能在 React 语料更利于复杂动效生成
 - 双向引用：entities/html-video.md（确认 Hyperframes 身份，此前存疑已解决）
+
+## [2026-11-04] ingest | HyperFrames 项目分析（HTML 渲染成视频）
+
+- 目标：https://hyperframes.heygen.com/（用户指定分析）
+- 抓取：官网首页 curl 被 Connection reset；改以 GitHub README（24 KB）+ GitHub API + 包结构为准
+- 核实（2026-11-04）：heygen-com/hyperframes，Apache-2.0，⭐78,566 / fork 7,230，创建 2026-03-10，当日仍在推送；Node ≥ 22；npm 包 hyperframes
+- 新页：wiki/entities/hyperframes.md
+- 核心内容：
+  - 机制：HTML + data 属性（composition-id/start/duration/track-index）声明时间线；动画必须可 seek；渲染器在无头 Chrome 逐帧 seek，FFmpeg 编码，同输入同输出
+  - 包结构：CLI / core（解析器+linter+adapters）/ engine（Puppeteer+FFmpeg）/ producer / studio / player / WebGL 转场 / AWS Lambda
+  - Agent 层：9 个 skill，核心集 4 个（/hyperframes、/hyperframes-cli、/hyperframes-registry、/media-use），约 450 个可编辑块
+  - frame.md：把 web 设计系统翻转给镜头，输出 DESIGN.md 超集（与 Replica 同思路）
+  - vs Remotion：同为 Chrome+FFmpeg，差别在创作模型（HTML vs React）、无构建步骤、许可（Apache-2.0 vs 源码可见许可）
+- 双向引用：entities/html-video.md、topics/code-video-hyperframes-vs-remotion.md
+- 未完成：未实际渲染实测；官网定价/托管边界未核实

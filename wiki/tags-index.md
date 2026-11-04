@@ -151,7 +151,6 @@
 - [ECC (Everything Claude Code)](entities/ecc.md)
 - [GSD (Get Shit Done)](entities/gsd.md)
 - [GitHub Spec Kit](entities/spec-kit.md)
-- [HyperFrames](entities/hyperframes.md)
 - [Karpathy AI编码方法论](topics/karpathy-ai-coding-methodology.md)
 - [Loop Engineering](concepts/loop-engineering.md)
 - [MUX0](entities/mux0.md)
@@ -229,10 +228,6 @@
 
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
 
-## Agent Skills
-
-- [HyperFrames](entities/hyperframes.md)
-
 ## Agent 安全
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
@@ -254,6 +249,7 @@
 
 ## AgentSkills
 
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Agentic-RAG
@@ -325,6 +321,7 @@
 ## Apache-2.0
 
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
@@ -527,6 +524,10 @@
 
 - [FDE (Forward Deployed Engineer)](concepts/fde.md)
 
+## FFmpeg
+
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+
 ## Fabric IQ
 
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
@@ -609,6 +610,7 @@
 
 ## HTML
 
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Harness
@@ -628,7 +630,7 @@
 
 ## HeyGen
 
-- [HyperFrames](entities/hyperframes.md)
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Hive
@@ -639,12 +641,9 @@
 
 - [ECC (Everything Claude Code)](entities/ecc.md)
 
-## HyperFrames
-
-- [HyperFrames](entities/hyperframes.md)
-
 ## Hyperframes
 
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## ID-Mapping
@@ -1000,6 +999,10 @@
 
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
 
+## Puppeteer
+
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+
 ## Python
 
 - [Apache Burr](entities/apache-burr.md)
@@ -1054,6 +1057,7 @@
 
 ## Remotion
 
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Replica
@@ -1290,6 +1294,10 @@
 
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
 
+## frame.md
+
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+
 ## gstack
 
 - [AI增强开发三件套：把Vibe Coding拉回工程交付](synthesis/ai-dev-trifecta.md)
@@ -1300,7 +1308,6 @@
 
 ## html-to-video
 
-- [HyperFrames](entities/hyperframes.md)
 - [html-video](entities/html-video.md)
 
 ## meishi
@@ -1434,6 +1441,7 @@
 
 ## 代码视频
 
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## 任务DAG
@@ -1753,7 +1761,6 @@
 ## 开源工具
 
 - [GitHub Spec Kit](entities/spec-kit.md)
-- [HyperFrames](entities/hyperframes.md)
 - [html-video](entities/html-video.md)
 
 ## 开源库
@@ -2145,6 +2152,10 @@
 - [LightRAG](entities/lightrag.md)
 - [RAG-Anything](entities/rag-anything.md)
 
+## 渲染引擎
+
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+
 ## 湖仓一体
 
 - [StarRocks 跨数据源查询方案（深度调研）](topics/starrocks-cross-data-source-query.md)
@@ -2250,6 +2261,10 @@
 ## 研发体系
 
 - [AI Native 研发体系](topics/ai-native-dev-system.md)
+
+## 确定性渲染
+
+- [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 
 ## 神经科学
 
@@ -2451,7 +2466,6 @@
 
 ## 视频生成
 
-- [HyperFrames](entities/hyperframes.md)
 - [html-video](entities/html-video.md)
 
 ## 角色化
