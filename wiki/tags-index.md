@@ -644,6 +644,7 @@
 ## Hyperframes
 
 - [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## ID-Mapping
@@ -1045,6 +1046,7 @@
 
 ## React
 
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Reallm-Labs
@@ -1058,6 +1060,7 @@
 ## Remotion
 
 - [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Replica
@@ -1322,6 +1325,10 @@
 
 - [LLM-as-a-Verifier：验证作为新的 Scaling 轴](topics/llm-as-a-verifier.md)
 
+## source-available
+
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
+
 ## user_code
 
 - [用户编码机制（User Code Encoding）](concepts/user-code-encoding.md)
@@ -1442,6 +1449,7 @@
 ## 代码视频
 
 - [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## 任务DAG
@@ -1559,6 +1567,10 @@
 
 - [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
 
+## 商业授权
+
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
+
 ## 国家队
 
 - [紫东太初](entities/zdt-taichu.md)
@@ -1654,6 +1666,10 @@
 
 - [IDMapping — 58 用户 ID 关系映射体系](topics/idmapping.md)
 - [万象 ID 映射 — 实现方案与实现流程](topics/wanxiang-idmapping-design.md)
+
+## 对比
+
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
 
 ## 对比分析
 
@@ -2490,6 +2506,10 @@
 - [Hermes Agent（🧠 爱马仕）](entities/hermes-agent.md)
 - [MemPalace](entities/mempalace.md)
 - [OpenClaw（🦞 龙虾）](entities/openclaw.md)
+
+## 许可证
+
+- [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
 
 ## 论文综述
 

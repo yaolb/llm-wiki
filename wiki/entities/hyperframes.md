@@ -123,6 +123,8 @@ README 示例用 GSAP：gsap.timeline({ paused: true })，并把时间轴挂到 
 - [[Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型]] —— 同为「把设计系统变成生成约束」，一个面向界面，一个面向视频
 - [[AI 编程 (AI Programming)]] —— 让 Agent 写代码而不是写像素，是本项目的核心前提
 
+- [[Remotion：用 React 写视频（但不是开源软件）]] —— **最重要的对手**：生态与 Lambda 更成熟，但许可是 source-available（员工 >3 人的营利组织需买公司许可，且禁止做衍生 SaaS）；创作模型是 React 组件，需要打包步骤
+
 ## 待验证
 
 - 官网/文档站首页连接被重置，未读到产品介绍与定价页

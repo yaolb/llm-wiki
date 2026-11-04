@@ -907,3 +907,14 @@
   - vs Remotion：同为 Chrome+FFmpeg，差别在创作模型（HTML vs React）、无构建步骤、许可（Apache-2.0 vs 源码可见许可）
 - 双向引用：entities/html-video.md、topics/code-video-hyperframes-vs-remotion.md
 - 未完成：未实际渲染实测；官网定价/托管边界未核实
+
+## [2026-11-04] ingest | Remotion 许可证与定位核实
+
+- 用户追问 Remotion；核实 `remotion-dev/remotion`：TypeScript，⭐70,573 / fork 5,809，创建 2020-06-23，当日仍推送，GitHub license=NOASSERTION
+- 拉取 `LICENSE.md`（2,823 B）确认：自定义「Remotion License」，两层结构
+  - Free License 适用：个人 / 营利组织员工 ≤3 人 / 非营利 / 纯评估；允许免费商用与修改源码
+  - 超出规模须买 Company License（remotion.pro/license）
+  - 明确禁止：复制或修改 Remotion 代码用于出售、出租、再授权自己的衍生物（挡住「基于它做视频 SaaS」）
+  - 5.0 将调整许可（PR #3750）
+- 新页：wiki/entities/remotion.md
+- 双向引用：entities/hyperframes.md、topics/code-video-hyperframes-vs-remotion.md
