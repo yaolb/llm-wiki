@@ -74,3 +74,39 @@ LICENSE.md 开头注明：Remotion 5.0 将小幅调整许可条款（PR #3750）
 - Remotion 5.0 的许可变更细节（仅见 PR 链接）
 - Lambda 渲染的费用构成（AWS 资源 + 是否有额外授权要求）
 - 「员工数」如何界定（全职/外包/集团合并）需查 FAQ
+
+## 实测验证：能否直接使用（2026-11-04）
+
+**结论：能，且比 HyperFrames 更省事——不需要任何绕过。**
+
+环境同前：macOS Apple Silicon 12 核 / Node 22.14 / FFmpeg 8.1.2。
+
+```
+npm i remotion @remotion/cli react react-dom   # 245 包，14s
+npx remotion render src/index.tsx Demo out/demo.mp4 --browser-executable=<chrome>
+```
+
+实测产物：**1920×1080 / 30fps / 150 帧 / 5.0s / 98 KB**。
+
+- **首次渲染 9 秒**（含 webpack 打包）
+- **二次渲染 3 秒**（打包缓存命中）
+- node_modules **442 MB**（对比 HyperFrames 包 23.9 MB）
+
+### 与 HyperFrames 的实测对照
+
+- 启动成本：Remotion 装依赖即可 ｜ HyperFrames 要绕两个坑（skills 拉取、浏览器锁）
+- 体积：442 MB ｜ 23.9 MB（npm 包解包）
+- 出片速度（折算每秒视频）：Remotion 热缓存 **0.6s/秒** ｜ HyperFrames **0.73s/秒**
+- 首次构建：Remotion 多一步打包（冷启动 +6s）｜ HyperFrames 无构建
+- 画质/体积：同为 1080p30，Remotion 98 KB vs HF 29 KB（内容不同，不可直接比）
+
+### 代码观察
+
+- monorepo **21 个包**，含 `cli`、`bundler`、`browser-bundler`、`cloudrun`、`lambda`、`player`、`studio` 等
+- 仓库内已有 **`.agents` / `.pi` / `.codex` / `.claude`** 目录，以及 `agent-plugin`、`claude-code-plugin` 包 —— **它也在做 Agent 集成**，并非只是「一份最佳实践文档」
+
+### 使用建议
+
+- 团队 ≤3 人、要精致动效、需要成熟 Lambda：**Remotion**，装上就能跑
+- 要许可证干净、给 Agent 用、追求轻量：**HyperFrames**
+- 两者都能本机跑通，真正差别在**许可、体积、创作模型**，不在能不能用
