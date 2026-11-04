@@ -177,3 +177,30 @@ HYPERFRAMES_SKIP_SKILLS · HYPERFRAMES_BROWSER_PATH · HYPERFRAMES_FFMPEG_PATH �
 - **CI / 自动化**：可用但要固定——预装浏览器 + SKIP_SKILLS + 锁清理
 - **团队协作 / 评审**：需自建 Studio 或 Hub，成本另算
 - **替代 AI 视频生成**：不可，定位不同（确定性 vs 创意生成）
+
+## 竞品格局与许可证（2026-11-04 核实）
+
+### 同赛道：代码视频框架
+
+| 项目 | 许可 | 是否开源 | 星数 | 最后推送 | 技术底座 |
+| --- | --- | --- | --- | --- | --- |
+| **HyperFrames** | Apache-2.0 | 是 | 78,566 | 2026-11-04 | 纯 HTML |
+| **Remotion** | Remotion License（NOASSERTION） | **否**（源码可见） | 70,573 | 2026-11-04 | React |
+| **Motion Canvas** | MIT | 是 | 19,680 | 2026-07-02 | TypeScript 生成器 |
+| **Revideo** | MIT | 是 | 4,174 | 2026-07-15 | TypeScript（Motion Canvas 分支，midrender） |
+| **Editly** | MIT | 是 | 5,579 | 2025-05-12 | Node + FFmpeg（已停更） |
+
+关键区别：**Remotion 不是开源软件**。它采用自定义的「Remotion License」，属 source-available：个人与小团队免费，超过规模阈值需商业授权。HyperFrames 的 Apache-2.0 是它最直接的商业差异化。
+
+### 邻接赛道
+
+- **Nexrender**（`inlife/nexrender`）：**MIT**，⭐1,861 —— After Effects 渲染农场，不是「用代码写视频」，而是「用数据驱动 AE 模板」
+- **云端视频 API（闭源 SaaS）**：Shotstack、Creatomate、JSON2Video、Plainly、Bannerbear —— 提供模板 + 数据 → 视频的托管 API，按渲染计费，不开源
+- **AI 视频生成**：Vidu、可灵、Sora、Runway —— 不同赛道，负责「凭空造画面」，与确定性渲染不重叠
+
+### HyperFrames 的站位
+
+1. **许可证是武器**：同赛道里只有它和 Motion Canvas/Revideo/Editly 是 OSI 开源；唯一的高星对手 Remotion 是源码可见
+2. **创作模型是差异**：HTML（语料最多）vs React / TS 生成器 —— 直接决定 Agent 一次写对率
+3. **Agent 原生**：9 个 skill + 约 450 个块 + frame.md，另外几家都没有这一层
+4. **风险**：Remotion 有 5 年生态与社区惯性；Motion Canvas 在「解释型动画」上更成熟；SaaS 在「不想写代码」的人群里更省事
