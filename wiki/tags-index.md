@@ -171,6 +171,10 @@
 
 - [FDE (Forward Deployed Engineer)](concepts/fde.md)
 
+## AI视频
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
+
 ## AI记忆
 
 - [MemPalace](entities/mempalace.md)
@@ -248,6 +252,10 @@
 
 - [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 
+## AgentSkills
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
+
 ## Agentic-RAG
 
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](topics/agentic-rag.md)
@@ -318,6 +326,7 @@
 
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Apache2.0
 
@@ -598,6 +607,10 @@
 
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
 
+## HTML
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
+
 ## Harness
 
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
@@ -616,6 +629,7 @@
 ## HeyGen
 
 - [HyperFrames](entities/hyperframes.md)
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Hive
 
@@ -628,6 +642,10 @@
 ## HyperFrames
 
 - [HyperFrames](entities/hyperframes.md)
+
+## Hyperframes
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## ID-Mapping
 
@@ -1022,6 +1040,10 @@
 - [MetaRSI-v1：把 RSI 拆成 Data / Model / Harness 三个可组合算子](topics/metarsi-v1-recursive-self-improvement.md)
 - [自改进AI Agent](concepts/self-improving-agent.md)
 
+## React
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
+
 ## Reallm-Labs
 
 - [InfiFusion](entities/infifusion.md)
@@ -1029,6 +1051,10 @@
 ## Redis
 
 - [万象 ID 映射 — 实现方案与实现流程](topics/wanxiang-idmapping-design.md)
+
+## Remotion
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Replica
 
@@ -1213,6 +1239,10 @@
 ## VibeCoding
 
 - [Karpathy AI编码方法论](topics/karpathy-ai-coding-methodology.md)
+
+## Vidu
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## Web自动化
 
@@ -1402,6 +1432,10 @@
 
 - [Understand Anything](entities/understand-anything.md)
 
+## 代码视频
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
+
 ## 任务DAG
 
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
@@ -1466,6 +1500,10 @@
 ## 前端工程
 
 - [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+
+## 剪映AI
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## 动态组合
 
@@ -1765,6 +1803,10 @@
 ## 成本控制
 
 - [Prompt Caching](concepts/prompt-caching.md)
+
+## 批量个性化
+
+- [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## 技术全景
 

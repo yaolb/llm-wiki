@@ -44,6 +44,8 @@ Open Design · Windsurf CLI · Trae CLI · Claude Code · Cursor · Codex · Gem
 
 内置 21 个模板，涵盖：数据可视化（NYT 风格折线图等）、片头/片尾、电影级效果（胶片颗粒 + 漏光）、代码演示（打字机 + 终端光标 VFX）、产品宣传等。
 
+- [[代码视频 vs AI 视频：Hyperframes 与 Remotion 实测]] —— **确认此前存疑的身份**：`Hyperframes` 即 **`heygen-com/hyperframes`**（HeyGen 出品，**Apache-2.0**，⭐78,566，创建 2026-03-10），仓库描述 “Write HTML. Render video. Built for agents.”，与 HeyGen 的 `HyperFrames` 为同一项目，无需拆分
+
 ## 相关
 
 - [[HyperFrames]] — HeyGen 开源的独立渲染框架，本项目的默认引擎（2026-08 有独立介绍帖）

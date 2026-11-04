@@ -873,3 +873,22 @@
   - 在体验证：FB5V 为「刹车踏板」，紧张性放电、气味时抑制、角速度正相关、大转弯飙升
   - 设计原则：分裂吸引子 + 去抑制门控；内容在 PFG，写入时机由 h∆K 抑制控制
 - 双向引用：concepts/agent-memory-system.md、topics/pi-agent-context-management.md、concepts/context-engineering.md（均为类比，页内已标注非论文结论）
+
+## [2026-11-04] ingest | 代码视频 vs AI 视频（Hyperframes / Remotion 实测）
+
+- 原文：腾讯云开发者社区 · 月鹿造物《实测｜有了 Vidu 和剪映 AI，HeyGen 为什么还开源了一个代码视频工具？》（2026-09-08）
+  https://cloud.tencent.com/developer/article/2739500
+- 抓取：腾讯云页面 `scripts/fetch-article.py` 未命中（JS 渲染），改从页面 `__NEXT_DATA__` 的 `articleInfo.content.blocks` 重建（117 块），正文 5,278 字；图片按页面 img 候选下载 7 张
+- 归档：raw/heygen-hyperframes-vs-remotion.md；素材 raw/assets/heygen-hyperframes-vs-remotion/（img-01…07）
+- 新页：wiki/topics/code-video-hyperframes-vs-remotion.md
+- 核心内容：
+  - 四方案同一输入（Lovart 官网）15 秒竖屏：Vidu 画面漂移 / 剪映 AI 通用模板 / Hyperframes 像 PPT 但每帧对得上 / Remotion 8.5 倍体积做出真视频感
+  - 关键判断：代码视频 = 工厂流水线（批量个性化、数据驱动、品牌一致性），AI 视频 = 画家画布（凭空造画面），需求不重叠
+  - HeyGen 自造原因：AI 写 HTML 语料多更自在 + Remotion 每次改动需重新打包不利于拖拽编辑
+  - 两条路线：Hyperframes 造 AI 原生流水线（14 skills、单文件 HTML）；Remotion 借力 5 年 React 生态（官方 skill 为最佳实践文档）
+  - 第二轮测试：喂公众号成品 HTML → 两者都继承风格（HTML 同时携带内容与风格）
+- **核实与纠正（我查 GitHub API，2026-11-04）**：
+  - Remotion：⭐70,571（原文写 47k），创建 2020-06-23（原文写 2021）
+  - heygen-com/hyperframes：Apache-2.0，⭐78,566（**高于 Remotion**），创建 2026-03-10（原文「2026 年 4 月」「一个多月」自相矛盾）
+  - 因此原文「Remotion 靠生态碾压新人」的解释不成立，问题更可能在 React 语料更利于复杂动效生成
+- 双向引用：entities/html-video.md（确认 Hyperframes 身份，此前存疑已解决）
