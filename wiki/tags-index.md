@@ -853,6 +853,10 @@
 
 - [星火灰度上线方案 — 云平台环境隔离与灰度路由](topics/xinghuo-grayscale-deployment.md)
 
+## Nature
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## Neo4j
 
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
@@ -1341,6 +1345,10 @@
 - [DeepSeek](entities/deepseek.md)
 - [Qwen](entities/qwen.md)
 
+## 中央复合体
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## 中山大学
 
 - [FuseAI](entities/fuseai.md)
@@ -1480,6 +1488,10 @@
 
 - [Huashu Design](entities/huashu-design.md)
 
+## 去抑制门控
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## 参考资料
 
 - [顶层本体与行业本体库整理（含开源）](topics/ontology-standards-and-libraries.md)
@@ -1496,6 +1508,10 @@
 ## 向量检索
 
 - [Apache Ossie 实战：给 AI 取数系统搭一层业务语义地基](topics/apache-ossie-ai-data-retrieval.md)
+
+## 吸引子网络
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
 
 ## 国家队
 
@@ -1619,6 +1635,10 @@
 ## 工作舱
 
 - [PilotDeck 2.0：清华开源的智能体操作系统](topics/pilotdeck-2-agent-os.md)
+
+## 工作记忆
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
 
 ## 工具
 
@@ -1938,6 +1958,10 @@
 
 - [MemPalace](entities/mempalace.md)
 
+## 果蝇
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## 架构演进
 
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](topics/agentic-rag.md)
@@ -2131,6 +2155,10 @@
 - [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
 - [豆包 Seedream 图生图颜色校正：Lab 色度迁移 + ΔE00 质检](topics/doubao-seedream-color-correction.md)
 
+## 电生理
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## 画像
 
 - [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md)
@@ -2180,6 +2208,10 @@
 ## 研发体系
 
 - [AI Native 研发体系](topics/ai-native-dev-system.md)
+
+## 神经科学
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
 
 ## 稀疏计算
 
@@ -2392,6 +2424,10 @@
 
 - [模型微调（Fine-tuning）](concepts/model-finetuning.md)
 
+## 记忆机制
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## 记忆系统
 
 - [Agent记忆系统](concepts/agent-memory-system.md)
@@ -2499,6 +2535,10 @@
 
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
+## 连接组
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
+
 ## 选型
 
 - [从本体论到 Fabric Ontology](topics/fabric-ontology-from-ontology.md)
@@ -2511,6 +2551,10 @@
 ## 金融
 
 - [UZI-Skill（游资技能库）](entities/uzi-skill.md)
+
+## 钙成像
+
+- [工作记忆的分裂吸引子：一半管记什么，一半管何时记](topics/nature-working-memory-split-attractor.md)
 
 ## 长上下文
 

@@ -30,6 +30,8 @@ updated: 2026-07-04
 - [[GSD (Get Shit Done)]]（Get Shit Done）：面向大型项目的上下文工程系统
 - CLAUDE.md：项目级行为约束和知识基线
 
+- [[工作记忆的分裂吸引子：一半管记什么，一半管何时记]] —— 神经机制的工程映射：去抑制≈放开写入许可，抑制≈保持只读跟随；「慢兴奋」对应长时程但可调的上下文保留
+
 ## 相关概念
 - [[AI 编程（AI Programming / AI Coding）]]
 - [[RAG 检索增强生成（Retrieval-Augmented Generation）]]

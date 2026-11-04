@@ -856,3 +856,20 @@
   - Hub 自托管：Linux + Docker、通配子域 HTTPS、GitHub App、备份；数据留 90 天，可导出 Segment/Mixpanel/自建端点，不回传 GitHub
   - 局限：强依赖 Copilot、仅 macOS/Linux、「像」是概率非保证、Hub 运维重、MIT 边界
 - 双向引用：`concepts/context-engineering.md`、`concepts/ai-programming.md`、`synthesis/ai-dev-trifecta.md`
+
+## [2026-11-04] ingest | 工作记忆的分裂吸引子（Nature 果蝇研究）
+
+- 原文：「Brain博览记2026」《Nature丨记忆的神经机制研究：工作记忆的新增与保持》（2026-10-18）
+  https://mp.weixin.qq.com/s/0g3EVSn-Lmk-ktShPIa-WQ
+- 论文：A split attractor design for rapidly writing a navigational goal（Nature，2026-10-07 在线）
+- 抓取：scripts/fetch-article.py，**3,359 字 + 8 张图全本地化**
+- 归档：raw/nature-working-memory-neural-mechanism.md；素材 raw/assets/nature-working-memory-neural-mechanism/
+- 新页：wiki/topics/nature-working-memory-split-attractor.md
+- 核心内容：
+  - 果蝇 FB 中 h∆K 与 PFG 环状复馈；气味写入活动凸包，保持航向期间持续、偏离时消失
+  - 持续性来自网络：TNTe 阻断 h∆K 输出后持续兴奋消失
+  - 慢兴奋（胆碱能/5-HT）扩大稳定参数域且可平滑调节记忆时长；快抑制（FB5V/FB6M）负责快速开关
+  - 转弯时 PFG 低幅跟随罗盘（旋转增益≈1），h∆K 沉默；去抑制把当前航向锁成高幅 bump（锁存器）
+  - 在体验证：FB5V 为「刹车踏板」，紧张性放电、气味时抑制、角速度正相关、大转弯飙升
+  - 设计原则：分裂吸引子 + 去抑制门控；内容在 PFG，写入时机由 h∆K 抑制控制
+- 双向引用：concepts/agent-memory-system.md、topics/pi-agent-context-management.md、concepts/context-engineering.md（均为类比，页内已标注非论文结论）
