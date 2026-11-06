@@ -3,7 +3,7 @@ type: topic
 tags: [Ontology, 本体论, 语义层, Data Agent, 自进化, MCP, EvoOntology, 轨迹归因, 企业AI, 人大]
 created: 2026-10-03
 updated: 2026-10-03
-related_sources: 1
+related_sources: 2
 source_url: https://mp.weixin.qq.com/s/PirpvPKDnqI0TYHFZIBRyA
 ---
 
@@ -156,3 +156,21 @@ EvoOntology **目前仍是研究工作**：
 - 论文未提供**中文/企业私有数据集**上的结果；真实权限与审计场景下的自进化安全性未验证
 - 媒体解读稿与 arXiv 原文可能有个别数字偏差，**引用具体数字前建议回原文核对**（arXiv 2609.15779）
 - 开源代码 `ruc-datalab/EvoOntology` 的可复现性尚未核实
+## 第二篇报道（2026-10-14，DataFunTalk）
+
+> 来源：DataFunTalk《重磅开源 EvoOntology：打掉本体"建设、维护、更新"难题》（2026-10-14）
+> 原文：https://mp.weixin.qq.com/s/Bc741KzcvQGDHmSo3TmjEg
+> 素材：`raw/evontology-open-source-detail.md`；**21 张图**见 `raw/assets/evontology-open-source-detail/`
+
+**与第一篇的关系：同一项目的第二篇报道，核心数据高度重合**（Sonnet-5 72.5→57.5→81.3、GPT-5.6-sol 68.5→65.5→93.5、Gate 取消 89.5→78.3、Tool/Content/Schema 57/34/9、Jaccard ≤0.62 等均一致），故不另建页面。
+
+**这篇多出来的信息：**
+
+- 六种模型平均提升 **+17.8 个百分点**（Trajectory-Wise，相对无 Ontology 的 Baseline）
+- 与 Memory 的对照更明确：ReAct Baseline **69.5%** → 可检索历史轨迹的 Memory **75.8%** → EvoOntology **89.5%**
+- 成本分阶段：无 Ontology 每轮 3.2K/14.6 轮/52.6K；初始 Ontology 4.1K/11.2 轮/50.4K；进化后 4.6K/**8.4 轮/42K**
+- 跨模型迁移：至少降 **6.6pt**，部分情况平均差 **10.9pt**
+- 论文作者信息：**中国人民大学信息学院助理教授 张绍磊**
+- **DACon 2026 北京站（10-23~24，北京希尔顿逸林）** 有作者现场分享《自进化数据智能体：迈向 Data–Ontology–Agent 协同进化》
+
+**仓库核实（2026-11-06）**：`ruc-datalab/EvoOntology`，**MIT**，⭐**1,154**，创建 **2026-09-15**，最后推送 **2026-10-09**。

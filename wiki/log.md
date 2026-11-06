@@ -935,3 +935,14 @@
   - 限制：完全访问权限不逐步确认；非离线；迭代极快
   - 许可：PolyForm Noncommercial 1.0.0，个人非商业免费，商用需单独授权
 - 双向引用：topics/pilotdeck-2-agent-os.md、topics/agent-task-dag-orchestration.md、entities/agentconnect.md
+
+## [2026-11-06] update | EvoOntology 增补第二篇报道（去重，不新建页面）
+
+- 原文：DataFunTalk《重磅开源 EvoOntology：打掉本体"建设、维护、更新"难题》（2026-10-14）
+  https://mp.weixin.qq.com/s/Bc741KzcvQGDHmSo3TmjEg
+- 抓取：scripts/fetch-article.py，**8,952 字 + 21 张图**（原页 25 张，4 张缺失）
+- 归档：raw/evontology-open-source-detail.md；素材 raw/assets/evontology-open-source-detail/
+- **去重判断**：与已有页 `topics/evontology-self-evolving-ontology.md`（来源 2026-10-01 首篇）核心数据完全重合（81.3/93.5/89.5/78.3、57/34/9、Jaccard 0.62、52.6K→42K、14.6→8.4、75.8）
+  → **不新建页面**，仅把该页 related_sources 改为 2，并追加「第二篇报道」小节记录增量信息
+- 增量信息：六模型平均 +17.8pt；Memory 对照 69.5→75.8→89.5；成本分阶段（3.2K/14.6轮/52.6K → 4.1K/11.2轮/50.4K → 4.6K/8.4轮/42K）；跨模型迁移至少 −6.6pt、部分 −10.9pt；作者张绍磊；DACon 2026 北京站 10-23~24
+- 仓库核实（2026-11-06）：`ruc-datalab/EvoOntology`，MIT，⭐1,154，创建 2026-09-15，最后推送 2026-10-09
