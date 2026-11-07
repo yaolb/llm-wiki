@@ -229,3 +229,4 @@ Faithfulness 低？
 - [RAGAS Docs](https://docs.ragas.io/)
 - [DeepEval Docs](https://deepeval.com/docs/introduction)
 - [What Matters for Model Merging at Scale? (Yadav et al., 2024)](https://arxiv.org/abs/2410.03617)
+- [[SAG2：不建向量库、不调模型建库的本地知识库]] —— 可作评测口径参考：MuSiQue Recall@5 80.68%、EnterpriseRAG-Bench Recall@10 81.10%，但均为项目方/作者自报，无第三方复现

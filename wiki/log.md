@@ -946,3 +946,20 @@
   → **不新建页面**，仅把该页 related_sources 改为 2，并追加「第二篇报道」小节记录增量信息
 - 增量信息：六模型平均 +17.8pt；Memory 对照 69.5→75.8→89.5；成本分阶段（3.2K/14.6轮/52.6K → 4.1K/11.2轮/50.4K → 4.6K/8.4轮/42K）；跨模型迁移至少 −6.6pt、部分 −10.9pt；作者张绍磊；DACon 2026 北京站 10-23~24
 - 仓库核实（2026-11-06）：`ruc-datalab/EvoOntology`，MIT，⭐1,154，创建 2026-09-15，最后推送 2026-10-09
+
+## [2026-11-07] ingest | SAG2：不建向量库的本地知识库（BM25 + Jev）
+
+- 原文：「袋鼠帝」《RAG这次真死了！SAG2才是本地知识库的神，又快又准又便宜～》（2026-11-06）
+  https://mp.weixin.qq.com/s/Zle_gEs168spr9_HC0P0dg
+- 抓取：scripts/fetch-article.py，**6,550 字 + 26 张图全本地化**
+- 核实（2026-11-07）：`Zleap-AI/SAG-Wiki` **MIT / Rust / ⭐157**（创建 2026-10-18）；`Zleap-AI/SAG` **MIT / Python / ⭐2,764**（创建 2025-11-07）；`Zleap-AI/SAG2` 为 301 重定向
+- 归档：raw/sag2-local-knowledge-base.md；素材 raw/assets/sag2-local-knowledge-base/
+- 新页：wiki/topics/sag2-keyword-multihop-retrieval.md
+- 核心内容：
+  - 建库不调模型、不做 embedding、不要向量库：直接建 BM25 倒排索引
+  - 语义判断交给 Jev（只回判断+分数），多跳靠「关键词→段落→新关键词」循环
+  - 自报数据：11,656 段建库 4.57h → 2.36s（约 7,000×）、Token 2,826 万 → 0；MuSiQue Recall@5 80.68%（+15.55pt）；EnterpriseRAG-Bench 51 万文档 8m32s / Recall@10 81.10%
+  - SAG Wiki 桌面端：Rust / MIT / ⭐157 / 13–18 MB，加文件夹即建库、增量更新、支持音视频
+  - 四组实测：383 篇公众号、10 万维基词条、26 份半导体研报（3 vs 11 次调用）、代码排错（144s→95s）
+- 批判点已写入待验证：多跳依赖词面重合、语义泛化弱、强依赖 Jev、评测均为自报、EnterpriseRAG 为模拟数据
+- 双向引用：topics/jev-model.md（Jev 的真实生产用例）、topics/agentic-rag.md、topics/rag-evaluation.md

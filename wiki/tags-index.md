@@ -337,6 +337,10 @@
 
 - [NVIDIA Auto Ontology：从元数据自动生成本体，创建时间缩短 90%](topics/nvidia-auto-ontology.md)
 
+## BM25
+
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
+
 ## BMAD
 
 - [BMAD](entities/bmad.md)
@@ -681,6 +685,7 @@
 
 - [Jev 模型：单步判别式决策模型](topics/jev-model.md)
 - [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 
 ## KV Cache
 
@@ -805,6 +810,7 @@
 ## MIT
 
 - [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 
 ## MLA
 
@@ -1031,6 +1037,7 @@
 - [OpenAI 内部数据代理（Data Agent）](concepts/openai-data-agent.md)
 - [RAG 评估体系与方法论](topics/rag-evaluation.md)
 - [RAG-Anything](entities/rag-anything.md)
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 - [SeedER](entities/seeder.md)
 - [Snail AI](entities/snail-ai.md)
 - [Snail AI — Java 生态的企业级 AI Agent 平台](topics/snail-ai-agent-platform.md)
@@ -1091,6 +1098,14 @@
 ## Rust
 
 - [cc-switch](entities/cc-switch.md)
+
+## SAG-Wiki
+
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
+
+## SAG2
+
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 
 ## SAM
 
@@ -1495,6 +1510,7 @@
 ## 倒排索引
 
 - [Elasticsearch 倒排索引的 Bitmap 机制研究与万象借鉴方案](synthesis/elasticsearch-bitmap-inverted-index-adoption.md)
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 
 ## 元数据
 
@@ -1621,6 +1637,10 @@
 - [J-Space 插件让 DeepSeek V4 Pro 0813 全面超越 Fable 5](topics/j-space-deepseek-v4-pro-0813.md)
 - [LoopArena：把模型的 Loop 调度能力单独拎出来考](topics/looparena-benchmark.md)
 
+## 增量更新
+
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
+
 ## 增长平台
 
 - [万象](entities/wanxiang.md)
@@ -1660,6 +1680,10 @@
 ## 多跳推理
 
 - [SeedER](entities/seeder.md)
+
+## 多跳检索
+
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 
 ## 大型项目
 
@@ -2042,6 +2066,10 @@
 
 - [MemPalace](entities/mempalace.md)
 - [OpenBot：把 Codex 与 Claude Code 组成协作团队](entities/openbot.md)
+
+## 本地知识库
+
+- [SAG2：不建向量库、不调模型建库的本地知识库](topics/sag2-keyword-multihop-retrieval.md)
 
 ## 果蝇
 

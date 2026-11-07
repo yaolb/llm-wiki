@@ -76,3 +76,4 @@ Agent 自主决定：
 - [Agentic RAG — Weaviate](https://weaviate.io/blog/what-is-agentic-rag)
 - [Agentic RAG — IBM](https://www.ibm.com/think/topics/agentic-rag)
 - [RAG 没死：从独立系统到 Agent 组件](https://mp.weixin.qq.com/s/IzheS512kExzwXzRy-fBiw)
+- [[SAG2：不建向量库、不调模型建库的本地知识库]] —— **对照路线**：Agentic RAG 让模型多轮规划检索；SAG2 把多轮压缩成**关键词扩展循环**，更便宜但更依赖词面线索
