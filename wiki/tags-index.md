@@ -23,6 +23,10 @@
 - [2026上半年万象项目复盘](synthesis/2026-h1-wanxiang-review.md)
 - [AI Agent 技术全景报告 2026](topics/ai-agent-landscape-2026.md)
 
+## 3D合成
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
+
 ## 58
 
 - [WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化](topics/workbuddy-data-warehouse-expert-team.md)
@@ -172,6 +176,7 @@
 
 ## AI视频
 
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 - [代码视频 vs AI 视频：Hyperframes 与 Remotion 实测](topics/code-video-hyperframes-vs-remotion.md)
 
 ## AI记忆
@@ -320,6 +325,7 @@
 
 ## Apache-2.0
 
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 - [Helix Foundry：图 + SQL 自动构建跨源企业本体](topics/helix-foundry-graph-sql-ontology.md)
 - [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
 - [Laya：421M 非自回归 System 1 决策模型（Jev 的开源替代）](topics/laya-system1-decision-model.md)
@@ -328,6 +334,10 @@
 ## Apache2.0
 
 - [AgentConnect](entities/agentconnect.md)
+
+## ArtCraft
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 
 ## Attention
 
@@ -660,6 +670,10 @@
 
 - [用户画像系列文章 · 参考资料汇编](sources/user-profile-series-reference.md)
 - [用户画像系列：从标签体系到 AI 检索](topics/user-profile-series.md)
+
+## IDE
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 
 ## IDMapping
 
@@ -1097,6 +1111,7 @@
 
 ## Rust
 
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 - [cc-switch](entities/cc-switch.md)
 
 ## SAG-Wiki
@@ -1220,6 +1235,7 @@
 
 ## Tauri
 
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 - [cc-switch](entities/cc-switch.md)
 
 ## Terminal-Bench
@@ -1325,6 +1341,10 @@
 ## earendil-works
 
 - [Pi — 最小化终端编码 Agent](concepts/pi-coding-agent.md)
+
+## egui
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 
 ## frame.md
 
@@ -1614,6 +1634,10 @@
 - [MobileSAM 与 ACE2P：通用分割 vs 人体解析](topics/mobilesam-vs-ace2p.md)
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
 
+## 图像生成
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
+
 ## 图像质量评测
 
 - [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
@@ -1667,6 +1691,10 @@
 
 - [WorkBuddy 数仓专家团：AI 智能体驱动的数仓全流程自动化](topics/workbuddy-data-warehouse-expert-team.md)
 - [本体建模五步法：本体论+AI如何进入复杂工业场景](topics/ontology-modeling-five-steps.md)
+
+## 多模型聚合
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 
 ## 多模态
 
@@ -2740,6 +2768,10 @@
 ## 验证
 
 - [任务 DAG 多 Agent 编排：Anthropic 费马大定理项目的启示](topics/agent-task-dag-orchestration.md)
+
+## 高斯泼溅
+
+- [ArtCraft：给艺术家用的 AI 图像/视频「IDE」](entities/artcraft.md)
 
 ## 龙虾
 

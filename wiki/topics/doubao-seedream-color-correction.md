@@ -191,6 +191,8 @@ Imgproc.cvtColor(rgbFloat, lab, Imgproc.COLOR_RGB2Lab);
 - [[SAM / FastSAM / MobileSAM 三条轻量化路线对比]] —— MobileSAM 的原理与轻量化路线
 - [[Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测]] —— 同一条流水线的质量评测与档位选择
 
+- [[ArtCraft：给艺术家用的 AI 图像/视频「IDE」]] —— 它的模型目录含 **Seedream 4–5.0 Pro Ultra**，可与本页的颜色保真问题对照：生成工具负责构图，色差仍要单独校正
+
 ## 待验证
 
 - **API 参数、模型 ID、价格、分辨率档位**均来自对话中的转述，请以火山方舟官方文档为准

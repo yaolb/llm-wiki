@@ -963,3 +963,18 @@
   - 四组实测：383 篇公众号、10 万维基词条、26 份半导体研报（3 vs 11 次调用）、代码排错（144s→95s）
 - 批判点已写入待验证：多跳依赖词面重合、语义泛化弱、强依赖 Jev、评测均为自报、EnterpriseRAG 为模拟数据
 - 双向引用：topics/jev-model.md（Jev 的真实生产用例）、topics/agentic-rag.md、topics/rag-evaluation.md
+
+## [2026-11-08] ingest | ArtCraft：AI 图像/视频创作 IDE（Rust + Tauri）
+
+- 目标：https://github.com/storytold/artcraft（用户指定研究）
+- 核实（2026-11-08）：Rust（+ React/TS），Apache-2.0（README 写 MIT OR Apache-2.0），⭐39,773 / fork 6,242 / open issue 682，
+  创建 2022-03-31，推送 2026-11-07，仓库 ~1.37 GB；最新 v0.41.1（2026-11-07）；下载量 Windows exe 818,687 / macOS dmg 272,422
+- 归档：raw 未单列（本页为项目研究，非文章转载）；新页 wiki/entities/artcraft.md
+- 核心内容：
+  - 定位「The IDE for artists」：2D 图层合成 + 3D 布景/景深 + Image to Location + Image to 3D Mesh + 角色一致性
+  - 62 个模型目录（图像 16 / 视频 25 / 音频 5 / 3D 网格 11 / 世界与泼溅 5），外部供应商 Grok/Midjourney/Sora/World Labs
+  - 双 UI：Tauri 2.6.2 + React 为正式版；artcraft-native 为纯 Rust egui（no Tauri, no webview），共用 API crate
+  - 代码：7,327 文件 / 3,261 .rs / 1,659 .ts(x)；crates 含 9 个供应商客户端
+  - Roadmap：去托管依赖、专用图像模型、自建片厂与长片、Open OpenAI 愿景
+- 风险：682 issue 积压、双 UI 过渡、仍依赖官方云、62 模型长尾维护、1.37 GB 仓库
+- 双向引用：topics/code-video-hyperframes-vs-remotion.md、topics/doubao-seedream-color-correction.md
