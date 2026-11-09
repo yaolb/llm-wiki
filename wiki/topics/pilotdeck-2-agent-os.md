@@ -136,6 +136,8 @@ PilotDeck 的站位是**长周期、多项目的生产力工作**，抓手是"�
 
 - [[OpenBot：把 Codex 与 Claude Code 组成协作团队]] —— **对照**：PilotDeck 是自带 OS 与记忆体系的工作舱，OpenBot 是**外挂在你已有的 CLI 上**做隔离与调度；前者换生态，后者复用已有订阅
 
+- [[Anthropic 的 Agent 记忆实验：Wiki 与原文检索要一起用]] —— **同名机制的对照**：Anthropic 的 **dreaming** 与会话记录校准笔记，与 PilotDeck 的 **Dream 模式**（空闲归纳去重）是同一思路；区别在 Anthropic 强调「会话记录只读、产出不改输入」
+
 ## 待验证
 
 - 成本与得分数据全部来自官方 README / 新闻稿，**未见第三方复现**

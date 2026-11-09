@@ -978,3 +978,20 @@
   - Roadmap：去托管依赖、专用图像模型、自建片厂与长片、Open OpenAI 愿景
 - 风险：682 issue 积压、双 UI 过渡、仍依赖官方云、62 模型长尾维护、1.37 GB 仓库
 - 双向引用：topics/code-video-hyperframes-vs-remotion.md、topics/doubao-seedream-color-correction.md
+
+## [2026-11-09] ingest | Anthropic Agent 记忆研究（Wiki + 原文检索）
+
+- 原文：DataFunTalk《Anthropic重磅公开Agent记忆内幕！》（2026-11-09）
+  https://mp.weixin.qq.com/s/cpjAuL6FuiLFVWt2lfUK6A
+- 一手来源：Anthropic《The components of agent memory》（2026-11-06），已核实可访问（HTTP 200）
+- 抓取：scripts/fetch-article.py，**3,731 字 + 6 张图全本地化**
+- 归档：raw/anthropic-agent-memory-wiki.md；素材 raw/assets/anthropic-agent-memory-wiki/
+- 新页：wiki/topics/anthropic-components-of-agent-memory.md
+- 核心内容：
+  - 语料：Stainless 约 4.2 亿 Token；Opus 5 用 128 个会话搭 Wiki（共享日志、合并重复、回原文核对）
+  - 25 题覆盖率：只查 Wiki 48%（2 轮仅 13%）／只搜原文 53%／两者合用 61%，合用每题少约 2 万 Token
+  - 任务相关：并购多文档 87% vs 73%；单文档关键词定位无增益
+  - 成本：省的是答题阶段，建库与修订需摊销，重复查询才划算
+  - 错误案例：宝可梦红记反方位→信任笔记→单向台阶掉三次；修复机制 dreaming（会话记录只读、产出不改输入）
+  - 压缩边界：多 Agent 写同一表 41/57；改为每份合同一页 + 关键条款原句 → 57/57（两处改动同时生效，归因未拆）
+- 双向引用：concepts/agent-memory-system.md、topics/pilotdeck-2-agent-os.md、topics/llm-wiki-methodology.md、topics/pi-agent-context-management.md

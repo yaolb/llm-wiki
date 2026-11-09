@@ -225,3 +225,4 @@ bash 等工具一次可能产生海量日志，容易撑满窗口。Pi 的策略
 
 - Pi 官网：https://pi.dev
 - Pi GitHub：https://github.com/earendil-works/pi
+- [[Anthropic 的 Agent 记忆实验：Wiki 与原文检索要一起用]] —— 压缩边界的实测判据：流程类可摘要，**判定性条款（适用性/金额/生效日）必须保留原句并记出处**，否则会变成「看似可靠的错误」

@@ -65,3 +65,4 @@ Agent Memory 的研究从 2023 年到 2025 年快速演进，详见 → [[Agent 
 - [[openclaw]]
 - [[hermes-agent]]
 - [[MemPalace]]
+- [[Anthropic 的 Agent 记忆实验：Wiki 与原文检索要一起用]] —— **目前最完整的官方实证**：只查 Wiki 48%、只搜原文 53%、两者合用 61%，且合用更省 Token；记忆不是「存得越多越好」，而是「结构化 Wiki + 原文检索」双层配合

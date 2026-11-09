@@ -92,3 +92,4 @@ llm-wiki 完全遵循此方法论构建：
 ## 拓展阅读
 - [Karpathy Gist 原文](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
 - [Vannevar Bush — As We May Think (1945)](https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/) — Memex 概念
+- [[Anthropic 的 Agent 记忆实验：Wiki 与原文检索要一起用]] —— **为「Wiki + 原文双通道」提供定量证据**：只读 Wiki 会漏掉未写入的规则（48% < 53%），双通道才到 61%；也说明构建成本需要靠重复查询摊薄
