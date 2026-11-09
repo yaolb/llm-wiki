@@ -161,6 +161,58 @@ source_url: https://www.anthropic.com/research/components-of-agent-memory
 - [[Pi Agent 的 Context 管理：组装、增长、压缩与重建]] —— 上下文压缩的边界问题：哪些能压、哪些必须留原句，本篇给了判据
 - [[工作记忆的分裂吸引子：一半管记什么，一半管何时记]] —— 生物学侧对照：记忆需要「写入门控」与「纠错」，与本篇 dreaming 的定位一致
 
+
+## 一手原文核对（2026-11-09，直读 anthropic.com 原文）
+
+> 原文：The components of agent memory（Published Nov 6, 2026，Team Engineering）
+> 方法：抓取页面 HTML 后提取正文（约 24,859 字符）逐段比对解读稿。
+
+### 数字：全部对得上
+
+- 语料：**约 350,000 个文件、约 4.2 亿 Token**，来自 Stainless
+- 评测集：**25 道题**；Wiki 由 **128 个会话**逐步构建
+- 只查 Wiki：**48%**（2 个会话时仅 **13%**，随 dreaming 扩展而上升）
+- 只搜索原文：**53%**
+- 搜索 + Wiki：随 Wiki 增长从 **54% 升到 61%**
+- 合用省 **约 20,000 Token/题**
+
+### 解读稿漏掉的三件事
+
+**① Stainless 是 Anthropic 自己收购的公司**
+
+原文：about 350,000 files, roughly 420M tokens—from Stainless, **a software company we acquired in May**.
+
+> 解读稿只说「软件公司 Stainless」。这一点影响不小：语料来源与评测方同属一家，**不是完全独立的第三方语料**。
+
+**② 宝可梦实验里真正的对比是「记忆体积 vs 成绩」**
+
+原文数据：
+
+- **Sonnet 3.7**：写了 **413 个记忆文件、225 个文件夹** → 只拿到 **1 个徽章**
+- **Fable 5**：只写 **9 个文件、2 个文件夹**，外加一个顶层 `global.md` → 拿到 **4 个徽章**
+
+原因是：宝可梦的游戏状态**一直在变**，Sonnet 3.7 那种「每场战斗、每个道具、每个 NPC 都单独存档」的详细记录**持续过时**，到第 10,000 步左右开始整理第四批「master」记忆文件，**把时间花在翻自己的记忆而不是玩游戏**。
+
+> 解读稿只讲了「记错方位导致掉下台阶三次」，**漏掉了这个更有说服力的对照：写得越多 ≠ 记得越好。**
+
+**③ 另一个失败模式：Wiki 长得比原文还大（博尔赫斯地图）**
+
+原文：On another LAB task, **the wiki grew larger than the documents themselves**. Like the mapmakers in Borges's short story "On Exactitude in Science," who drafted a map so detailed it was as large as the empire it represented, **Claude had made an extremely detailed wiki that effectively abstracted nothing**.
+
+> 这直接否定了「把知识库做大就是好」的直觉：**没有抽象的 Wiki，只是原文的复制品，还多了一层维护成本。**
+
+### 原文补充的机制细节
+
+- **dreaming 的来源**：Letta 与 UC Berkeley 提出的 **sleep-time compute**——用两次交互之间的空闲时间重组上下文
+- **记忆可以「上浮」**：dreaming 能把笔记提升到记忆层级顶部，Agent harness 在**每次会话开始时预加载**进上下文（Figure 13），Claude 不需要搜索、甚至不需要知道它的存在
+- **评测基准**：除宝可梦外，用 **Harvey LAB benchmark**（给定文档生成法律备忘录，再按标准评分）+ 一组并购文档
+- 开头引了克尔凯郭尔：**「生活只能倒着理解，却必须正着过。」**（life can only be understood backward, but it must be lived forward）
+
+### 对解读稿的修正
+
+- 「两样一起用，得分最高升到 61%」→ 原文是**从 54% 随 Wiki 增长升到 61%**，不是一步到位
+- 「35 万份企业文件」→ 原文为 **about 350,000 files**，与解读一致
+- 「128 轮整理」→ 原文是 **128 sessions**（会话），不是 128 轮问答
 ## 待验证 / 证据边界
 
 - 数据均转述自 Anthropic 官方研究，**未读原文全文**（仅核实页面可访问）
