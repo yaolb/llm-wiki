@@ -995,3 +995,19 @@
   - 错误案例：宝可梦红记反方位→信任笔记→单向台阶掉三次；修复机制 dreaming（会话记录只读、产出不改输入）
   - 压缩边界：多 Agent 写同一表 41/57；改为每份合同一页 + 关键条款原句 → 57/57（两处改动同时生效，归因未拆）
 - 双向引用：concepts/agent-memory-system.md、topics/pilotdeck-2-agent-os.md、topics/llm-wiki-methodology.md、topics/pi-agent-context-management.md
+
+## [2026-11-10] ingest | Shotcut：剪映的开源替代（GPL-3.0，一切皆滤镜）
+
+- 原文：「Java基基」《剪映开源替代 Star 15.4k》（2026-10-24）https://mp.weixin.qq.com/s/myLYRTpqCSinChKJrDZOmQ
+- 抓取：scripts/fetch-article.py，**3,730 字 + 10 张图全本地化**
+- 核实（2026-11-10）：`mltframework/shotcut`，**C++ / GPL-3.0**，⭐15,642 / fork 1,563 / open issue 44，创建 2012-04-23，推送 2026-11-04
+- 归档：raw/capcut-open-source-alternative.md；素材 raw/assets/capcut-open-source-alternative/
+- 新页：wiki/entities/shotcut.md
+- 核心内容：
+  - 一切效果皆滤镜：Text: Rich / Crop: Source / Chroma Key: Advanced / Stabilize / 3-way wheels / 3D LUT
+  - 时间线无「导入媒体」：拖入即剪，工程为 XML，可混分辨率帧率，4K–8K 帧精确
+  - 预览侧降级：代理编辑 + 预览缩放，导出回原素材；HDR 10-bit / HDR10 / HLG / GPU 16-bit float
+  - 缺失：模板市场 / 一键成片 / 移动端 / 云端协作
+  - 许可 GPL-3.0 传染性；中文翻译不全；不建议自编译
+- 备注：原文约一半篇幅是社群与项目广告，技术内容集中在 Shotcut 部分
+- 双向引用：topics/code-video-hyperframes-vs-remotion.md、entities/html-video.md

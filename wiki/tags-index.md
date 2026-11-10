@@ -548,6 +548,7 @@
 ## FFmpeg
 
 - [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## Fabric IQ
 
@@ -572,6 +573,10 @@
 ## GNN
 
 - [SeedER](entities/seeder.md)
+
+## GPL-3.0
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## GQA
 
@@ -628,6 +633,10 @@
 ## Gravitino
 
 - [Datastrato 2.0：Agent Context 的三重支柱（统一元数据 → 开放语义层 → Ontology）](topics/datastrato-agent-context-three-pillars.md)
+
+## HDR
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## HTML
 
@@ -832,6 +841,10 @@
 
 - [KV Cache 机制详解：从 Attention 到四大开源模型架构](topics/kv-cache-mechanism-explained.md)
 - [各大模型厂商 KV-Cache 处理方式全景对比](topics/kv-cache-providers-comparison.md)
+
+## MLT
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## MemGPT
 
@@ -1043,6 +1056,10 @@
 
 - [Apache Burr](entities/apache-burr.md)
 
+## Qt
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
+
 ## RAG
 
 - [Agentic RAG：RAG 从独立系统到 Agent 组件](topics/agentic-rag.md)
@@ -1169,6 +1186,10 @@
 ## Segment Anything
 
 - [SAM / FastSAM / MobileSAM 三条轻量化路线对比](topics/sam-fastsam-mobilesam.md)
+
+## Shotcut
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## Skill
 
@@ -1502,6 +1523,10 @@
 - [用户画像系列文章 · 参考资料汇编](sources/user-profile-series-reference.md)
 - [用户画像系列：从标签体系到 AI 检索](topics/user-profile-series.md)
 
+## 代理剪辑
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
+
 ## 代码分析
 
 - [Understand Anything](entities/understand-anything.md)
@@ -1589,6 +1614,10 @@
 ## 前端工程
 
 - [Replica：给 AI 套上设计规范，生成对齐产品体系的界面原型](topics/replica-design-system-prototype.md)
+
+## 剪映
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## 剪映AI
 
@@ -1876,6 +1905,10 @@
 ## 开源情报
 
 - [PYTHIA（本地 AI Agent 实时感知工具）](entities/pythia.md)
+
+## 开源替代
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 
 ## 开源标准
 
@@ -2584,6 +2617,10 @@
 
 - [Seedream 5.0 Pro 清晰度差异与 1.5K 图生图质量评测](topics/seedream-1k-2k-quality-eval.md)
 
+## 视频剪辑
+
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
+
 ## 视频生成
 
 - [html-video](entities/html-video.md)
@@ -2689,6 +2726,7 @@
 
 ## 跨平台
 
+- [Shotcut：剪映的开源替代，但它替代的是「价格」不是「省事」](entities/shotcut.md)
 - [cc-switch](entities/cc-switch.md)
 
 ## 跨数据源
