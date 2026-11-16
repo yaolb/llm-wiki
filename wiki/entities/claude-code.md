@@ -32,6 +32,7 @@ Claude Code 是 Anthropic 推出的命令行 AI 编程工具，采用多 Agent �
 - **项目记忆**：CLAUDE.md 定义项目级规则和上下文
 
 ## 相关摘要
+- [[ui-design-twelve-skills]]：设计 Skill 的规则参考、工具依赖与浏览器验收要分层理解（2026-11-16）。
 - [[AI编程Agent框架对比分析]]
 - [[Anthropic 数据分析 Agent：Claude 自动化 95% 内部数据分析]]（topics/anthropic-data-analytics-agent.md）— 官方实践：分层数据技术栈 + Skill 机制 + 三级验证
 

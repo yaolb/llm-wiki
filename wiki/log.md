@@ -1011,3 +1011,9 @@
   - 许可 GPL-3.0 传染性；中文翻译不全；不建议自编译
 - 备注：原文约一半篇幅是社群与项目广告，技术内容集中在 Shotcut 部分
 - 双向引用：topics/code-video-hyperframes-vs-remotion.md、entities/html-video.md
+
+
+## [2026-11-16] ingest | 12 个设计 Skill 清单与证据核对
+- 归档微信正文与本地 HTML 快照；正文容器确无图片，原文提及的仓库截图缺失已标注。
+- 新建主题页，核对 12 个匹配仓库及官方 README，保存 API 快照；更新 Huashu Design 和 Claude Code 双向引用。
+- 区分个人推荐、官方说明与未验证效果；没有安装技能或执行外部项目。

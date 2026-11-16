@@ -186,3 +186,10 @@
 - [Relationship Graph](reports/relationship-graph.md)
 - [Stale Pages](reports/stale-pages.md)
 <!-- openclaw:wiki:index:end -->
+
+
+## 手工摄入补充
+
+### 主题
+
+- [12 个设计 Skill：从设计系统到视觉验收](topics/ui-design-twelve-skills.md) — 12 项推荐的项目定位、API 快照与适用边界，区分规则文档和完整工具链，未做安装实测。 `#design-skills #ui-ux #agent-skills`

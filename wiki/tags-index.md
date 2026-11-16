@@ -1351,6 +1351,10 @@
 
 - [从 Arrow 到 Iceberg 到 Polaris 到 Ossie：语义标准化的最后一块拼图](topics/data-stack-semantic-standardization.md)
 
+## agent-skills
+
+- [12 个设计 Skill：从设计系统到视觉验收](topics/ui-design-twelve-skills.md)
+
 ## bitmap
 
 - [万象标签处理与 CK 入库流水线](topics/wanxiang-tag-ck-pipeline.md)
@@ -1369,6 +1373,14 @@
 
 - [Cordis 与既有组合方案逐项对比](synthesis/cordis-vs-existing-composability-approaches.md)
 
+## design-skills
+
+- [12 个设计 Skill：从设计系统到视觉验收](topics/ui-design-twelve-skills.md)
+
+## design-system
+
+- [12 个设计 Skill：从设计系统到视觉验收](topics/ui-design-twelve-skills.md)
+
 ## dreaming
 
 - [Anthropic 的 Agent 记忆实验：Wiki 与原文检索要一起用](topics/anthropic-components-of-agent-memory.md)
@@ -1384,6 +1396,10 @@
 ## frame.md
 
 - [HyperFrames：把 HTML 渲染成视频的开源框架](entities/hyperframes.md)
+
+## frontend
+
+- [12 个设计 Skill：从设计系统到视觉验收](topics/ui-design-twelve-skills.md)
 
 ## gstack
 
@@ -1412,6 +1428,10 @@
 ## source-available
 
 - [Remotion：用 React 写视频（但**不是开源软件**）](entities/remotion.md)
+
+## ui-ux
+
+- [12 个设计 Skill：从设计系统到视觉验收](topics/ui-design-twelve-skills.md)
 
 ## user_code
 

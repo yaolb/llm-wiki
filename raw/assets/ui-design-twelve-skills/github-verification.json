@@ -1,0 +1,139 @@
+{
+  "checked": "2026-11-16",
+  "method": "GitHub REST /repos/{owner}/{repo}; public unauthenticated requests",
+  "repositories": [
+    {
+      "repo": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "full_name": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "stars": 150232,
+      "license": "MIT",
+      "created": "2025-11-30T11:36:31Z",
+      "pushed": "2026-11-16T04:10:04Z",
+      "branch": "main",
+      "description": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms."
+    },
+    {
+      "repo": "Leonxlnx/taste-skill",
+      "full_name": "Leonxlnx/taste-skill",
+      "url": "https://github.com/Leonxlnx/taste-skill",
+      "stars": 116578,
+      "license": "MIT",
+      "created": "2026-02-19T21:44:05Z",
+      "pushed": "2026-11-08T21:51:50Z",
+      "branch": "main",
+      "description": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages"
+    },
+    {
+      "repo": "alchaincyf/huashu-design",
+      "full_name": "alchaincyf/huashu-design",
+      "url": "https://github.com/alchaincyf/huashu-design",
+      "stars": 29639,
+      "license": "MIT",
+      "created": "2026-04-19T14:42:06Z",
+      "pushed": "2026-11-10T00:16:14Z",
+      "branch": "master",
+      "description": "Huashu Design 3.0 · 在 agent 里打一句话，拿回能交付的设计：网页 / App 原型 / 可编辑 PPTX / 动画 / 信息图 · 六个候选挑三个方向 · 84 种带样张的风格库 · 越用越懂你的外观账本与设计体检 · HTML-native design skill for Claude Code, Codex, Cursor & any agent"
+    },
+    {
+      "repo": "MengTo/Skills",
+      "full_name": "MengTo/Skills",
+      "url": "https://github.com/MengTo/Skills",
+      "stars": 7640,
+      "license": "MIT",
+      "created": "2026-02-03T10:10:55Z",
+      "pushed": "2026-11-14T09:17:50Z",
+      "branch": "main",
+      "description": "Agent skills for designers and builders using Codex, Claude, Cursor, and other AI coding agents"
+    },
+    {
+      "repo": "oso95/scroll-world",
+      "full_name": "oso95/scroll-world",
+      "url": "https://github.com/oso95/scroll-world",
+      "stars": 11022,
+      "license": "MIT",
+      "created": "2026-07-06T21:28:58Z",
+      "pushed": "2026-07-29T04:44:56Z",
+      "branch": "main",
+      "description": "A skill that turn any brand into a scrollable 3D world landing page"
+    },
+    {
+      "repo": "emilkowalski/skills",
+      "full_name": "emilkowalski/skills",
+      "url": "https://github.com/emilkowalski/skills",
+      "stars": 57350,
+      "license": "MIT",
+      "created": "2026-03-16T13:52:31Z",
+      "pushed": "2026-11-15T12:42:50Z",
+      "branch": "main",
+      "description": "Skills for Designers and Engineers."
+    },
+    {
+      "repo": "jakubkrehel/make-interfaces-feel-better",
+      "full_name": "jakubkrehel/make-interfaces-feel-better",
+      "url": "https://github.com/jakubkrehel/make-interfaces-feel-better",
+      "stars": 4024,
+      "license": "MIT",
+      "created": "2026-03-13T00:25:09Z",
+      "pushed": "2026-08-29T16:59:35Z",
+      "branch": "main",
+      "description": "An agent skill that helps make your interface feel better."
+    },
+    {
+      "repo": "Owl-Listener/designer-skills",
+      "full_name": "Owl-Listener/designer-skills",
+      "url": "https://github.com/Owl-Listener/designer-skills",
+      "stars": 3379,
+      "license": "MIT",
+      "created": "2026-03-07T14:45:45Z",
+      "pushed": "2026-09-05T15:32:50Z",
+      "branch": "main",
+      "description": "Designer Skills Collection: agentic skills, commands, and plugins for design — from research to systems, UI, interaction, and delivery."
+    },
+    {
+      "repo": "ibelick/ui-skills",
+      "full_name": "ibelick/ui-skills",
+      "url": "https://github.com/ibelick/ui-skills",
+      "stars": 11118,
+      "license": "MIT",
+      "created": "2026-01-07T19:35:54Z",
+      "pushed": "2026-11-14T08:35:12Z",
+      "branch": "main",
+      "description": "Skills for Design Engineers"
+    },
+    {
+      "repo": "buildermethods/design-os",
+      "full_name": "buildermethods/design-os",
+      "url": "https://github.com/buildermethods/design-os",
+      "stars": 1880,
+      "license": "MIT",
+      "created": "2025-12-16T19:40:19Z",
+      "pushed": "2026-10-07T04:19:20Z",
+      "branch": "main",
+      "description": "The missing design process between your product idea and your codebase."
+    },
+    {
+      "repo": "bergside/awesome-design-skills",
+      "full_name": "bergside/awesome-design-skills",
+      "url": "https://github.com/bergside/awesome-design-skills",
+      "stars": 3678,
+      "license": "MIT",
+      "created": "2026-03-09T08:55:36Z",
+      "pushed": "2026-06-28T10:05:22Z",
+      "branch": "main",
+      "description": "List of 67 awesome DESIGN.md and SKILL.md design skill files for agentic tools like Claude Design, Google Stitch, Codex, Cursor, and other AI tools"
+    },
+    {
+      "repo": "anthropics/skills",
+      "full_name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "stars": 195688,
+      "license": null,
+      "created": "2025-09-22T15:53:31Z",
+      "pushed": "2026-11-14T21:52:49Z",
+      "branch": "main",
+      "description": "Public repository for Agent Skills"
+    }
+  ],
+  "frontend_skill_license": "Apache-2.0 (skills/frontend-design/LICENSE.txt checked)"
+}
